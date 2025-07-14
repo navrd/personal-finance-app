@@ -1,14 +1,27 @@
 <script lang="ts">
-    
+	import { goto } from '$app/navigation';
+	import { setAuthContext } from '$lib/auth/context.svelte';
+
 	let { children } = $props();
+
+	const auth = setAuthContext();
+
+	$effect(() => {
+		if (!auth.initialized || !auth.user?.id) {
+			goto('/login');
+		} else {
+			goto('/');
+		}
+	});
 </script>
 
-<main>
-	<h1>layout</h1>
-	<a href="/budgets">budgets</a>
-	<a href="/transactions">transactions</a>
-	<a href="/reccuring">reccuring</a>
-	<a href="/pots">pots</a>
-	<a href="/overview">overview</a>
-    {@render children()}
-</main>
+<svelte:head>
+	<title>Personal Finance App — Initialisation</title>
+	<meta name="description" content="Personal Finance App" />
+</svelte:head>
+
+{#if auth.loading}
+	<h1>Loading...</h1>
+{:else}
+	{@render children?.()}
+{/if}
