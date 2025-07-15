@@ -24,6 +24,8 @@
 <div class="app">
 	{#if auth.loading}
 		<h1>Loading...</h1>
+	{:else if !auth.initialized || !auth.user?.id}
+		{@render children?.()}
 	{:else}
 		<Sidebar />
 		{@render children?.()}

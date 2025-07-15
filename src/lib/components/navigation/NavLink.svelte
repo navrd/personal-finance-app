@@ -3,11 +3,11 @@
 	import { BlankLink } from '$lib/components';
 	import { titleToIcon, type NavLinkProps } from '$lib/types';
 
-	let active = $derived.by(() => {
-		return page.url.pathname.includes(title);
-	});
-
 	let { href, minimize, title }: NavLinkProps = $props();
+
+	let active = $derived.by(() => {
+		return page.url.pathname === href;
+	});
 </script>
 
 <li class="sidebar__navlink" class:sidebar__navlink_minimized={minimize}>
@@ -28,14 +28,16 @@
 
 <style lang="scss">
 	.sidebar__navlink {
-		width: 10rem;
-		height: 3rem;
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
 		gap: 0.5rem;
-		@media (min-width: 325px) and (max-width: 1023px) {
+		@media (min-width: 0px) and (max-width: 1023px) {
 			height: 100%;
+		}
+		@media screen and (min-width: 1024px) {
+			width: 10rem;
+			height: 3rem;
 		}
 	}
 	.sidebar__navlink_minimized {
@@ -47,7 +49,7 @@
 		position: absolute;
 		left: 0;
 		z-index: 1;
-		@media (min-width: 325px) and (max-width: 1023px) {
+		@media (min-width: 0px) and (max-width: 1023px) {
 			bottom: 0;
 			width: 100%;
 			height: 90%;
@@ -80,7 +82,7 @@
 			height: 100%;
 			content: '';
 		}
-		@media (min-width: 325px) and (max-width: 1023px) {
+		@media (min-width: 0px) and (max-width: 1023px) {
 			&:before {
 				bottom: 0;
 				width: 100%;
@@ -105,13 +107,15 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		justify-content: flex-start;
+
 		gap: 0.5rem;
 		z-index: 2;
-		@media (min-width: 325px) and (max-width: 1023px) {
+		@media (min-width: 0px) and (max-width: 1023px) {
 			flex-direction: column;
+			justify-content: center;
 		}
 		@media (min-width: 1024px) {
+			justify-content: flex-start;
 		}
 		* {
 			color: currentColor;
@@ -130,8 +134,25 @@
 	}
 	.navlink__title {
 		display: flex;
+		@media (min-width: 0px) and (max-width: 599px) {
+			display: none;
+		}
+		@media screen and (min-width: 600px) and (max-width: 1023px) {
+			display: block;
+		}
+		@media (min-width: 1024px) {
+			display: block;
+		}
 	}
 	.navlink__title_hidden {
-		display: none;
+		@media (min-width: 0px) and (max-width: 599px) {
+			display: none;
+		}
+		@media screen and (min-width: 600px) and (max-width: 1023px) {
+			display: block;
+		}
+		@media (min-width: 1024px) {
+			display: none;
+		}
 	}
 </style>

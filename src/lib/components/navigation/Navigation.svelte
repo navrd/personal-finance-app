@@ -12,7 +12,7 @@
 		{ href: '/transactions', title: 'transactions' },
 		{ href: '/reccuring', title: 'reccuring' },
 		{ href: '/pots', title: 'pots' },
-		{ href: '/overview', title: 'overview' }
+		{ href: '/', title: 'overview' }
 	];
 </script>
 
@@ -27,7 +27,7 @@
 		display: flex;
 		flex-direction: var(--sidebar-flex-direction);
 		gap: 1rem;
-		@media (min-width: 325px) and (max-width: 1023px) {
+		@media (min-width: 0px) and (max-width: 1023px) {
 			height: 100%;
             width: 100%;
 			justify-content: space-between;
