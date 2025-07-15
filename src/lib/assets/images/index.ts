@@ -1,0 +1,7 @@
+export { default as Logo } from './logo.svg?raw'
+export { default as LogoMinimized } from './logo-minimized.svg?raw'
+export { default as Home } from './home.svg?raw'
+export { default as Budgets } from './budgets.svg?raw'
+export { default as Pots } from './pots.svg?raw'
+export { default as Transactions } from './transactions.svg?raw'
+export { default as Reccuring } from './reccuring.svg?raw'

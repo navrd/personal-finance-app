@@ -1,0 +1,41 @@
+@import './base.css';
+
+@font-face {
+	font-family: 'PublicSans';
+	font-style: normal;
+	src:
+		local('RedditSans'),
+		url('../fonts/PublicSans-VariableFont_wght.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'PublicSans';
+	font-style: italic;
+	src:
+		local('RedditSans'),
+		url('../fonts/PublicSans-Italic-VariableFont_wght.ttf') format('truetype');
+}
+
+*,
+*::before,
+*::after {
+	font-family: 'PublicSans', sans, sans-serif;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+}
+a,
+button,
+input {
+	font-family: inherit;
+	cursor: pointer;
+}
+
+.overflow-hidden {
+	overflow: hidden;
+}
+ul,
+ol,
+li {
+	list-style: none;
+}
