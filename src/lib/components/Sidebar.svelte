@@ -1,24 +1,27 @@
 <script lang="ts">
-	import { getAuthContext } from '$lib/auth/context.svelte';
-	import { Navigation } from '$lib/components';
+	// import { getAuthContext } from '$lib/auth/context.svelte';
+	import { Navigation, Spacer } from '$lib/components';
 	import { Logo, LogoMinimized } from '$lib/assets/images';
-	let auth = getAuthContext();
-	let minimize = $state(false);
+	import { getContext } from 'svelte';
+	import type { BooleanContextValue } from '$lib/types';
+	import Minimize from './Minimize.svelte';
+	// let auth = getAuthContext();
+	let minimize: BooleanContextValue = getContext('minimize');
 </script>
 
-<nav class="sidebar" class:sidebar__minimized={minimize}>
+<nav class="sidebar" class:sidebar__minimized={minimize.value}>
 	<div class="sidebar__logo">
-		{#if minimize}
+		{#if minimize.value}
 			{@html LogoMinimized}
 		{:else}
 			{@html Logo}
 		{/if}
 	</div>
-	<Navigation {minimize} />
-	<div class="spacer"></div>
+	<Navigation minimize={minimize.value} />
+	<Spacer />
 	<div class="sidebar__buttons">
-		<button onclick={() => (minimize = !minimize)}>Minimize</button>
-		<button onclick={auth.signOut}>Sign out</button>
+		<Minimize />
+		<!-- <button onclick={auth.signOut}>Sign out</button> -->
 	</div>
 </nav>
 
@@ -34,11 +37,17 @@
 		align-items: flex-start;
 		position: fixed;
 		transition: width 0.3s ease;
+
 		@media (min-width: 0px) and (max-width: 1023px) {
+			padding: 0 1rem;
 			bottom: 0;
+			border-top-right-radius: 1rem;
+			border-top-left-radius: 1rem;
 		}
 		@media (min-width: 1024px) {
 			left: 0;
+			border-top-right-radius: 1rem;
+			border-bottom-right-radius: 1rem;
 		}
 	}
 	.sidebar__minimized {
@@ -62,9 +71,5 @@
 		@media (min-width: 0px) and (max-width: 1023px) {
 			display: none;
 		}
-	}
-
-	.spacer {
-		flex: 1 1 auto;
 	}
 </style>

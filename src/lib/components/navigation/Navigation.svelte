@@ -6,6 +6,7 @@
 		minimize: boolean;
 	}
 	let { minimize }: NavigationProps = $props();
+    $inspect(minimize)
 
 	const links: Omit<NavLinkProps, 'minimize'>[] = [
 		{ href: '/budgets', title: 'budgets' },

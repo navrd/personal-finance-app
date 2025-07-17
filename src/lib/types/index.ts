@@ -5,6 +5,9 @@ export interface NavLinkProps {
     title: string;
 }
 
+export interface BooleanContextValue {
+    value: boolean;
+}
 export const titleToIcon: Record<string, string> = {
     overview: Home,
     pots: Pots,

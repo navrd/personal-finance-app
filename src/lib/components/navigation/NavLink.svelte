@@ -8,6 +8,7 @@
 	let active = $derived.by(() => {
 		return page.url.pathname === href;
 	});
+    // $inspect(minimize)
 </script>
 
 <li class="sidebar__navlink" class:sidebar__navlink_minimized={minimize}>
@@ -107,9 +108,13 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-
 		gap: 0.5rem;
 		z-index: 2;
+		&:hover,
+		&:focus,
+		&:active {
+			color: white;
+		}
 		@media (min-width: 0px) and (max-width: 1023px) {
 			flex-direction: column;
 			justify-content: center;
@@ -127,6 +132,11 @@
 	}
 	.navlink__overlay_active {
 		color: var(--color-green);
+		&:hover,
+		&:focus,
+		&:active {
+			color: var(--color-green);
+		}
 		* {
 			color: currentColor;
 			fill: currentColor;
