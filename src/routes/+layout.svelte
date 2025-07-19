@@ -4,13 +4,39 @@
 	import { setAuthContext } from '$lib/auth/context.svelte';
 	import { Sidebar } from '$lib/components';
 	import { setContext } from 'svelte';
-	import type { BooleanContextValue } from '$lib/types';
+	import type { BooleanContextValue, Transaction } from '$lib/types';
+	import { supabase } from '$lib/supabaseClient';
 
 	let { children } = $props();
 
 	const auth = setAuthContext();
 	let minimize: BooleanContextValue = $state({ value: false });
 	setContext('minimize', minimize);
+	let transactions: Transaction[] = $state([]);
+	$inspect(transactions);
+
+	$effect(() => {
+		async function fetchDailyEntries() {
+			if (!auth.initialized || !auth.user?.id || auth.loading) {
+				return;
+			}
+
+			try {
+				const { data, error } = await supabase.from('transactions').select('*');
+
+				if (error) {
+					console.error('Error fetching transactions:', error.message);
+					// Handle error - show toast, set error state, etc.
+				}
+
+				transactions = data || [];
+			} catch (err: any) {
+				console.error('Fetch error:', err);
+			}
+		}
+
+		fetchDailyEntries();
+	});
 
 	$effect(() => {
 		if (!auth.initialized || !auth.user?.id) {
@@ -45,7 +71,7 @@
 		min-width: 100dvw;
 	}
 	.content {
-        transition: padding 0.3s ease;
+		transition: padding 0.3s ease;
 		@media (min-width: 0px) and (max-width: 1023px) {
 			padding-bottom: var(--sidebar-height);
 		}

@@ -15,3 +15,14 @@ export const titleToIcon: Record<string, string> = {
     reccuring: Reccuring,
     transactions: Transactions
 };
+
+export interface Transaction {
+    avatar: string;
+    name: string;
+    category: string;
+    date: string;
+    amount: number;
+    recurring: boolean;
+}
+
+export type CategorisedTransactions = Record<string, Transaction[]>;

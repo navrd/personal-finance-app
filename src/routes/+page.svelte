@@ -1,9 +1,14 @@
 <script lang="ts">
-	import PieChart from "$lib/components/pieChart/PieChart.svelte";
+	import { BudgetsDiagram } from '$lib/components';
 
-    let {children} = $props();
+	let { children } = $props();
 </script>
 
-<PieChart />
+<svelte:head>
+	<title>Personal Finance App - Home</title>
+	<meta name="description" content="Personal Finance App" />
+</svelte:head>
+
+<BudgetsDiagram />
 
 {@render children?.()}

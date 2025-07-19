@@ -51,8 +51,8 @@
 </script>
 
 <svelte:head>
-	<title>Mood Tracker — Registration</title>
-	<meta name="description" content="Mood Tracker" />
+	<title>Personal Finance App - Register</title>
+	<meta name="description" content="Personal Finance App" />
 </svelte:head>
 
 <div class="auth-form-wrapper">

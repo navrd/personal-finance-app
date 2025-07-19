@@ -8,7 +8,6 @@
 	let active = $derived.by(() => {
 		return page.url.pathname === href;
 	});
-    // $inspect(minimize)
 </script>
 
 <li class="sidebar__navlink" class:sidebar__navlink_minimized={minimize}>

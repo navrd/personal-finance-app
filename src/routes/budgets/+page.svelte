@@ -1,1 +1,14 @@
-<h2>budgets</h2>
+<script lang="ts">
+	import { BudgetsDiagram } from '$lib/components';
+
+	let { children } = $props();
+</script>
+
+<svelte:head>
+	<title>Personal Finance App - Budgets</title>
+	<meta name="description" content="Personal Finance App" />
+</svelte:head>
+
+<BudgetsDiagram />
+
+{@render children?.()}

@@ -5,15 +5,15 @@
 	interface NavigationProps {
 		minimize: boolean;
 	}
+
 	let { minimize }: NavigationProps = $props();
-    $inspect(minimize)
 
 	const links: Omit<NavLinkProps, 'minimize'>[] = [
-		{ href: '/budgets', title: 'budgets' },
+		{ href: '/', title: 'overview' },
 		{ href: '/transactions', title: 'transactions' },
-		{ href: '/reccuring', title: 'reccuring' },
+		{ href: '/budgets', title: 'budgets' },
 		{ href: '/pots', title: 'pots' },
-		{ href: '/', title: 'overview' }
+		{ href: '/reccuring', title: 'reccuring' }
 	];
 </script>
 
@@ -30,7 +30,7 @@
 		gap: 1rem;
 		@media (min-width: 0px) and (max-width: 1023px) {
 			height: 100%;
-            width: 100%;
+			width: 100%;
 			justify-content: space-between;
 		}
 	}
