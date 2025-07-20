@@ -4,38 +4,68 @@
 	import { setAuthContext } from '$lib/auth/context.svelte';
 	import { Sidebar } from '$lib/components';
 	import { setContext } from 'svelte';
-	import type { BooleanContextValue, Transaction } from '$lib/types';
+	import type { Balance, Category, StateWrapper, Transaction } from '$lib/types';
 	import { supabase } from '$lib/supabaseClient';
 
-	let { children } = $props();
+	let { children, data } = $props();
+
+	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = $state({value: data.categories});
+    setContext('categories', categories);
+
+	let transactions: StateWrapper<Transaction[]> = $state({ value: [] });
+	setContext('transactions', transactions);
 
 	const auth = setAuthContext();
-	let minimize: BooleanContextValue = $state({ value: false });
+	let minimize: StateWrapper<boolean> = $state({ value: false });
 	setContext('minimize', minimize);
-	let transactions: Transaction[] = $state([]);
-	$inspect(transactions);
+
+	let balance = $state<StateWrapper<Pick<Balance, 'current' | 'expenses' | 'income'> | null>>({
+		value: null
+	});
+	setContext('balance', balance);
+
 
 	$effect(() => {
-		async function fetchDailyEntries() {
+		async function fetchUserBalance() {
+			try {
+				const { data, error } = await supabase
+					.from('balance')
+					.select('current, income, expenses')
+					.single();
+
+				if (error) {
+					console.error('Error fetching balance:', error);
+					return null;
+				}
+
+				balance.value = data || null;
+			} catch (err) {
+				console.error('Unexpected error:', err);
+				return null;
+			}
+		}
+		fetchUserBalance();
+	});
+
+	$effect(() => {
+		async function fetchUserTransactions() {
 			if (!auth.initialized || !auth.user?.id || auth.loading) {
 				return;
 			}
-
 			try {
 				const { data, error } = await supabase.from('transactions').select('*');
 
 				if (error) {
 					console.error('Error fetching transactions:', error.message);
-					// Handle error - show toast, set error state, etc.
 				}
 
-				transactions = data || [];
+				transactions.value = data || [];
 			} catch (err: any) {
 				console.error('Fetch error:', err);
 			}
 		}
 
-		fetchDailyEntries();
+		fetchUserTransactions();
 	});
 
 	$effect(() => {

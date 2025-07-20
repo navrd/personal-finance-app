@@ -1,34 +1,23 @@
 <script lang="ts">
 	import { PieChart } from '$lib/components';
+	import type { Balance, Category, StateWrapper, Transaction } from '$lib/types';
+	import { getContext } from 'svelte';
 
-	import data from '$lib/data.json';
-	import type { CategorisedTransactions, Transaction } from '$lib/types';
+	let transactions: StateWrapper<Transaction[]> = getContext('transactions');
+	let categories: Category[] = getContext('categories');
+	let balance: StateWrapper<Pick<Balance, 'current' | 'expenses' | 'income'> | null> =
+		getContext('balance');
 
-	let transactions = $state(data.transactions);
-	let budgets = $state(data.budgets);
-
-	let categorizedTransactions: CategorisedTransactions = $derived.by(() => {
-		return transactions.reduce((acc: CategorisedTransactions, transaction: Transaction) => {
-			const { category } = transaction;
-			if (!acc[category]) {
-				acc[category] = [];
-			}
-			acc[category].push(transaction);
-			return acc;
-		}, {});
-	});
-	$inspect(categorizedTransactions);
+	$inspect('transactions', transactions);
+	$inspect('categories', categories);
+	$inspect('balance', balance);
 </script>
 
 <section class="budgets-diagram">
 	<div class="budgets-diagram__chart">
 		<PieChart />
 	</div>
-	<div class="bugets-diagram__legend">
-		{#each Object.entries(categorizedTransactions) as category}
-			<p>{category[0]}</p>
-		{/each}
-	</div>
+	<div class="bugets-diagram__legend"></div>
 </section>
 
 <style lang="scss"></style>

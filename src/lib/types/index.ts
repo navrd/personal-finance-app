@@ -5,6 +5,10 @@ export interface NavLinkProps {
     title: string;
 }
 
+export type StateWrapper<T> = {
+    value: T;
+}
+
 export interface BooleanContextValue {
     value: boolean;
 }
@@ -19,10 +23,36 @@ export const titleToIcon: Record<string, string> = {
 export interface Transaction {
     avatar: string;
     name: string;
-    category: string;
+    category_id: string;
     date: string;
     amount: number;
     recurring: boolean;
 }
 
 export type CategorisedTransactions = Record<string, Transaction[]>;
+
+export interface Category {
+    id: string
+    category: string
+    created_at: string
+}
+export interface SupabaseResponse<T> {
+    data: T | null
+    error: Error | null
+}
+
+export interface Balance {
+    id: string
+    user_id: string
+    current: number
+    income: number
+    expenses: number
+    created_at: string
+    updated_at: string
+}
+
+export interface BalanceUpdate {
+    current?: number
+    income?: number
+    expenses?: number
+}
