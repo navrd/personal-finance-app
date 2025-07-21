@@ -45,6 +45,14 @@
 	}
 
 	const isFormValid = $derived(email.includes('@') && password.length > 8);
+
+	$effect(() => {
+		if (!auth.initialized || !auth.user?.id) {
+			goto('/login');
+		} else {
+			goto('/');
+		}
+	});
 </script>
 
 <svelte:head>
@@ -92,12 +100,12 @@
 
 				<button type="submit" disabled={loading || !isFormValid}>
 					{loading ? 'Logging in...' : 'Login'}
-                </button>
+				</button>
 			</form>
 			<div class="button-group">
 				<button type="button" onclick={() => (showForgotPassword = true)}>
 					Forgot your password?
-                </button>
+				</button>
 			</div>
 		{:else}
 			<div class="forgot-password">

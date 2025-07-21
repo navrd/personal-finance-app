@@ -3,19 +3,23 @@
 	import { goto } from '$app/navigation';
 	import { setAuthContext } from '$lib/auth/context.svelte';
 	import { Sidebar } from '$lib/components';
-	import { setContext } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import type { Balance, Category, StateWrapper, Transaction } from '$lib/types';
 	import { supabase } from '$lib/supabaseClient';
+	import { page } from '$app/state';
 
 	let { children, data } = $props();
 
-	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = $state({value: data.categories});
-    setContext('categories', categories);
+	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = $state({
+		value: data.categories
+	});
+	setContext('categories', categories);
 
 	let transactions: StateWrapper<Transaction[]> = $state({ value: [] });
 	setContext('transactions', transactions);
 
 	const auth = setAuthContext();
+    $inspect(auth.loading, auth.initialized, auth.user?.id)
 	let minimize: StateWrapper<boolean> = $state({ value: false });
 	setContext('minimize', minimize);
 
@@ -23,7 +27,6 @@
 		value: null
 	});
 	setContext('balance', balance);
-
 
 	$effect(() => {
 		async function fetchUserBalance() {
@@ -67,12 +70,11 @@
 
 		fetchUserTransactions();
 	});
-
 	$effect(() => {
 		if (!auth.initialized || !auth.user?.id) {
 			goto('/login');
 		} else {
-			goto('/');
+			return 
 		}
 	});
 </script>

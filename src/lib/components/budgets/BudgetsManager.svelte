@@ -1,0 +1,619 @@
+<script lang="ts">
+	import { supabase } from '$lib/supabaseClient';
+	import { getAuthContext } from '$lib/auth/context.svelte';
+	import { getContext } from 'svelte';
+	import type { StateWrapper, Category } from '$lib/types';
+
+	let auth = getAuthContext();
+	$inspect(auth);
+
+	interface Budget {
+		id: string;
+		category_id: string;
+		user_id: string;
+		maximum: number;
+		theme: string;
+		created_at: string;
+		updated_at: string;
+	}
+	interface UpdateBudgetData {
+		category_id?: string;
+		user_id: string;
+		maximum?: number;
+		theme?: string;
+	}
+
+	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = getContext('categories');
+	// Reactive state
+	let budgets: Budget[] = $state([]);
+	let loading = $state(false);
+	let error: string | null | unknown = $state(null);
+	let user = $state(null);
+
+	// Form state
+	let showForm = $state(false);
+	let editingBudget: Budget | null = $state(null);
+	let formData = $state({
+		category_id: '',
+		maximum: '',
+		theme: '#277C78'
+	});
+
+	// Predefined color themes
+	const colorThemes = [
+		'#277C78',
+		'#82C341',
+		'#F2CDAC',
+		'#626070',
+		'#597081',
+		'#AF81BA',
+		'#FF9500',
+		'#DC2626'
+	];
+    
+
+
+	// Budget service class
+	class BudgetService {
+		async getAll() {
+			const { data, error } = await supabase
+				.from('budgets')
+				.select('*')
+				.order('created_at', { ascending: false });
+
+			if (error) throw error;
+			return data || [];
+		}
+
+		async create(budgetData: Omit<UpdateBudgetData, 'id'>) {
+			const { data, error } = await supabase
+				.from('budgets')
+				.insert([
+					{
+						...budgetData,
+						user_id: auth.user?.id
+					}
+				])
+				.select()
+				.single();
+
+			if (error) throw error;
+			return data;
+		}
+
+		async update(id: String, budgetData: UpdateBudgetData) {
+			const { data, error } = await supabase
+				.from('budgets')
+				.update(budgetData)
+				.eq('id', id)
+				.select()
+				.single();
+
+			if (error) throw error;
+			return data;
+		}
+
+		async delete(id: string) {
+			const { error } = await supabase.from('budgets').delete().eq('id', id);
+
+			if (error) throw error;
+		}
+
+		async getByCategory(category: string) {
+			const { data, error } = await supabase.rpc('get_user_budgets', {
+				p_category: category
+			});
+
+			if (error) throw error;
+			return data || [];
+		}
+	}
+
+	const budgetService = new BudgetService();
+
+	// Load budgets
+	async function loadBudgets() {
+		try {
+			loading = true;
+			error = null;
+			budgets = await budgetService.getAll();
+		} catch (err) {
+			error = err;
+			console.error('Error loading budgets:', err);
+		} finally {
+			loading = false;
+		}
+	}
+
+	// Handle form submission
+	async function handleSubmit(event: SubmitEvent) {
+		event.preventDefault();
+
+		if (!formData.category_id || !formData.maximum) {
+			error = 'Please fill in all required fields';
+			return;
+		}
+
+		try {
+			loading = true;
+			error = null;
+
+			const budgetData = {
+				category_id: formData.category_id,
+				user_id: auth.user!.id,
+				maximum: parseFloat(formData.maximum),
+				theme: formData.theme
+			};
+
+			if (editingBudget) {
+				// Update existing budget
+				const updated = await budgetService.update(editingBudget.id, budgetData);
+				const index = budgets.findIndex((b) => b.id === editingBudget?.id);
+				if (index !== -1) {
+					budgets[index] = updated;
+				}
+			} else {
+				// Create new budget
+				const newBudget = await budgetService.create(budgetData);
+				budgets = [newBudget, ...budgets];
+			}
+
+			resetForm();
+		} catch (err: unknown) {
+			error = err;
+			console.error('Error saving budget:', err);
+		} finally {
+			loading = false;
+		}
+	}
+
+	// Edit budget
+	function editBudget(budget: Budget) {
+		editingBudget = budget;
+		formData = {
+			category_id: budget.category_id,
+			maximum: budget.maximum.toString(),
+			theme: budget.theme
+		};
+		showForm = true;
+	}
+
+	// Delete budget
+	async function deleteBudget(id: string) {
+		if (!confirm('Are you sure you want to delete this budget?')) return;
+
+		try {
+			loading = true;
+			error = null;
+			await budgetService.delete(id);
+			budgets = budgets.filter((b) => b.id !== id);
+		} catch (err) {
+			error = err;
+			console.error('Error deleting budget:', err);
+		} finally {
+			loading = false;
+		}
+	}
+
+	// Reset form
+	function resetForm() {
+		formData = {
+			category_id: '',
+			maximum: '',
+			theme: '#277C78'
+		};
+		editingBudget = null;
+		showForm = false;
+	}
+
+	// Format currency
+	function formatCurrency(amount: number) {
+		return new Intl.NumberFormat('en-US', {
+			style: 'currency',
+			currency: 'USD'
+		}).format(amount);
+	}
+
+	// Check authentication and load data
+
+	$effect(() => {
+        async function getAllBudgets() {
+            budgets = await budgetService.getAll()
+        }
+		if (auth.user?.id) {
+            getAllBudgets()
+		}
+	});
+</script>
+
+<div class="budget-manager">
+	<div class="header">
+		<h1>Budget Manager</h1>
+		{#if auth.user?.id}
+			<button onclick={() => (showForm = !showForm)} class="btn btn-primary">
+				{showForm ? 'Cancel' : 'Add Budget'}
+			</button>
+		{/if}
+	</div>
+
+	{#if error}
+		<div class="alert alert-error" role="alert">
+			{error}
+			<button onclick={() => (error = null)} class="close-btn">&times;</button>
+		</div>
+	{/if}
+
+	{#if !auth.user?.id}
+		<div class="auth-prompt">
+			<p>Please sign in to manage your budgets.</p>
+		</div>
+	{:else}
+		{#if showForm}
+			<div class="form-container">
+				<form onsubmit={handleSubmit} class="budget-form">
+					<h2>{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
+
+					<div class="form-group">
+						<label for="category">Category *</label>
+						<select
+							id="category"
+							bind:value={formData.category_id}
+							placeholder="e.g. Entertainment, Food, Transport"
+							required
+						>
+							{#each categories.value as category}
+								<option value={category.id}>{category.category}</option>
+							{/each}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="maximum">Maximum Amount *</label>
+						<input
+							id="maximum"
+							type="number"
+							step="0.01"
+							min="0.01"
+							bind:value={formData.maximum}
+							placeholder="0.00"
+							required
+						/>
+					</div>
+
+					<div class="form-group">
+						<label for="theme">Theme Color</label>
+						<div class="color-picker">
+							{#each colorThemes as color}
+								<button
+									type="button"
+									class="color-option {formData.theme === color ? 'selected' : ''}"
+									style="background-color: {color}"
+									onclick={() => (formData.theme = color)}
+									title={color}>x</button
+								>
+							{/each}
+						</div>
+						<input id="theme" type="color" bind:value={formData.theme} class="color-input" />
+					</div>
+
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary" disabled={loading}>
+							{loading ? 'Saving...' : editingBudget ? 'Update Budget' : 'Create Budget'}
+						</button>
+						<button type="button" onclick={resetForm} class="btn btn-secondary"> Cancel </button>
+					</div>
+				</form>
+			</div>
+		{/if}
+
+		<div class="budgets-list">
+			{#if loading && budgets.length === 0}
+				<div class="loading">Loading budgets...</div>
+			{:else if budgets.length === 0}
+				<div class="empty-state">
+					<p>No budgets found. Create your first budget to get started!</p>
+				</div>
+			{:else}
+				<div class="budgets-grid">
+					{#each budgets as budget (budget.id)}
+						<div class="budget-card" style="border-left: 4px solid {budget.theme}">
+							<div class="budget-header">
+								<h3 class="category">{budget.category_id}</h3>
+								<div class="actions">
+									<button onclick={() => editBudget(budget)} class="btn-icon" title="Edit">
+										✏️
+									</button>
+									<button onclick={() => deleteBudget(budget.id)} class="btn-icon" title="Delete">
+										🗑️
+									</button>
+								</div>
+							</div>
+
+							<div class="budget-amount">
+								<span class="amount">{formatCurrency(budget.maximum)}</span>
+								<span class="label">Maximum</span>
+							</div>
+
+							<div class="budget-meta">
+								<small>Created: {new Date(budget.created_at).toLocaleDateString()}</small>
+								{#if budget.updated_at !== budget.created_at}
+									<small>Updated: {new Date(budget.updated_at).toLocaleDateString()}</small>
+								{/if}
+							</div>
+						</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	{/if}
+</div>
+
+<style>
+	.budget-manager {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 20px;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	}
+
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 30px;
+	}
+
+	.header h1 {
+		margin: 0;
+		color: #1f2937;
+	}
+
+	.btn {
+		padding: 10px 20px;
+		border: none;
+		border-radius: 8px;
+		font-size: 14px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s;
+		text-decoration: none;
+		display: inline-block;
+	}
+
+	.btn-primary {
+		background: #277c78;
+		color: white;
+	}
+
+	.btn-primary:hover {
+		background: #1f5f5c;
+	}
+
+	.btn-secondary {
+		background: #6b7280;
+		color: white;
+	}
+
+	.btn-secondary:hover {
+		background: #4b5563;
+	}
+
+	.btn-icon {
+		background: none;
+		border: none;
+		font-size: 16px;
+		cursor: pointer;
+		padding: 5px;
+		border-radius: 4px;
+		transition: background-color 0.2s;
+	}
+
+	.btn-icon:hover {
+		background: #f3f4f6;
+	}
+
+	.alert {
+		padding: 15px;
+		border-radius: 8px;
+		margin-bottom: 20px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.alert-error {
+		background: #fef2f2;
+		color: #dc2626;
+		border: 1px solid #fecaca;
+	}
+
+	.close-btn {
+		background: none;
+		border: none;
+		font-size: 18px;
+		cursor: pointer;
+		color: inherit;
+	}
+
+	.auth-prompt {
+		text-align: center;
+		padding: 40px;
+		background: #f9fafb;
+		border-radius: 12px;
+		color: #6b7280;
+	}
+
+	.form-container {
+		background: white;
+		border: 1px solid #e5e7eb;
+		border-radius: 12px;
+		padding: 30px;
+		margin-bottom: 30px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	}
+
+	.budget-form h2 {
+		margin: 0 0 20px 0;
+		color: #1f2937;
+	}
+
+	.form-group {
+		margin-bottom: 20px;
+	}
+
+	.form-group label {
+		display: block;
+		margin-bottom: 5px;
+		font-weight: 500;
+		color: #374151;
+	}
+
+	.form-group input {
+		width: 100%;
+		padding: 10px 12px;
+		border: 1px solid #d1d5db;
+		border-radius: 6px;
+		font-size: 14px;
+	}
+
+	.form-group input:focus {
+		outline: none;
+		border-color: #277c78;
+		box-shadow: 0 0 0 3px rgba(39, 124, 120, 0.1);
+	}
+
+	.color-picker {
+		display: flex;
+		gap: 8px;
+		margin-bottom: 10px;
+		flex-wrap: wrap;
+	}
+
+	.color-option {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		border: 2px solid transparent;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.color-option:hover,
+	.color-option.selected {
+		border-color: #1f2937;
+		transform: scale(1.1);
+	}
+
+	.color-input {
+		width: 60px !important;
+		height: 40px;
+		padding: 2px;
+	}
+
+	.form-actions {
+		display: flex;
+		gap: 12px;
+		margin-top: 30px;
+	}
+
+	.loading {
+		text-align: center;
+		padding: 40px;
+		color: #6b7280;
+	}
+
+	.empty-state {
+		text-align: center;
+		padding: 40px;
+		background: #f9fafb;
+		border-radius: 12px;
+		color: #6b7280;
+	}
+
+	.budgets-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 20px;
+	}
+
+	.budget-card {
+		background: white;
+		border: 1px solid #e5e7eb;
+		border-radius: 12px;
+		padding: 20px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+	}
+
+	.budget-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.budget-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 15px;
+	}
+
+	.category {
+		margin: 0;
+		font-size: 18px;
+		font-weight: 600;
+		color: #1f2937;
+	}
+
+	.actions {
+		display: flex;
+		gap: 5px;
+	}
+
+	.budget-amount {
+		margin-bottom: 15px;
+	}
+
+	.amount {
+		display: block;
+		font-size: 24px;
+		font-weight: 700;
+		color: #277c78;
+	}
+
+	.label {
+		font-size: 12px;
+		color: #6b7280;
+		text-transform: uppercase;
+		font-weight: 500;
+	}
+
+	.budget-meta {
+		border-top: 1px solid #f3f4f6;
+		padding-top: 10px;
+	}
+
+	.budget-meta small {
+		display: block;
+		color: #9ca3af;
+		font-size: 12px;
+		margin-bottom: 2px;
+	}
+
+	@media (max-width: 768px) {
+		.header {
+			flex-direction: column;
+			gap: 15px;
+			text-align: center;
+		}
+
+		.budgets-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.form-actions {
+			flex-direction: column;
+		}
+	}
+</style>
