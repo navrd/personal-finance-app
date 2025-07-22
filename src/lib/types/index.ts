@@ -56,3 +56,26 @@ export interface BalanceUpdate {
     income?: number
     expenses?: number
 }
+
+export interface SortOption {
+    id: string
+    title: string
+    created_at: string
+    updated_at: string
+}
+
+export interface PaginationData<T> {
+    items: T[];
+    totalPages: number;
+    currentPage: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+    totalItems: number;
+}
+
+export interface TransactionFilters {
+    search: string;
+    debouncedSearch: string;
+    sort: string;
+    category: string;
+}

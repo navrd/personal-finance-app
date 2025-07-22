@@ -3,10 +3,9 @@
 	import { goto } from '$app/navigation';
 	import { setAuthContext } from '$lib/auth/context.svelte';
 	import { Sidebar } from '$lib/components';
-	import { onMount, setContext } from 'svelte';
-	import type { Balance, Category, StateWrapper, Transaction } from '$lib/types';
+	import { setContext } from 'svelte';
+	import type { Balance, Category, SortOption, StateWrapper, Transaction } from '$lib/types';
 	import { supabase } from '$lib/supabaseClient';
-	import { page } from '$app/state';
 
 	let { children, data } = $props();
 
@@ -15,11 +14,16 @@
 	});
 	setContext('categories', categories);
 
+	let sortOptions: StateWrapper<Pick<SortOption, 'id' | 'title'>[]> = $state({
+		value: data.sortOptions
+	});
+	setContext('sortOptions', sortOptions);
+
 	let transactions: StateWrapper<Transaction[]> = $state({ value: [] });
 	setContext('transactions', transactions);
 
 	const auth = setAuthContext();
-    $inspect(auth.loading, auth.initialized, auth.user?.id)
+	$inspect(auth.loading, auth.initialized, auth.user?.id);
 	let minimize: StateWrapper<boolean> = $state({ value: false });
 	setContext('minimize', minimize);
 
@@ -74,7 +78,7 @@
 		if (!auth.initialized || !auth.user?.id) {
 			goto('/login');
 		} else {
-			return 
+			return;
 		}
 	});
 </script>
