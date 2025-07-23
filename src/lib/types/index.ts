@@ -79,3 +79,20 @@ export interface TransactionFilters {
     sort: string;
     category: string;
 }
+
+export interface TransactionSortOption {
+    id: string; // UUID from database
+    label: string;
+    field: string;
+    direction: 'asc' | 'desc';
+    type: 'string' | 'number' | 'date' | 'boolean';
+    sort_order?: number;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface GenericSortConfig {
+    field: string;
+    direction: 'asc' | 'desc';
+    type: 'string' | 'number' | 'date' | 'boolean';
+}

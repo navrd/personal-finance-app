@@ -5,7 +5,6 @@
 	import type { StateWrapper, Category } from '$lib/types';
 
 	let auth = getAuthContext();
-	$inspect(auth);
 
 	interface Budget {
 		id: string;
@@ -50,8 +49,6 @@
 		'#FF9500',
 		'#DC2626'
 	];
-    
-
 
 	// Budget service class
 	class BudgetService {
@@ -65,7 +62,7 @@
 			return data || [];
 		}
 
-		async create(budgetData: Omit<UpdateBudgetData, 'id'>) {
+		async create(budgetData: UpdateBudgetData) {
 			const { data, error } = await supabase
 				.from('budgets')
 				.insert([
@@ -217,11 +214,11 @@
 	// Check authentication and load data
 
 	$effect(() => {
-        async function getAllBudgets() {
-            budgets = await budgetService.getAll()
-        }
+		async function getAllBudgets() {
+			budgets = await budgetService.getAll();
+		}
 		if (auth.user?.id) {
-            getAllBudgets()
+			getAllBudgets();
 		}
 	});
 </script>
@@ -314,7 +311,7 @@
 					<p>No budgets found. Create your first budget to get started!</p>
 				</div>
 			{:else}
-				<div class="budgets-grid">
+				<div class="budgets">
 					{#each budgets as budget (budget.id)}
 						<div class="budget-card" style="border-left: 4px solid {budget.theme}">
 							<div class="budget-header">
@@ -350,10 +347,14 @@
 
 <style>
 	.budget-manager {
-		max-width: 1200px;
-		margin: 0 auto;
+		display: flex;
+		flex-direction: column; 
 		padding: 20px;
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	}
+	.budgets-list {
+		display: flex;
+		flex-direction: column;
 	}
 
 	.header {
@@ -530,13 +531,14 @@
 		color: #6b7280;
 	}
 
-	.budgets-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		gap: 20px;
+	.budgets {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
 	}
 
 	.budget-card {
+		flex-basis: calc((100% - 1rem) / 2);   
 		background: white;
 		border: 1px solid #e5e7eb;
 		border-radius: 12px;
@@ -601,15 +603,15 @@
 		margin-bottom: 2px;
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 1023px) {
 		.header {
 			flex-direction: column;
 			gap: 15px;
 			text-align: center;
 		}
 
-		.budgets-grid {
-			grid-template-columns: 1fr;
+		.budgets {
+			flex-basis: calc((100%));
 		}
 
 		.form-actions {

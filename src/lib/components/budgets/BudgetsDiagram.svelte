@@ -7,17 +7,25 @@
 	let categories: Category[] = getContext('categories');
 	let balance: StateWrapper<Pick<Balance, 'current' | 'expenses' | 'income'> | null> =
 		getContext('balance');
-
-	$inspect('transactions', transactions);
-	$inspect('categories', categories);
-	$inspect('balance', balance);
 </script>
 
 <section class="budgets-diagram">
 	<div class="budgets-diagram__chart">
 		<PieChart />
 	</div>
-	<div class="bugets-diagram__legend"></div>
+	<div class="budgets-diagram__legend"></div>
 </section>
 
-<style lang="scss"></style>
+<style lang="scss">
+	.budgets-diagram {
+		padding: 20px;
+		display: flex;
+		max-width: 100%;
+	}
+	.budgets-diagram__chart {
+		max-width: inherit;
+	}
+	.budgets-diagram__legend {
+		max-width: inherit;
+	}
+</style>

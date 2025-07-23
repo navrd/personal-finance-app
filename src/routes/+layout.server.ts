@@ -1,9 +1,10 @@
 import { supabase } from "$lib/supabaseClient";
-import type { Category, SortOption } from "$lib/types";
+import type { Category, SortOption, TransactionSortOption } from "$lib/types";
 
 export const load = async () => {
     let categories: Pick<Category, 'id' | 'category'>[] = [];
     let sortOptions: Pick<SortOption, 'id' | 'title'>[] = [];
+    let transactionSortOptions: TransactionSortOption[] = [];
     async function getCategoriesMinimal(): Promise<Pick<Category, 'id' | 'category'>[]> {
         try {
             const { data, error } = await supabase
@@ -39,9 +40,28 @@ export const load = async () => {
         }
     }
 
+    async function getTransactionSortOptions(): Promise<TransactionSortOption[]> {
+        try {
+            const { data, error } = await supabase
+                .from('transactions_sort_options')
+                .select('*')
+                .order('created_at', { ascending: true });
+
+            if (error) {
+                throw new Error(`Failed to fetch sort options: ${error.message}`);
+            }
+
+            return data || []
+        } catch (error) {
+            console.error('Failed to get transactions sort options:', error);
+            throw error;
+        }
+    }
+
 
     categories = await getCategoriesMinimal();
     sortOptions = await getSortOptions();
+    transactionSortOptions = await getTransactionSortOptions();
 
-    return { categories, sortOptions }
+    return { categories, sortOptions, transactionSortOptions }
 }

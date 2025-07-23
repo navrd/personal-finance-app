@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
 		Category,
 		PaginationData,
-		SortOption,
 		StateWrapper,
 		Transaction,
-		TransactionFilters
+		TransactionFilters,
+		TransactionSortOption
 	} from '$lib/types';
 	import { getContext } from 'svelte';
 
@@ -13,14 +14,15 @@
 
 	let transactions: StateWrapper<Transaction[]> = getContext('transactions');
 	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = getContext('categories');
-	let sortOptions: StateWrapper<Pick<SortOption, 'id' | 'title'>[]> = getContext('sortOptions');
+	let transactionSortOptions: StateWrapper<TransactionSortOption[]> =
+		getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
 
 	let filters: TransactionFilters = $state({
 		search: '',
 		debouncedSearch: '',
-		sort: sortOptions.value[0].title,
+		sort: transactionSortOptions.value[4].id,
 		category: 'all'
 	});
 
@@ -48,35 +50,13 @@
 			return searchFlag && categoryFlag;
 		});
 	});
-
+    
 	let sortedTransactions = $derived.by(() => {
-		const sorted = [...filteredTransactions];
-
-		switch (filters.sort) {
-			case 'A to Z':
-				return sorted.sort((a, b) => a.name.localeCompare(b.name));
-
-			case 'Z to A':
-				return sorted.sort((a, b) => b.name.localeCompare(a.name));
-
-			case 'Highest':
-				return sorted.sort((a, b) => b.amount - a.amount);
-
-			case 'Lowest':
-				return sorted.sort((a, b) => a.amount - b.amount);
-
-			case 'Latest':
-				return sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-			case 'Oldest':
-				return sorted.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-			default:
-				return sorted;
-		}
+		let sorted = [...filteredTransactions];
+		if (filters.sort && transactionSortOptions.value.length > 0) {
+			return sortTransactions(sorted, filters.sort, transactionSortOptions.value);
+		} else return sorted;
 	});
-
-	// Derived pagination data
 	const paginationData: PaginationData<Transaction> = $derived.by(() => {
 		const totalPages = Math.ceil(sortedTransactions.length / pageSize);
 		const startIndex = (currentPage - 1) * pageSize;
@@ -121,8 +101,8 @@
 		</div>
 		<div class="transactions-list__filter">
 			<select bind:value={filters.sort}
-				>{#each sortOptions.value as sortOption}
-					<option value={sortOption.title}>{sortOption.title}</option>
+				>{#each transactionSortOptions.value as sortOption}
+					<option value={sortOption.id}>{sortOption.label}</option>
 				{/each}</select
 			>
 		</div>

@@ -4,10 +4,19 @@
 	import { setAuthContext } from '$lib/auth/context.svelte';
 	import { Sidebar } from '$lib/components';
 	import { setContext } from 'svelte';
-	import type { Balance, Category, SortOption, StateWrapper, Transaction } from '$lib/types';
+	import type {
+		Balance,
+		Category,
+		SortOption,
+		StateWrapper,
+		Transaction,
+		TransactionSortOption
+	} from '$lib/types';
 	import { supabase } from '$lib/supabaseClient';
 
 	let { children, data } = $props();
+
+	const auth = setAuthContext();
 
 	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = $state({
 		value: data.categories
@@ -19,11 +28,14 @@
 	});
 	setContext('sortOptions', sortOptions);
 
+	let transactionSortOptions: StateWrapper<TransactionSortOption[]> = $state({
+		value: data.transactionSortOptions
+	});
+	setContext('transactionSortOptions', transactionSortOptions);
+
 	let transactions: StateWrapper<Transaction[]> = $state({ value: [] });
 	setContext('transactions', transactions);
 
-	const auth = setAuthContext();
-	$inspect(auth.loading, auth.initialized, auth.user?.id);
 	let minimize: StateWrapper<boolean> = $state({ value: false });
 	setContext('minimize', minimize);
 
@@ -104,9 +116,12 @@
 	.app {
 		display: flex;
 		min-height: 100dvh;
-		min-width: 100dvw;
+		min-width: 100%;
+		max-width: 100%;
 	}
 	.content {
+		min-width: 100%;
+		max-width: 100%;
 		transition: padding 0.3s ease;
 		@media (min-width: 0px) and (max-width: 1023px) {
 			padding-bottom: var(--sidebar-height);
