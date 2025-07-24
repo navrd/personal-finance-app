@@ -9,7 +9,7 @@
 	let { minimize }: NavigationProps = $props();
 
 	const links: Omit<NavLinkProps, 'minimize'>[] = [
-		{ href: '/', title: 'overview' },
+		{ href: '/overview', title: 'overview' },
 		{ href: '/transactions', title: 'transactions' },
 		{ href: '/budgets', title: 'budgets' },
 		{ href: '/pots', title: 'pots' },

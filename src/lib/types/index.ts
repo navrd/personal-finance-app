@@ -96,3 +96,54 @@ export interface GenericSortConfig {
     direction: 'asc' | 'desc';
     type: 'string' | 'number' | 'date' | 'boolean';
 }
+
+export interface AuthFormError {
+    error: string
+    email?: string
+    fullName?: string
+}
+
+export interface SignupFormData {
+    full_name: string
+    email: string
+    password: string
+}
+
+export interface LoginFormData {
+    email: string
+    password: string
+}
+
+export interface Pot {
+    id: string;
+    user_id: string;
+    name: string;
+    target: number;
+    total: number;
+    theme: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface CreatePotData {
+    name: string;
+    target: number;
+    total: number;
+    theme: string;
+}
+
+export interface Budget {
+    id: string;
+    category_id: string;
+    user_id: string;
+    maximum: number;
+    theme: string;
+    created_at: string;
+    updated_at: string;
+}
+export interface UpdateBudgetData {
+    category_id?: string;
+    user_id: string;
+    maximum?: number;
+    theme?: string;
+}

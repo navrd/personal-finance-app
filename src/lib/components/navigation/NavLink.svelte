@@ -11,7 +11,7 @@
 </script>
 
 <li class="sidebar__navlink" class:sidebar__navlink_minimized={minimize}>
-	<BlankLink {href}>
+	<BlankLink href="/app{href}">
 		<div class="navlink__content" class:navlink__content_active={active}>
 			<div class="navlink__underlay" class:navlink__underlay_active={active}></div>
 			<div
