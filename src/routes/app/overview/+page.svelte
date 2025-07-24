@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { StateWrapper } from '$lib/types';
-	import { getContext } from 'svelte';
+	import { BudgetsDiagram } from '$lib/components';
 
+	let { children } = $props();
 </script>
 
 <svelte:head>
@@ -9,6 +9,6 @@
 	<meta name="description" content="Personal Finance App" />
 </svelte:head>
 
-<style lang="scss">
+<BudgetsDiagram />
 
-</style>
+{@render children?.()}

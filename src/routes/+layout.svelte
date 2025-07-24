@@ -1,97 +1,74 @@
 <script lang="ts">
 	import '$lib/assets/css/main.css';
-	import { goto } from '$app/navigation';
-	import { setAuthContext } from '$lib/auth/context.svelte';
-	import { Sidebar } from '$lib/components';
 	import { setContext } from 'svelte';
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import type {
 		Balance,
+		Budget,
 		Category,
-		SortOption,
+		Pot,
 		StateWrapper,
 		Transaction,
 		TransactionSortOption
 	} from '$lib/types';
-	import { supabase } from '$lib/supabaseClient';
+	import type { User } from '@supabase/auth-js';
+	import type { SupabaseClient } from '@supabase/supabase-js';
 
-	let { children, data } = $props();
+	let { data, children } = $props();
+	$inspect(data);
 
-	const auth = setAuthContext();
+	let { session } = $derived(data);
+
+	onMount(() => {
+		const { data } = supabase.value.auth.onAuthStateChange((_, newSession) => {
+			if (newSession?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+		return () => data.subscription.unsubscribe();
+	});
+
+	let user: StateWrapper<User | null> = $state({ value: data.user });
+	setContext('user', user);
+
+	let supabase: StateWrapper<SupabaseClient> = $state({ value: data.supabase });
+	setContext('supabase', supabase);
 
 	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = $state({
 		value: data.categories
 	});
 	setContext('categories', categories);
 
-	let sortOptions: StateWrapper<Pick<SortOption, 'id' | 'title'>[]> = $state({
-		value: data.sortOptions
-	});
-	setContext('sortOptions', sortOptions);
-
 	let transactionSortOptions: StateWrapper<TransactionSortOption[]> = $state({
 		value: data.transactionSortOptions
 	});
 	setContext('transactionSortOptions', transactionSortOptions);
 
-	let transactions: StateWrapper<Transaction[]> = $state({ value: [] });
+	let transactions: StateWrapper<Transaction[]> = $state({ value: data.transactions });
 	setContext('transactions', transactions);
 
 	let minimize: StateWrapper<boolean> = $state({ value: false });
 	setContext('minimize', minimize);
 
 	let balance = $state<StateWrapper<Pick<Balance, 'current' | 'expenses' | 'income'> | null>>({
-		value: null
+		value: data.balance
 	});
 	setContext('balance', balance);
 
-	$effect(() => {
-		async function fetchUserBalance() {
-			try {
-				const { data, error } = await supabase
-					.from('balance')
-					.select('current, income, expenses')
-					.single();
+	let budgets = $state<StateWrapper<Budget[]>>({ value: data.budgets });
+	setContext('budgets', budgets);
 
-				if (error) {
-					console.error('Error fetching balance:', error);
-					return null;
-				}
-
-				balance.value = data || null;
-			} catch (err) {
-				console.error('Unexpected error:', err);
-				return null;
-			}
-		}
-		fetchUserBalance();
-	});
+	let pots = $state<StateWrapper<Pot[]>>({ value: data.pots });
+	setContext('pots', pots);
 
 	$effect(() => {
-		async function fetchUserTransactions() {
-			if (!auth.initialized || !auth.user?.id || auth.loading) {
-				return;
-			}
-			try {
-				const { data, error } = await supabase.from('transactions').select('*');
-
-				if (error) {
-					console.error('Error fetching transactions:', error.message);
-				}
-
-				transactions.value = data || [];
-			} catch (err: any) {
-				console.error('Fetch error:', err);
-			}
-		}
-
-		fetchUserTransactions();
-	});
-	$effect(() => {
-		if (!auth.initialized || !auth.user?.id) {
-			goto('/login');
-		} else {
-			return;
-		}
+		user.value = data.session?.user || null;
+		categories.value = data.categories;
+		transactions.value = data.transactions;
+		balance.value = data.balance;
+		budgets.value = data.budgets;
+		pots.value = data.pots;
 	});
 </script>
 
@@ -100,16 +77,7 @@
 	<meta name="description" content="Personal Finance App" />
 </svelte:head>
 <div class="app">
-	{#if auth.loading}
-		<h1>Loading...</h1>
-	{:else if !auth.initialized || !auth.user?.id}
-		{@render children?.()}
-	{:else}
-		<Sidebar />
-		<main class="content" class:content_expanded={minimize.value}>
-			{@render children?.()}
-		</main>
-	{/if}
+	{@render children?.()}
 </div>
 
 <style lang="scss">
@@ -118,21 +86,5 @@
 		min-height: 100dvh;
 		min-width: 100%;
 		max-width: 100%;
-	}
-	.content {
-		min-width: 100%;
-		max-width: 100%;
-		transition: padding 0.3s ease;
-		@media (min-width: 0px) and (max-width: 1023px) {
-			padding-bottom: var(--sidebar-height);
-		}
-		@media (min-width: 1024px) {
-			padding-left: var(--sidebar-width);
-		}
-	}
-	.content_expanded {
-		@media (min-width: 1024px) {
-			padding-left: 5rem;
-		}
 	}
 </style>

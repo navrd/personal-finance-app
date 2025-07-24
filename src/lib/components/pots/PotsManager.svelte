@@ -1,31 +1,16 @@
 <script lang="ts">
-	import { getAuthContext } from '$lib/auth/context.svelte';
-	import { supabase } from '$lib/supabaseClient';
-	import { onMount } from 'svelte';
+	import type { CreatePotData, Pot, StateWrapper } from '$lib/types';
+	import type { User, SupabaseClient } from '@supabase/supabase-js';
+	import { getContext, onMount } from 'svelte';
 
 	// Types
-	interface Pot {
-		id: string;
-		user_id: string;
-		name: string;
-		target: number;
-		total: number;
-		theme: string;
-		created_at?: string;
-		updated_at?: string;
-	}
 
-	interface CreatePotData {
-		name: string;
-		target: number;
-		total: number;
-		theme: string;
-	}
-
-	let auth = getAuthContext();
+	let user: StateWrapper<User | null> = getContext('user');
+	let supabase: StateWrapper<SupabaseClient> = getContext('supabase');
+	let pots: StateWrapper<Pot[]> = getContext('pots');
+	$inspect('pots: ', pots)
 
 	// Reactive state
-	let pots = $state<Pot[]>([]);
 	let loading = $state(false);
 	let error = $state<string | null>(null);
 	let showCreateForm = $state(false);
@@ -51,42 +36,17 @@
 		'#597C7C'
 	];
 
-	onMount(() => {
-		fetchPots();
-	});
-
 	// CRUD Operations
-	async function fetchPots() {
-		try {
-			loading = true;
-			error = null;
-
-			const { data, error: fetchError } = await supabase
-				.from('pots')
-				.select('*')
-				.order('created_at', { ascending: false });
-
-			if (fetchError) throw fetchError;
-
-			pots = data || [];
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to fetch pots';
-			console.error('Error fetching pots:', err);
-		} finally {
-			loading = false;
-		}
-	}
-
 	async function createPot() {
 		try {
 			error = null;
 
-			const { data, error: createError } = await supabase
+			const { data, error: createError } = await supabase.value
 				.from('pots')
 				.insert([
 					{
 						...formData,
-						user_id: auth.user?.id
+						user_id: user.value?.id
 					}
 				])
 				.select();
@@ -94,7 +54,7 @@
 			if (createError) throw createError;
 
 			if (data && data[0]) {
-				pots = [data[0], ...pots];
+				pots.value = [data[0], ...pots.value];
 			}
 
 			resetForm();
@@ -109,7 +69,7 @@
 		try {
 			error = null;
 
-			const { data, error: updateError } = await supabase
+			const { data, error: updateError } = await supabase.value
 				.from('pots')
 				.update(updates)
 				.eq('id', id)
@@ -118,9 +78,9 @@
 			if (updateError) throw updateError;
 
 			if (data && data[0]) {
-				const index = pots.findIndex((pot) => pot.id === id);
+				const index = pots.value.findIndex((pot) => pot.id === id);
 				if (index !== -1) {
-					pots[index] = { ...pots[index], ...data[0] };
+					pots.value[index] = { ...pots.value[index], ...data[0] };
 				}
 			}
 
@@ -138,11 +98,11 @@
 		try {
 			error = null;
 
-			const { error: deleteError } = await supabase.from('pots').delete().eq('id', id);
+			const { error: deleteError } = await supabase.value.from('pots').delete().eq('id', id);
 
 			if (deleteError) throw deleteError;
 
-			pots = pots.filter((pot) => pot.id !== id);
+			pots.value = pots.value.filter((pot) => pot.id !== id);
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to delete pot';
 			console.error('Error deleting pot:', err);
@@ -278,13 +238,13 @@
 
 	{#if loading}
 		<div class="loading">Loading pots...</div>
-	{:else if pots.length === 0}
+	{:else if pots.value.length === 0}
 		<div class="empty-state">
 			<p>No pots created yet. Start saving by creating your first pot!</p>
 		</div>
 	{:else}
 		<div class="pots-grid">
-			{#each pots as pot (pot.id)}
+			{#each pots.value as pot (pot.id)}
 				<div class="pot-card" style="border-left: 4px solid {pot.theme}">
 					<div class="pot-header">
 						<h3>{pot.name}</h3>

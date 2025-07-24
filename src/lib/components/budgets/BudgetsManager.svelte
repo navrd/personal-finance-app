@@ -1,33 +1,16 @@
 <script lang="ts">
-	import { supabase } from '$lib/supabaseClient';
-	import { getAuthContext } from '$lib/auth/context.svelte';
 	import { getContext } from 'svelte';
-	import type { StateWrapper, Category } from '$lib/types';
+	import type { StateWrapper, Category, Budget, UpdateBudgetData } from '$lib/types';
+	import type { User, SupabaseClient } from '@supabase/supabase-js';
 
-	let auth = getAuthContext();
-
-	interface Budget {
-		id: string;
-		category_id: string;
-		user_id: string;
-		maximum: number;
-		theme: string;
-		created_at: string;
-		updated_at: string;
-	}
-	interface UpdateBudgetData {
-		category_id?: string;
-		user_id: string;
-		maximum?: number;
-		theme?: string;
-	}
+	let user: StateWrapper<User | null> = getContext('user');
+	let supabase: StateWrapper<SupabaseClient> = getContext('supabase');
 
 	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = getContext('categories');
 	// Reactive state
-	let budgets: Budget[] = $state([]);
+	let budgets: StateWrapper<Budget[]> = getContext('budgets')
 	let loading = $state(false);
 	let error: string | null | unknown = $state(null);
-	let user = $state(null);
 
 	// Form state
 	let showForm = $state(false);
@@ -37,6 +20,7 @@
 		maximum: '',
 		theme: '#277C78'
 	});
+
 
 	// Predefined color themes
 	const colorThemes = [
@@ -51,75 +35,39 @@
 	];
 
 	// Budget service class
-	class BudgetService {
-		async getAll() {
-			const { data, error } = await supabase
-				.from('budgets')
-				.select('*')
-				.order('created_at', { ascending: false });
 
-			if (error) throw error;
-			return data || [];
-		}
+	async function createBudget(budgetData: UpdateBudgetData) {
+		const { data, error } = await supabase.value
+			.from('budgets')
+			.insert([
+				{
+					...budgetData,
+					user_id: user.value?.id
+				}
+			])
+			.select()
+			.single();
 
-		async create(budgetData: UpdateBudgetData) {
-			const { data, error } = await supabase
-				.from('budgets')
-				.insert([
-					{
-						...budgetData,
-						user_id: auth.user?.id
-					}
-				])
-				.select()
-				.single();
-
-			if (error) throw error;
-			return data;
-		}
-
-		async update(id: String, budgetData: UpdateBudgetData) {
-			const { data, error } = await supabase
-				.from('budgets')
-				.update(budgetData)
-				.eq('id', id)
-				.select()
-				.single();
-
-			if (error) throw error;
-			return data;
-		}
-
-		async delete(id: string) {
-			const { error } = await supabase.from('budgets').delete().eq('id', id);
-
-			if (error) throw error;
-		}
-
-		async getByCategory(category: string) {
-			const { data, error } = await supabase.rpc('get_user_budgets', {
-				p_category: category
-			});
-
-			if (error) throw error;
-			return data || [];
-		}
+		if (error) throw error;
+		return data;
 	}
 
-	const budgetService = new BudgetService();
+	async function updateBudget(id: String, budgetData: UpdateBudgetData) {
+		const { data, error } = await supabase.value
+			.from('budgets')
+			.update(budgetData)
+			.eq('id', id)
+			.select()
+			.single();
 
-	// Load budgets
-	async function loadBudgets() {
-		try {
-			loading = true;
-			error = null;
-			budgets = await budgetService.getAll();
-		} catch (err) {
-			error = err;
-			console.error('Error loading budgets:', err);
-		} finally {
-			loading = false;
-		}
+		if (error) throw error;
+		return data;
+	}
+
+	async function deleteBudget(id: string) {
+		const { error } = await supabase.value.from('budgets').delete().eq('id', id);
+
+		if (error) throw error;
 	}
 
 	// Handle form submission
@@ -137,22 +85,22 @@
 
 			const budgetData = {
 				category_id: formData.category_id,
-				user_id: auth.user!.id,
+				user_id: user.value!.id,
 				maximum: parseFloat(formData.maximum),
 				theme: formData.theme
 			};
 
 			if (editingBudget) {
 				// Update existing budget
-				const updated = await budgetService.update(editingBudget.id, budgetData);
-				const index = budgets.findIndex((b) => b.id === editingBudget?.id);
+				const updated = await updateBudget(editingBudget.id, budgetData);
+				const index = budgets.value.findIndex((b) => b.id === editingBudget?.id);
 				if (index !== -1) {
-					budgets[index] = updated;
+					budgets.value[index] = updated;
 				}
 			} else {
 				// Create new budget
-				const newBudget = await budgetService.create(budgetData);
-				budgets = [newBudget, ...budgets];
+				const newBudget = await createBudget(budgetData);
+				budgets.value = [newBudget, ...budgets.value];
 			}
 
 			resetForm();
@@ -176,14 +124,14 @@
 	}
 
 	// Delete budget
-	async function deleteBudget(id: string) {
+	async function handleDeleteBudget(id: string) {
 		if (!confirm('Are you sure you want to delete this budget?')) return;
 
 		try {
 			loading = true;
 			error = null;
-			await budgetService.delete(id);
-			budgets = budgets.filter((b) => b.id !== id);
+			await deleteBudget(id);
+			budgets.value = budgets.value.filter((b) => b.id !== id);
 		} catch (err) {
 			error = err;
 			console.error('Error deleting budget:', err);
@@ -212,21 +160,12 @@
 	}
 
 	// Check authentication and load data
-
-	$effect(() => {
-		async function getAllBudgets() {
-			budgets = await budgetService.getAll();
-		}
-		if (auth.user?.id) {
-			getAllBudgets();
-		}
-	});
 </script>
 
 <div class="budget-manager">
 	<div class="header">
 		<h1>Budget Manager</h1>
-		{#if auth.user?.id}
+		{#if user.value?.id}
 			<button onclick={() => (showForm = !showForm)} class="btn btn-primary">
 				{showForm ? 'Cancel' : 'Add Budget'}
 			</button>
@@ -240,7 +179,7 @@
 		</div>
 	{/if}
 
-	{#if !auth.user?.id}
+	{#if !user.value?.id}
 		<div class="auth-prompt">
 			<p>Please sign in to manage your budgets.</p>
 		</div>
@@ -304,15 +243,15 @@
 		{/if}
 
 		<div class="budgets-list">
-			{#if loading && budgets.length === 0}
+			{#if loading && budgets.value.length === 0}
 				<div class="loading">Loading budgets...</div>
-			{:else if budgets.length === 0}
+			{:else if budgets.value.length === 0}
 				<div class="empty-state">
 					<p>No budgets found. Create your first budget to get started!</p>
 				</div>
 			{:else}
 				<div class="budgets">
-					{#each budgets as budget (budget.id)}
+					{#each budgets.value as budget (budget.id)}
 						<div class="budget-card" style="border-left: 4px solid {budget.theme}">
 							<div class="budget-header">
 								<h3 class="category">{budget.category_id}</h3>
@@ -320,7 +259,7 @@
 									<button onclick={() => editBudget(budget)} class="btn-icon" title="Edit">
 										✏️
 									</button>
-									<button onclick={() => deleteBudget(budget.id)} class="btn-icon" title="Delete">
+									<button onclick={() => handleDeleteBudget(budget.id)} class="btn-icon" title="Delete">
 										🗑️
 									</button>
 								</div>
@@ -348,7 +287,7 @@
 <style>
 	.budget-manager {
 		display: flex;
-		flex-direction: column; 
+		flex-direction: column;
 		padding: 20px;
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 	}
@@ -538,7 +477,7 @@
 	}
 
 	.budget-card {
-		flex-basis: calc((100% - 1rem) / 2);   
+		flex-basis: calc((100% - 1rem) / 2);
 		background: white;
 		border: 1px solid #e5e7eb;
 		border-radius: 12px;
