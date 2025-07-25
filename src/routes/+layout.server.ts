@@ -1,7 +1,7 @@
 import type { Category, TransactionSortOption, Transaction, Balance, Pot, Budget } from '$lib/types';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabase }, cookies }) => {
+export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabase }, cookies, depends }) => {
     const { session } = await safeGetSession();
 
     async function fetchCategoriesMinimal(): Promise<Pick<Category, 'id' | 'category'>[]> {
@@ -15,9 +15,9 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
                 return [];
             }
             return data || [];
-        } catch (error) {
-            console.error('Failed to get categories:', error);
-            throw error;
+        } catch (err: unknown) {
+            console.error('Failed to get categories:', err);
+            throw err;
         }
     }
 
@@ -33,9 +33,9 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
             }
 
             return data || [];
-        } catch (error) {
-            console.error('Failed to get transactions sort options:', error);
-            throw error;
+        } catch (err:unknown) {
+            console.error('Failed to get transactions sort options:', err);
+            throw err;
         }
     }
 
@@ -72,6 +72,7 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
     }
 
     async function fetchPots(): Promise<Pot[]> {
+        depends('app:pots')
         try {
 
             const { data, error: fetchError } = await supabase
@@ -89,6 +90,7 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
     }
 
     async function fetchBudgets(): Promise<Budget[]> {
+        depends('app:budgets')
         try {
             const { data, error } = await supabase
                 .from('budgets')

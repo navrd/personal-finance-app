@@ -13,7 +13,6 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession }}) => {
 export const actions: Actions = {
 signout: async ({ locals, cookies }) => {
         try {
-            console.log('signout')
             // Server-side signout
             const { error } = await locals.supabase.auth.signOut()
 
@@ -44,7 +43,6 @@ signout: async ({ locals, cookies }) => {
                 httpOnly: false, // Accessible to client JS
                 secure: false // Works in dev
             })
-            console.log('signoutsucees?')
 
         } catch (error) {
             console.error('Signout error:', error)
