@@ -69,22 +69,16 @@ const authGuard: Handle = async ({ event, resolve }) => {
 
     const isProtectedRoute = event.url.pathname.startsWith('/app')
 
-    console.log('Current path:', event.url.pathname)
-    console.log('Has session:', !!event.locals.session)
-    console.log('Is protected route:', isProtectedRoute)
-    console.log('Should redirect:', !event.locals.session && isProtectedRoute)
-
     if (!event.locals.session && isProtectedRoute) {
         redirect(303, '/auth')
     }
     if (!event.locals.session && event.url.pathname === '/') {
         redirect(303, '/auth')
     }
-    console.log('not authorized: ', !event.locals.session && isProtectedRoute)
+
     if (event.locals.session && (event.url.pathname === '/' || event.url.pathname === '/app' || event.url.pathname === '/app/')) {
         redirect(303, '/app/overview')
     }
-    console.log('authorized: ', event.locals.session && (event.url.pathname === '/' || event.url.pathname === '/app' || event.url.pathname === '/app/'))
 
     if (event.locals.session && (event.url.pathname === '/auth' || event.url.pathname === '/login')) {
         redirect(303, '/app/overview')

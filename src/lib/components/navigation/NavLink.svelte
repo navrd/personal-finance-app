@@ -6,7 +6,7 @@
 	let { href, minimize, title }: NavLinkProps = $props();
 
 	let active = $derived.by(() => {
-		return page.url.pathname === href;
+		return page.url.pathname === `/app${href}`;
 	});
 </script>
 

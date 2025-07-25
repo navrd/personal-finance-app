@@ -1,14 +1,16 @@
 <script lang="ts">
-	import type { CreatePotData, Pot, StateWrapper } from '$lib/types';
-	import type { User, SupabaseClient } from '@supabase/supabase-js';
-	import { getContext, onMount } from 'svelte';
+	import { applyAction, enhance } from '$app/forms';
+	import { invalidate } from '$app/navigation';
+	import type { CreatePotData, Pot, PotError } from '$lib/types';
+	import { getContext } from 'svelte';
 
-	// Types
+	interface PotsManagerProps {
+		form?: PotError | null;
+	}
 
-	let user: StateWrapper<User | null> = getContext('user');
-	let supabase: StateWrapper<SupabaseClient> = getContext('supabase');
-	let pots: StateWrapper<Pot[]> = getContext('pots');
-	$inspect('pots: ', pots)
+	let { form }: PotsManagerProps = $props();
+
+	let pots: () => Pot[] = getContext('pots');
 
 	// Reactive state
 	let loading = $state(false);
@@ -17,7 +19,7 @@
 	let editingPot = $state<Pot | null>(null);
 
 	// Form state
-	let formData = $state<CreatePotData>({
+	let formData = $state<CreatePotData & { id?: string }>({
 		name: '',
 		target: 0,
 		total: 0,
@@ -36,79 +38,6 @@
 		'#597C7C'
 	];
 
-	// CRUD Operations
-	async function createPot() {
-		try {
-			error = null;
-
-			const { data, error: createError } = await supabase.value
-				.from('pots')
-				.insert([
-					{
-						...formData,
-						user_id: user.value?.id
-					}
-				])
-				.select();
-
-			if (createError) throw createError;
-
-			if (data && data[0]) {
-				pots.value = [data[0], ...pots.value];
-			}
-
-			resetForm();
-			showCreateForm = false;
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to create pot';
-			console.error('Error creating pot:', err);
-		}
-	}
-
-	async function updatePot(id: string, updates: Partial<CreatePotData>) {
-		try {
-			error = null;
-
-			const { data, error: updateError } = await supabase.value
-				.from('pots')
-				.update(updates)
-				.eq('id', id)
-				.select();
-
-			if (updateError) throw updateError;
-
-			if (data && data[0]) {
-				const index = pots.value.findIndex((pot) => pot.id === id);
-				if (index !== -1) {
-					pots.value[index] = { ...pots.value[index], ...data[0] };
-				}
-			}
-
-			editingPot = null;
-			resetForm();
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to update pot';
-			console.error('Error updating pot:', err);
-		}
-	}
-
-	async function deletePot(id: string) {
-		if (!confirm('Are you sure you want to delete this pot?')) return;
-
-		try {
-			error = null;
-
-			const { error: deleteError } = await supabase.value.from('pots').delete().eq('id', id);
-
-			if (deleteError) throw deleteError;
-
-			pots.value = pots.value.filter((pot) => pot.id !== id);
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to delete pot';
-			console.error('Error deleting pot:', err);
-		}
-	}
-
 	// Helper functions
 	function resetForm() {
 		formData = {
@@ -122,6 +51,7 @@
 	function startEditing(pot: Pot) {
 		editingPot = pot;
 		formData = {
+			id: pot.id,
 			name: pot.name,
 			target: pot.target,
 			total: pot.total,
@@ -136,19 +66,23 @@
 		showCreateForm = false;
 	}
 
-	function handleSubmit(e: SubmitEvent) {
-		e.preventDefault();
-		if (editingPot) {
-			updatePot(editingPot.id, formData);
-		} else {
-			createPot();
-		}
-	}
-
 	function getProgressPercentage(pot: Pot): number {
 		return pot.target > 0 ? Math.min((pot.total / pot.target) * 100, 100) : 0;
 	}
+
+	async function clearForm() {
+		await applyAction({
+			type: 'success',
+			status: 200,
+			data: {}
+		});
+	}
 </script>
+
+{#if form && Object.keys(form).length > 0}
+	<h2>{form.message}</h2>
+	<button onclick={clearForm}>Clear errors</button>
+{/if}
 
 <div class="pots-container">
 	<header class="header">
@@ -171,13 +105,35 @@
 	{/if}
 
 	{#if showCreateForm}
-		<form class="pot-form" onsubmit={handleSubmit}>
+		<form
+			class="pot-form"
+			method="POST"
+			action={editingPot ? '?/updatePot' : '?/createPot'}
+			use:enhance={() => {
+				loading = true;
+				return async ({ result, update }) => {
+					if (result.type === 'success') {
+						// Only reload pots data, not everything
+						await invalidate('app:pots');
+						loading = false;
+						showCreateForm = false;
+						resetForm();
+					} else {
+						await update(); // Handle errors normally
+						loading = false;
+					}
+				};
+			}}
+		>
 			<h3>{editingPot ? 'Edit Pot' : 'Create New Pot'}</h3>
-
+			{#if editingPot}
+				<input type="hidden" name="id" value={formData.id} />
+			{/if}
 			<div class="form-group">
 				<label for="name">Name</label>
 				<input
 					id="name"
+					name="name"
 					type="text"
 					bind:value={formData.name}
 					placeholder="e.g., Vacation Fund"
@@ -190,6 +146,7 @@
 					<label for="target">Target Amount</label>
 					<input
 						id="target"
+						name="target"
 						type="number"
 						step="0.01"
 						min="0"
@@ -203,6 +160,7 @@
 					<label for="total">Current Total</label>
 					<input
 						id="total"
+						name="total"
 						type="number"
 						step="0.01"
 						min="0"
@@ -224,13 +182,14 @@
 							aria-label="Select color {color}"
 						></button>
 					{/each}
+					<input type="hidden" name="theme" bind:value={formData.theme} />
 				</div>
 			</div>
 
 			<div class="form-actions">
 				<button type="button" class="btn btn-secondary" onclick={cancelEdit}> Cancel </button>
 				<button type="submit" class="btn btn-primary">
-					{editingPot ? 'Update Pot' : 'Create Pot'}
+					{loading ? 'Saving...' : editingPot ? 'Update Budget' : 'Create Budget'}
 				</button>
 			</div>
 		</form>
@@ -238,13 +197,13 @@
 
 	{#if loading}
 		<div class="loading">Loading pots...</div>
-	{:else if pots.value.length === 0}
+	{:else if pots().length === 0}
 		<div class="empty-state">
 			<p>No pots created yet. Start saving by creating your first pot!</p>
 		</div>
 	{:else}
 		<div class="pots-grid">
-			{#each pots.value as pot (pot.id)}
+			{#each pots() as pot (pot.id)}
 				<div class="pot-card" style="border-left: 4px solid {pot.theme}">
 					<div class="pot-header">
 						<h3>{pot.name}</h3>
@@ -256,13 +215,29 @@
 							>
 								✏️
 							</button>
-							<button
-								class="btn-icon delete"
-								onclick={() => deletePot(pot.id)}
-								aria-label="Delete {pot.name}"
+							<form
+								method="POST"
+								action="?/deletePot"
+								use:enhance={() => {
+									return async ({ result, update }) => {
+										if (!confirm('Are you sure you want to delete this budget?')) return;
+										loading = true;
+										if (result.type === 'success') {
+											// Only reload pots data, not everything
+											await invalidate('app:pots');
+											loading = false;
+										} else {
+											await update(); // Handle errors normally
+											loading = false;
+										}
+									};
+								}}
 							>
-								🗑️
-							</button>
+								<input type="hidden" name="id" value={pot.id} />
+								<button type="submit" class="btn-icon delete" aria-label="Delete {pot.name}">
+									🗑️
+								</button>
+							</form>
 						</div>
 					</div>
 

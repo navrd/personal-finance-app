@@ -125,12 +125,21 @@ export interface Pot {
     updated_at?: string;
 }
 
+export interface PotError {
+    id?: string;
+    target?: number;
+    name?: string;
+    theme?: string;
+    message?: string;
+}
+
 export interface CreatePotData {
     name: string;
     target: number;
     total: number;
     theme: string;
 }
+
 
 export interface Budget {
     id: string;
@@ -146,4 +155,11 @@ export interface UpdateBudgetData {
     user_id: string;
     maximum?: number;
     theme?: string;
+}
+
+export interface BudgetError {
+    category_id?: string;
+    maximum?: number;
+    theme?: string;
+    message?: string;
 }

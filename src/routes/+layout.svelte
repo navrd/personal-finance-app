@@ -4,10 +4,6 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type {
-		Balance,
-		Budget,
-		Category,
-		Pot,
 		StateWrapper,
 		Transaction,
 		TransactionSortOption
@@ -16,7 +12,6 @@
 	import type { SupabaseClient } from '@supabase/supabase-js';
 
 	let { data, children } = $props();
-	$inspect(data);
 
 	let { session } = $derived(data);
 
@@ -35,10 +30,7 @@
 	let supabase: StateWrapper<SupabaseClient> = $state({ value: data.supabase });
 	setContext('supabase', supabase);
 
-	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = $state({
-		value: data.categories
-	});
-	setContext('categories', categories);
+
 
 	let transactionSortOptions: StateWrapper<TransactionSortOption[]> = $state({
 		value: data.transactionSortOptions
@@ -50,25 +42,17 @@
 
 	let minimize: StateWrapper<boolean> = $state({ value: false });
 	setContext('minimize', minimize);
+	//non-reactive contexts
+	setContext('categories', data.categories);
 
-	let balance = $state<StateWrapper<Pick<Balance, 'current' | 'expenses' | 'income'> | null>>({
-		value: data.balance
-	});
-	setContext('balance', balance);
-
-	let budgets = $state<StateWrapper<Budget[]>>({ value: data.budgets });
-	setContext('budgets', budgets);
-
-	let pots = $state<StateWrapper<Pot[]>>({ value: data.pots });
-	setContext('pots', pots);
+	//reactive contexts
+	setContext('balance', () => data.balance);
+	setContext('budgets', () => data.budgets);
+	setContext('pots', () => data.pots);
 
 	$effect(() => {
 		user.value = data.session?.user || null;
-		categories.value = data.categories;
 		transactions.value = data.transactions;
-		balance.value = data.balance;
-		budgets.value = data.budgets;
-		pots.value = data.pots;
 	});
 </script>
 

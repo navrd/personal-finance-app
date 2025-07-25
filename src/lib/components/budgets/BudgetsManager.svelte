@@ -1,14 +1,22 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import type { StateWrapper, Category, Budget, UpdateBudgetData } from '$lib/types';
+	import type { StateWrapper, Category, Budget, UpdateBudgetData, BudgetError } from '$lib/types';
 	import type { User, SupabaseClient } from '@supabase/supabase-js';
+	import { applyAction, enhance } from '$app/forms';
+	import { invalidate } from '$app/navigation';
+
+	interface BudgetsManagerProps {
+		form?: BudgetError | null;
+	}
+
+	let { form }: BudgetsManagerProps = $props();
 
 	let user: StateWrapper<User | null> = getContext('user');
 	let supabase: StateWrapper<SupabaseClient> = getContext('supabase');
 
-	let categories: StateWrapper<Pick<Category, 'id' | 'category'>[]> = getContext('categories');
+	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
 	// Reactive state
-	let budgets: StateWrapper<Budget[]> = getContext('budgets')
+	let budgets: () => Budget[] = getContext('budgets');
 	let loading = $state(false);
 	let error: string | null | unknown = $state(null);
 
@@ -20,7 +28,6 @@
 		maximum: '',
 		theme: '#277C78'
 	});
-
 
 	// Predefined color themes
 	const colorThemes = [
@@ -36,81 +43,12 @@
 
 	// Budget service class
 
-	async function createBudget(budgetData: UpdateBudgetData) {
-		const { data, error } = await supabase.value
-			.from('budgets')
-			.insert([
-				{
-					...budgetData,
-					user_id: user.value?.id
-				}
-			])
-			.select()
-			.single();
-
-		if (error) throw error;
-		return data;
-	}
-
-	async function updateBudget(id: String, budgetData: UpdateBudgetData) {
-		const { data, error } = await supabase.value
-			.from('budgets')
-			.update(budgetData)
-			.eq('id', id)
-			.select()
-			.single();
-
-		if (error) throw error;
-		return data;
-	}
-
 	async function deleteBudget(id: string) {
 		const { error } = await supabase.value.from('budgets').delete().eq('id', id);
 
 		if (error) throw error;
 	}
-
-	// Handle form submission
-	async function handleSubmit(event: SubmitEvent) {
-		event.preventDefault();
-
-		if (!formData.category_id || !formData.maximum) {
-			error = 'Please fill in all required fields';
-			return;
-		}
-
-		try {
-			loading = true;
-			error = null;
-
-			const budgetData = {
-				category_id: formData.category_id,
-				user_id: user.value!.id,
-				maximum: parseFloat(formData.maximum),
-				theme: formData.theme
-			};
-
-			if (editingBudget) {
-				// Update existing budget
-				const updated = await updateBudget(editingBudget.id, budgetData);
-				const index = budgets.value.findIndex((b) => b.id === editingBudget?.id);
-				if (index !== -1) {
-					budgets.value[index] = updated;
-				}
-			} else {
-				// Create new budget
-				const newBudget = await createBudget(budgetData);
-				budgets.value = [newBudget, ...budgets.value];
-			}
-
-			resetForm();
-		} catch (err: unknown) {
-			error = err;
-			console.error('Error saving budget:', err);
-		} finally {
-			loading = false;
-		}
-	}
+	// helpers
 
 	// Edit budget
 	function editBudget(budget: Budget) {
@@ -121,23 +59,6 @@
 			theme: budget.theme
 		};
 		showForm = true;
-	}
-
-	// Delete budget
-	async function handleDeleteBudget(id: string) {
-		if (!confirm('Are you sure you want to delete this budget?')) return;
-
-		try {
-			loading = true;
-			error = null;
-			await deleteBudget(id);
-			budgets.value = budgets.value.filter((b) => b.id !== id);
-		} catch (err) {
-			error = err;
-			console.error('Error deleting budget:', err);
-		} finally {
-			loading = false;
-		}
 	}
 
 	// Reset form
@@ -159,8 +80,26 @@
 		}).format(amount);
 	}
 
-	// Check authentication and load data
+	function getCategoryById(id: string) {
+		const category = categories.find((category) => category.id === id);
+		if (category) {
+			return categories.find((category) => category.id === id);
+		} else return null;
+	}
+
+	async function clearForm() {
+		await applyAction({
+			type: 'success',
+			status: 200,
+			data: {}
+		});
+	}
 </script>
+
+{#if form && Object.keys(form).length > 0}
+	<h2>{form.message}</h2>
+	<button onclick={clearForm}>Clear errors</button>
+{/if}
 
 <div class="budget-manager">
 	<div class="header">
@@ -186,18 +125,41 @@
 	{:else}
 		{#if showForm}
 			<div class="form-container">
-				<form onsubmit={handleSubmit} class="budget-form">
+				<form
+					method="POST"
+					class="budget-form"
+					action={editingBudget ? '?/updateBudget' : '?/createBudget'}
+					use:enhance={() => {
+						loading = true;
+						return async ({ result, update }) => {
+							if (result.type === 'success') {
+								// Only reload pots data, not everything
+								await invalidate('app:budgets');
+								loading = false;
+								resetForm();
+							} else {
+								await update(); // Handle errors normally
+								loading = false;
+							}
+						};
+					}}
+				>
 					<h2>{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
+					<input type="hidden" name="user_id" value={user.value.id} />
+					{#if editingBudget}
+						<input type="hidden" name="id" value={editingBudget.id} />
+					{/if}
 
 					<div class="form-group">
 						<label for="category">Category *</label>
 						<select
+							name="category_id"
 							id="category"
 							bind:value={formData.category_id}
 							placeholder="e.g. Entertainment, Food, Transport"
 							required
 						>
-							{#each categories.value as category}
+							{#each categories as category}
 								<option value={category.id}>{category.category}</option>
 							{/each}
 						</select>
@@ -207,9 +169,9 @@
 						<label for="maximum">Maximum Amount *</label>
 						<input
 							id="maximum"
+							name="maximum"
 							type="number"
 							step="0.01"
-							min="0.01"
 							bind:value={formData.maximum}
 							placeholder="0.00"
 							required
@@ -229,7 +191,13 @@
 								>
 							{/each}
 						</div>
-						<input id="theme" type="color" bind:value={formData.theme} class="color-input" />
+						<input
+							id="theme"
+							name="theme"
+							type="color"
+							bind:value={formData.theme}
+							class="color-input"
+						/>
 					</div>
 
 					<div class="form-actions">
@@ -243,25 +211,43 @@
 		{/if}
 
 		<div class="budgets-list">
-			{#if loading && budgets.value.length === 0}
+			{#if loading && budgets().length === 0}
 				<div class="loading">Loading budgets...</div>
-			{:else if budgets.value.length === 0}
+			{:else if budgets().length === 0}
 				<div class="empty-state">
 					<p>No budgets found. Create your first budget to get started!</p>
 				</div>
 			{:else}
 				<div class="budgets">
-					{#each budgets.value as budget (budget.id)}
+					{#each budgets() as budget (budget.id)}
 						<div class="budget-card" style="border-left: 4px solid {budget.theme}">
 							<div class="budget-header">
-								<h3 class="category">{budget.category_id}</h3>
+								<h3 class="category">{getCategoryById(budget.category_id)?.category}</h3>
 								<div class="actions">
 									<button onclick={() => editBudget(budget)} class="btn-icon" title="Edit">
 										✏️
 									</button>
-									<button onclick={() => handleDeleteBudget(budget.id)} class="btn-icon" title="Delete">
-										🗑️
-									</button>
+									<form
+										method="POST"
+										action="?/deleteBudget"
+										use:enhance={() => {
+											if (!confirm('Are you sure you want to delete this budget?')) return;
+											loading = true;
+											return async ({ result, update }) => {
+												if (result.type === 'success') {
+													// Only reload budgets data, not everything
+													await invalidate('app:budgets');
+													loading = false;
+												} else {
+													await update(); // Handle errors normally
+													loading = false;
+												}
+											};
+										}}
+									>
+										<input type="hidden" name="id" value={budget.id} />
+										<button type="submit" class="btn-icon" title="Delete"> 🗑️ </button>
+									</form>
 								</div>
 							</div>
 
