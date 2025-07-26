@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { BudgetsDiagram } from '$lib/components';
 
-	let { children } = $props();
 </script>
 
 <svelte:head>
@@ -11,4 +10,3 @@
 
 <BudgetsDiagram />
 
-{@render children?.()}

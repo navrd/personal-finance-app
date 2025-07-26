@@ -4,7 +4,7 @@
 	import { getContext } from 'svelte';
 	let minimize: StateWrapper<boolean> = getContext('minimize');
 
-	let { data, children } = $props();
+	let { children } = $props();
 </script>
 
 <Sidebar />
