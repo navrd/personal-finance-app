@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import type { StateWrapper, Category, Budget, UpdateBudgetData, BudgetError } from '$lib/types';
+	import type { StateWrapper, Category, Budget, BudgetError } from '$lib/types';
 	import type { User, SupabaseClient } from '@supabase/supabase-js';
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
@@ -41,13 +41,6 @@
 		'#DC2626'
 	];
 
-	// Budget service class
-
-	async function deleteBudget(id: string) {
-		const { error } = await supabase.value.from('budgets').delete().eq('id', id);
-
-		if (error) throw error;
-	}
 	// helpers
 
 	// Edit budget
@@ -80,6 +73,7 @@
 		}).format(amount);
 	}
 
+	//get category by id
 	function getCategoryById(id: string) {
 		const category = categories.find((category) => category.id === id);
 		if (category) {
@@ -87,6 +81,7 @@
 		} else return null;
 	}
 
+	//clear form prop
 	async function clearForm() {
 		await applyAction({
 			type: 'success',

@@ -11,16 +11,15 @@
 
 	let { children } = $props();
 
-	let transactions: StateWrapper<Transaction[]> = getContext('transactions');
-	let transactionSortOptions: StateWrapper<TransactionSortOption[]> =
-		getContext('transactionSortOptions');
+	let transactions: () => Transaction[] = getContext('transactions');
+	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
 
 	let filters: Omit<TransactionFilters, 'category'> = $state({
 		search: '',
 		debouncedSearch: '',
-		sort: transactionSortOptions.value[4].id,
+		sort: transactionSortOptions[4].id
 	});
 
 	let debounceTimeout: ReturnType<typeof setTimeout>;
@@ -33,23 +32,23 @@
 	});
 
 	let filteredTransactions = $derived.by(() => {
-		return transactions.value.filter((transaction) => {
+		return transactions().filter((transaction) => {
 			let searchFlag =
 				filters.search === ''
 					? true
 					: [transaction.name, transaction.amount.toFixed(2)].some((field) =>
 							field?.toLocaleLowerCase().includes(filters.search.toLocaleLowerCase())
 						);
-            let reccuringFlag = transaction.recurring === true;
+			let reccuringFlag = transaction.recurring === true;
 
 			return searchFlag && reccuringFlag;
 		});
 	});
-    
+
 	let sortedTransactions = $derived.by(() => {
 		let sorted = [...filteredTransactions];
-		if (filters.sort && transactionSortOptions.value.length > 0) {
-			return sortTransactions(sorted, filters.sort, transactionSortOptions.value);
+		if (filters.sort && transactionSortOptions.length > 0) {
+			return sortTransactions(sorted, filters.sort, transactionSortOptions);
 		} else return sorted;
 	});
 	const paginationData: PaginationData<Transaction> = $derived.by(() => {
@@ -62,7 +61,7 @@
 			currentPage,
 			hasNext: currentPage < totalPages,
 			hasPrev: currentPage > 1,
-			totalItems: transactions.value.length
+			totalItems: transactions.length
 		};
 	});
 	function nextPage() {
@@ -96,7 +95,7 @@
 		</div>
 		<div class="transactions-list__filter">
 			<select bind:value={filters.sort}
-				>{#each transactionSortOptions.value as sortOption}
+				>{#each transactionSortOptions as sortOption}
 					<option value={sortOption.id}>{sortOption.label}</option>
 				{/each}</select
 			>

@@ -3,17 +3,31 @@
 	import { setContext } from 'svelte';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import type {
-		StateWrapper,
-		Transaction,
-		TransactionSortOption
-	} from '$lib/types';
-	import type { User } from '@supabase/auth-js';
+	import type { StateWrapper } from '$lib/types';
+
 	import type { SupabaseClient } from '@supabase/supabase-js';
 
 	let { data, children } = $props();
 
 	let { session } = $derived(data);
+
+	let supabase: StateWrapper<SupabaseClient> = $state({ value: data.supabase });
+	let minimize: StateWrapper<boolean> = $state({ value: false });
+
+	//non-reactive data contexts
+	setContext('categories', data.categories);
+	setContext('transactionSortOptions', data.transactionSortOptions);
+
+	//reactive data contexts
+	setContext('user', () => data.user);
+	setContext('supabase', () => data.supabase);
+	setContext('balance', () => data.balance);
+	setContext('budgets', () => data.budgets);
+	setContext('pots', () => data.pots);
+	setContext('transactions', () => data.transactions);
+
+	//reactive app contexts
+	setContext('minimize', minimize);
 
 	onMount(() => {
 		const { data } = supabase.value.auth.onAuthStateChange((_, newSession) => {
@@ -22,37 +36,6 @@
 			}
 		});
 		return () => data.subscription.unsubscribe();
-	});
-
-	let user: StateWrapper<User | null> = $state({ value: data.user });
-	setContext('user', user);
-
-	let supabase: StateWrapper<SupabaseClient> = $state({ value: data.supabase });
-	setContext('supabase', supabase);
-
-
-
-	let transactionSortOptions: StateWrapper<TransactionSortOption[]> = $state({
-		value: data.transactionSortOptions
-	});
-	setContext('transactionSortOptions', transactionSortOptions);
-
-	let transactions: StateWrapper<Transaction[]> = $state({ value: data.transactions });
-	setContext('transactions', transactions);
-
-	let minimize: StateWrapper<boolean> = $state({ value: false });
-	setContext('minimize', minimize);
-	//non-reactive contexts
-	setContext('categories', data.categories);
-
-	//reactive contexts
-	setContext('balance', () => data.balance);
-	setContext('budgets', () => data.budgets);
-	setContext('pots', () => data.pots);
-
-	$effect(() => {
-		user.value = data.session?.user || null;
-		transactions.value = data.transactions;
 	});
 </script>
 
