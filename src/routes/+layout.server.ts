@@ -54,11 +54,11 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
         }
     }
 
-    async function fetchUserBalance(): Promise<Pick<Balance, 'current' | 'expenses' | 'income'>> {
+    async function fetchUserBalance(): Promise<Balance> {
         try {
             const { data, error } = await supabase
                 .from('balance')
-                .select('current, income, expenses')
+                .select('current, income, expenses, id')
                 .single();
 
             if (error) {
