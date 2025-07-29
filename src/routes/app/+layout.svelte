@@ -14,6 +14,7 @@
 
 <style lang="scss">
 	.content {
+		background: var(--color-beige-100);
 		min-width: 100%;
 		max-width: 100%;
 		transition: padding 0.3s ease;
