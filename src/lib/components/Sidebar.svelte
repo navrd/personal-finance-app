@@ -106,7 +106,7 @@
 		align-items: flex-start;
 		position: fixed;
 		transition: width 0.3s ease;
-
+		z-index: 1000;
 		@media (min-width: 0px) and (max-width: 1023px) {
 			padding: 0 1rem;
 			bottom: 0;

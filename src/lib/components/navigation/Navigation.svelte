@@ -25,6 +25,7 @@
 
 <style lang="scss">
 	.sidebar__navigation {
+		z-index: 1000;
 		display: flex;
 		flex-direction: var(--sidebar-flex-direction);
 		gap: 1rem;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BudgetsDiagram } from '$lib/components';
+	import { BudgetsOverview } from '$lib/components';
 	import BudgetsManager from '$lib/components/budgets/BudgetsManager.svelte';
 	import type { BudgetError } from '$lib/types/index.js';
 	import { type PageData } from '../$types.js';
@@ -16,5 +16,5 @@
 	<meta name="description" content="Personal Finance App" />
 </svelte:head>
 
-<BudgetsDiagram />
+<BudgetsOverview />
 <BudgetsManager {form} />

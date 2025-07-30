@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BudgetsDiagram, Balance, PotsOverview } from '$lib/components';
+	import { BudgetsOverview, Balance, PotsOverview } from '$lib/components';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type { Balance as BalanceType, Pot, Transaction, TransactionSortOption } from '$lib/types';
 	import { getContext } from 'svelte';
@@ -36,10 +36,10 @@
 		<Balance {balanceData} />
 	</div>
 	<div class="overview-grid__pots">
-		<PotsOverview {totalSavings} pots={pots()}/>
+		<PotsOverview {totalSavings} pots={pots()} />
 	</div>
 	<div class="overview-grid__budgets">
-		<BudgetsDiagram />
+		<BudgetsOverview />
 	</div>
 	<div class="overview-grid__transactions">
 		<div class="transactions">
@@ -91,6 +91,7 @@
 				'transactions transactions transactions budgets budgets'
 				'transactions transactions transactions reccuring reccuring'
 				'transactions transactions transactions reccuring reccuring';
+			grid-template-columns: repeat(5, 1fr);
 		}
 	}
 

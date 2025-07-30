@@ -11,7 +11,7 @@
 
 	let { form }: BudgetsManagerProps = $props();
 
-	let user: StateWrapper<User | null> = getContext('user');
+	let user: () => User = getContext('user');
 	let supabase: StateWrapper<SupabaseClient> = getContext('supabase');
 
 	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
@@ -99,7 +99,7 @@
 <div class="budget-manager">
 	<div class="header">
 		<h1>Budget Manager</h1>
-		{#if user.value?.id}
+		{#if user().id}
 			<button onclick={() => (showForm = !showForm)} class="btn btn-primary">
 				{showForm ? 'Cancel' : 'Add Budget'}
 			</button>
@@ -113,7 +113,7 @@
 		</div>
 	{/if}
 
-	{#if !user.value?.id}
+	{#if !user().id}
 		<div class="auth-prompt">
 			<p>Please sign in to manage your budgets.</p>
 		</div>
@@ -140,7 +140,7 @@
 					}}
 				>
 					<h2>{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
-					<input type="hidden" name="user_id" value={user.value.id} />
+					<input type="hidden" name="user_id" value={user().id} />
 					{#if editingBudget}
 						<input type="hidden" name="id" value={editingBudget.id} />
 					{/if}
