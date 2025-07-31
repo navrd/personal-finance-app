@@ -9,7 +9,9 @@
 
 <Sidebar />
 <main class="content" class:content_expanded={minimize.value}>
-	{@render children?.()}
+	<div class="content-wrapper">
+		{@render children?.()}
+	</div>
 </main>
 
 <style lang="scss">
@@ -29,5 +31,11 @@
 		@media (min-width: 1024px) {
 			padding-left: 5rem;
 		}
+	}
+	.content-wrapper {
+		padding: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
 	}
 </style>

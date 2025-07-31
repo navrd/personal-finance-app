@@ -88,6 +88,10 @@
 	<meta name="description" content="Personal Finance App" />
 </svelte:head>
 
+<header class="page-header">
+	<h2 class="page-header__title">Reccuring bills</h2>
+</header>
+
 <section class="transactions-list">
 	<div class="transactions-list__filters">
 		<div class="transactions-list__filter">
@@ -115,4 +119,17 @@
 	<button onclick={nextPage}>next</button>
 </section>
 
-{@render children?.()}
+<style lang="scss">
+	.page-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		min-height: 53px;
+	}
+	.page-header__title {
+		color: var(--color-grey-900);
+		font-size: 2rem;
+		line-height: 1.2;
+		font-weight: 550;
+	}
+</style>

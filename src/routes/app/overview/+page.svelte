@@ -30,7 +30,11 @@
 	<title>Personal Finance App - Overview</title>
 	<meta name="description" content="Personal Finance App" />
 </svelte:head>
-<h1 class="route-title">Overview</h1>
+
+<header class="page-header">
+	<h2 class="page-header__title">Overview</h2>
+</header>
+
 <div class="overview-grid">
 	<div class="overview-grid__balance">
 		<Balance {balanceData} />
@@ -70,15 +74,19 @@
 </div>
 
 <style lang="scss">
-	.route-title {
-		padding: 1.75rem;
-		color: var(--grey-900);
+	.page-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		min-height: 53px;
+	}
+	.page-header__title {
+		color: var(--color-grey-900);
 		font-size: 2rem;
 		line-height: 1.2;
 		font-weight: 550;
 	}
 	.overview-grid {
-		padding: 1rem;
 		display: grid;
 		gap: 1.5rem;
 		@media (min-width: 0px) and (max-width: 1023px) {
