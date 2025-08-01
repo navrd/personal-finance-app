@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { TransactionsList } from '$lib/components';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
 		Category,
@@ -114,13 +115,7 @@
 			>
 		</div>
 	</div>
-	<ul class="transactions-list__items">
-		{#each paginationData.items as transaction}
-			<li class="transactions-list__item">
-				<p>{transaction.name} {transaction.amount} {transaction.date}</p>
-			</li>
-		{/each}
-	</ul>
+	<TransactionsList transactions={paginationData.items} />
 	<button onclick={prevPage}>prev</button>
 	{#each Array.from({ length: paginationData.totalPages }, (_, i) => i + 1) as page}
 		<button onclick={() => goToPage(page)}>{page}</button>

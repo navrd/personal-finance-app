@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { BudgetsOverview, Balance, PotsOverview } from '$lib/components';
+	import TransactionsOverview from '$lib/components/transactions/TransactionsOverview.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type { Balance as BalanceType, Pot, Transaction, TransactionSortOption } from '$lib/types';
 	import { getContext } from 'svelte';
@@ -46,17 +47,7 @@
 		<BudgetsOverview />
 	</div>
 	<div class="overview-grid__transactions">
-		<div class="transactions">
-			<h2>Transactions</h2>
-			<a href="/app/transactions">details</a>
-			<ul class="transactions-list">
-				{#each transactionsSortedByDate.slice(0, 5) as transaction}
-					<li class="transaction">
-						<p>{transaction.name} {transaction.amount} {transaction.date}</p>
-					</li>
-				{/each}
-			</ul>
-		</div>
+		<TransactionsOverview transactions={transactionsSortedByDate.slice(0,5)} />
 	</div>
 	<div class="overview-grid__reccuring">
 		<div class="transactions">
