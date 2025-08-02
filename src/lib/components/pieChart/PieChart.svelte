@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getCategoryById } from '$lib/helpers/categories';
 	import type { Budget, Category } from '$lib/types';
 	import { getContext, onMount } from 'svelte';
 
@@ -14,28 +15,17 @@
 		animationDuration?: number;
 	}
 
-	let {
-		radius = 100,
-		strokeWidth = 20,
-		animationDuration = 2000,
-	}: Props = $props();
+	let { radius = 100, strokeWidth = 20, animationDuration = 2000 }: Props = $props();
 
 	let budgets: () => Budget[] = getContext('budgets');
-	let categories: Category[] = getContext('categories');
-
-	function getCategoryById(id: string) {
-		const category = categories.find((category) => category.id === id);
-		if (category) {
-			return categories.find((category) => category.id === id);
-		} else return null;
-	}
+	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
 
 	let totalLimit = $derived(budgets().reduce((acc, { maximum }) => acc + maximum, 0));
 	let preparedBudgets = $derived.by(() => {
 		let result: DataSegment[] = [];
 		budgets().forEach((budget) => {
 			let segment: DataSegment = { label: '', value: 0, color: '' };
-			segment.label = getCategoryById(budget.category_id)!.category;
+			segment.label = getCategoryById(categories, budget.category_id)!.category;
 			segment.value = Math.round((budget.maximum / totalLimit) * 100);
 			segment.color = budget.theme;
 			result.push(segment);
@@ -51,8 +41,8 @@
 	const svgSize: number = (radius + strokeWidth) * 2;
 	const center: number = svgSize / 2;
 
-	let conditionalSvgSize = $derived.by(() => (svgSize));
-	let conditionalCenter = $derived.by(() => (center));
+	let conditionalSvgSize = $derived.by(() => svgSize);
+	let conditionalCenter = $derived.by(() => center);
 	// Calculate total and percentages
 	const total: number = $derived(preparedBudgets.reduce((sum, item) => sum + item.value, 0));
 	const outerSegments: Array<

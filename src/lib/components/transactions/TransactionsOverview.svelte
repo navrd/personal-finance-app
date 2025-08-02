@@ -13,7 +13,7 @@
 		<h2 class="transactions-overview__title">Transactions</h2>
 		<a class="details" href="/app/transactions"><span>See Details</span> {@html ArrowRight}</a>
 	</div>
-	<TransactionsList {transactions} />
+	<TransactionsList {transactions} overview/>
 </section>
 
 <style lang="scss">

@@ -4,6 +4,7 @@
 	import type { User, SupabaseClient } from '@supabase/supabase-js';
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
+	import { getCategoryById } from '$lib/helpers/categories';
 
 	interface BudgetsManagerProps {
 		form?: BudgetError | null;
@@ -71,14 +72,6 @@
 			style: 'currency',
 			currency: 'USD'
 		}).format(amount);
-	}
-
-	//get category by id
-	function getCategoryById(id: string) {
-		const category = categories.find((category) => category.id === id);
-		if (category) {
-			return categories.find((category) => category.id === id);
-		} else return null;
 	}
 
 	//clear form prop
@@ -217,7 +210,7 @@
 					{#each budgets() as budget (budget.id)}
 						<div class="budget-card" style="border-left: 4px solid {budget.theme}">
 							<div class="budget-header">
-								<h3 class="category">{getCategoryById(budget.category_id)?.category}</h3>
+								<h3 class="category">{getCategoryById(categories, budget.category_id)?.category}</h3>
 								<div class="actions">
 									<button onclick={() => editBudget(budget)} class="btn-icon" title="Edit">
 										✏️

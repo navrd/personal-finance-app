@@ -20,7 +20,7 @@
 
 	let transactions: () => Transaction[] = getContext('transactions');
 	let transactionsSortedByDate = $derived.by(() => {
-		return sortTransactions(transactions(), transactionSortOptions[4].id, transactionSortOptions);
+		return sortTransactions(transactions(), transactionSortOptions[2].id, transactionSortOptions);
 	});
 	let reccuringTransactions = $derived(
 		transactionsSortedByDate.filter((transaction) => transaction.recurring)

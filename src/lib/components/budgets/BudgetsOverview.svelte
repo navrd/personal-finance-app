@@ -1,18 +1,12 @@
 <script lang="ts">
 	import { ArrowRight } from '$lib/assets/images';
 	import { PieChart } from '$lib/components';
+	import { getCategoryById } from '$lib/helpers/categories';
 	import type { Budget, Category } from '$lib/types';
 	import { getContext } from 'svelte';
 
 	let budgets: () => Budget[] = getContext('budgets');
-	let categories: Category[] = getContext('categories');
-
-	function getCategoryById(id: string) {
-		const category = categories.find((category) => category.id === id);
-		if (category) {
-			return categories.find((category) => category.id === id);
-		} else return null;
-	}
+	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
 </script>
 
 <section class="budgets-overview">
@@ -25,7 +19,7 @@
 		<ul class="budgets-overview__legend">
 			{#each budgets() as budget}
 				<li class="legend-item" style:--data-color={budget.theme}>
-					<h3 class="budget__label">{getCategoryById(budget.category_id)?.category}</h3>
+					<h3 class="budget__label">{getCategoryById(categories, budget.category_id)?.category}</h3>
 					<p class="budget__sum">{budget.maximum}</p>
 				</li>
 			{/each}
