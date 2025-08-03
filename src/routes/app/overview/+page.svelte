@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { BudgetsOverview, Balance, PotsOverview } from '$lib/components';
+	import ReccuringOverview from '$lib/components/reccuring/ReccuringOverview.svelte';
 	import TransactionsOverview from '$lib/components/transactions/TransactionsOverview.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type { Balance as BalanceType, Pot, Transaction, TransactionSortOption } from '$lib/types';
@@ -47,7 +48,7 @@
 		<BudgetsOverview />
 	</div>
 	<div class="overview-grid__transactions">
-		<TransactionsOverview transactions={transactionsSortedByDate.slice(0,5)} />
+		<TransactionsOverview transactions={transactionsSortedByDate.slice(0, 5)} />
 	</div>
 	<div class="overview-grid__reccuring">
 		<div class="transactions">
@@ -60,6 +61,7 @@
 					</li>
 				{/each}
 			</ul>
+			<ReccuringOverview transactions={transactions()} />
 		</div>
 	</div>
 </div>
