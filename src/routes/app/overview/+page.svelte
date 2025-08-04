@@ -23,9 +23,6 @@
 	let transactionsSortedByDate = $derived.by(() => {
 		return sortTransactions(transactions(), transactionSortOptions[2].id, transactionSortOptions);
 	});
-	let reccuringTransactions = $derived(
-		transactionsSortedByDate.filter((transaction) => transaction.recurring)
-	);
 </script>
 
 <svelte:head>
@@ -51,18 +48,7 @@
 		<TransactionsOverview transactions={transactionsSortedByDate.slice(0, 5)} />
 	</div>
 	<div class="overview-grid__reccuring">
-		<div class="transactions">
-			<h2>Reccuring Transactions</h2>
-			<a href="/app/reccuring">details</a>
-			<ul class="transactions-list">
-				{#each reccuringTransactions.slice(0, 5) as transaction}
-					<li class="transaction">
-						<p>{transaction.name} {transaction.amount} {transaction.date}</p>
-					</li>
-				{/each}
-			</ul>
-			<ReccuringOverview transactions={transactions()} />
-		</div>
+		<ReccuringOverview transactions={transactions()} />
 	</div>
 </div>
 
@@ -86,6 +72,7 @@
 			grid-template-areas: 'balance' 'pots' 'transactions' 'budgets' 'reccuring';
 		}
 		@media (min-width: 1024px) {
+			height: 100%;
 			grid-template-areas:
 				'balance balance balance balance balance'
 				'pots pots pots budgets budgets'

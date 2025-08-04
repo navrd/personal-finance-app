@@ -13,7 +13,7 @@
 		<h2 class="transactions-overview__title">Transactions</h2>
 		<a class="details" href="/app/transactions"><span>See Details</span> {@html ArrowRight}</a>
 	</div>
-	<TransactionsList {transactions} overview/>
+	<TransactionsList {transactions} overview />
 </section>
 
 <style lang="scss">
@@ -24,6 +24,9 @@
 		flex-direction: column;
 		max-width: 100%;
 		border-radius: 0.75rem;
+		@media screen and (min-width: 1024px) {
+			height: 100%;
+		}
 	}
 	.transactions-overview__header {
 		display: flex;

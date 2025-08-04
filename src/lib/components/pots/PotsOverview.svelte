@@ -10,13 +10,13 @@
 	let { totalSavings, pots }: PotsOverviewProps = $props();
 </script>
 
-<div class="pots">
-	<div class="pots__header">
-		<h2 class="pots__title">Pots</h2>
+<div class="pots-overview">
+	<div class="pots-overview__header">
+		<h2 class="pots-overview__title">Pots</h2>
 		<a class="details" href="/app/pots"><span>See Details</span> {@html ArrowRight}</a>
 	</div>
-	<div class="pots__data">
-		<div class="pots__total-savings">
+	<div class="pots-overview__data">
+		<div class="pots-overview__total-savings">
 			<div class="total-savings__icon">{@html PotsOutline}</div>
 			<div class="total-savings__data">
 				<p class="total-savings__label">total saved</p>
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="pots-summary">
+		<div class="pots-overview__summary">
 			{#each pots as pot}
 				<div class="pot" style:--data-color={pot.theme}>
 					<h3 class="pot__label">{pot.name}</h3>
@@ -36,7 +36,7 @@
 </div>
 
 <style lang="scss">
-	.pots {
+	.pots-overview {
 		display: flex;
 		gap: 1rem;
 		flex-direction: column;
@@ -44,12 +44,12 @@
 		border-radius: 0.75rem;
 		padding: 1.5rem;
 	}
-	.pots__header {
+	.pots-overview__header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.pots__data {
+	.pots-overview__data {
 		gap: 0.75rem;
 		display: flex;
 		@media screen and (min-width: 0px) and (max-width: 670px) {
@@ -59,7 +59,7 @@
 			flex-direction: row;
 		}
 	}
-	.pots__total-savings {
+	.pots-overview__total-savings {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
@@ -82,7 +82,7 @@
 		font-size: 2rem;
 		line-height: 1.2;
 	}
-	.pots-summary {
+	.pots-overview__summary {
 		display: flex;
 		gap: 0.75rem;
 		flex-wrap: wrap;
