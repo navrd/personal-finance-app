@@ -1,28 +1,73 @@
 <script lang="ts">
-	import { type Transaction } from '$lib/types';
+	import { sortTransactions } from '$lib/helpers/transactions';
+	import type { Transaction, TransactionSortOption } from '$lib/types';
+	import { getContext } from 'svelte';
 	import TransactionsListItem from './TransactionsListItem.svelte';
 
 	interface TransactionListProps {
 		transactions: Transaction[];
 		overview?: boolean;
+		reccuring?: boolean;
 	}
 
-	let { transactions, overview = false }: TransactionListProps = $props();
+	let { transactions, overview = false, reccuring = false }: TransactionListProps = $props();
+
+	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
+
+	let currentDate = $state(
+		new Date(
+			sortTransactions(transactions, transactionSortOptions[2].id, transactionSortOptions)[0].date
+		)
+	);
+
+	const dueSoonCutOffDate = new Date(currentDate);
+	dueSoonCutOffDate.setDate(currentDate.getDate() + 5);
+	let preparedReccuringTransactions: (Transaction & { paid: boolean; dueSoon: boolean })[] =
+		$derived.by(() => {
+			return transactions.map((transaction) => {
+				const transactionDate = new Date(transaction.date);
+				const paid = transactionDate.getDate() < currentDate.getDate();
+				const dueSoon = !paid && transactionDate.getDate() <= dueSoonCutOffDate.getDate();
+
+				return {
+					...transaction,
+					paid,
+					dueSoon
+				};
+			});
+		});
+	$inspect(preparedReccuringTransactions, currentDate);
 </script>
 
 <ul class="transactions-list__items">
 	{#if !overview}
 		<li class="transactions-list__header">
-			<div class="transactions-list__category"><p>Recipient/Sender</p></div>
+			<div class="transactions-list__category">
+				<p>{reccuring ? 'Bill Title' : 'Recipient/Sender'}</p>
+			</div>
 
-			<div class="transactions-list__category"><p>Category</p></div>
-			<div class="transactions-list__category"><p>Transaction Date</p></div>
+			{#if !reccuring}<div class="transactions-list__category"><p>Category</p></div>{/if}
+			<div class="transactions-list__category">
+				<p>{reccuring ? 'Due Date' : 'Transaction Date'}</p>
+			</div>
 			<div class="transactions-list__category">Amount</div>
 		</li>
 	{/if}
-	{#each transactions as transaction}
-		<TransactionsListItem {transaction} {overview} />
-	{/each}
+	{#if reccuring}
+		{#each preparedReccuringTransactions as transaction}
+			<TransactionsListItem
+				{transaction}
+				{overview}
+				{reccuring}
+				paid={transaction.paid}
+				dueSoon={transaction.dueSoon}
+			/>
+		{/each}
+	{:else}
+		{#each transactions as transaction}
+			<TransactionsListItem {transaction} {overview} {reccuring} />
+		{/each}
+	{/if}
 </ul>
 
 <style lang="scss">

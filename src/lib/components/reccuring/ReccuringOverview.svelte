@@ -35,7 +35,7 @@
 
 	const dueSoonCutOffDate = new Date(currentDate);
 	dueSoonCutOffDate.setDate(currentDate.getDate() + 5);
-	let preparedReccuringTransactions = $derived.by(() => {
+	let preparedReccuringTransactions: (Transaction & {paid: boolean, dueSoon: boolean})[] = $derived.by(() => {
 		return reccuringTransactions.map((transaction) => {
 			const transactionDate = new Date(transaction.date);
 			const paid = transactionDate.getDate() < currentDate.getDate();

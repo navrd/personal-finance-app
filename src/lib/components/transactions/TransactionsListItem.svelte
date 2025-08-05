@@ -6,8 +6,19 @@
 	interface TransactionsListItemProps {
 		transaction: Transaction;
 		overview?: boolean;
+		reccuring?: boolean;
+		dueSoon?: boolean;
+		paid?: boolean;
 	}
-	let { transaction, overview = false }: TransactionsListItemProps = $props();
+
+	let {
+		transaction,
+		overview = false,
+		reccuring = false,
+		paid = false,
+		dueSoon = false
+	}: TransactionsListItemProps = $props();
+	$inspect(paid, dueSoon);
 	const formatDate = (dateString: string): string => {
 		let date = new Date(dateString);
 		const months = [
@@ -45,14 +56,25 @@
 		</p>
 	</div>
 	{#if !overview}
-		<div class="transactions-list__category">
-			<p>{getCategoryById(categories, transaction.category_id)?.category}</p>
-		</div>
+		{#if !reccuring}<div class="transactions-list__category">
+				<p>{getCategoryById(categories, transaction.category_id)?.category}</p>
+			</div>{/if}
 
-		<div class="transactions-list__category"><p>{formatDate(transaction.date)}</p></div>
+		<div class="transactions-list__category" class:paid class:due-soon={dueSoon}>
+			<p>
+				{reccuring
+					? `Monthly — ${new Date(transaction.date).getDate()}`
+					: formatDate(transaction.date)}
+			</p>
+		</div>
 	{/if}
 	<div class="transactions-list__category">
-		<p class="amount" class:amount_plus={transaction.amount > 0}>
+		<p
+			class="amount"
+			class:amount_plus={transaction.amount > 0}
+			class:paid
+			class:due-soon={dueSoon}
+		>
 			{transaction.amount > 0
 				? `+$${transaction.amount}`
 				: transaction.amount.toString().replace('-', '-$')}
@@ -115,5 +137,11 @@
 	}
 	.amount_plus {
 		color: var(--color-green);
+	}
+	.paid {
+		color: var(--color-green);
+	}
+	.due-soon {
+		color: var(--color-red);
 	}
 </style>

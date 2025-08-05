@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TransactionsList from '$lib/components/transactions/TransactionsList.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
 		PaginationData,
@@ -92,32 +93,30 @@
 	<h2 class="page-header__title">Reccuring bills</h2>
 </header>
 
-<section class="transactions-list">
-	<div class="transactions-list__filters">
-		<div class="transactions-list__filter">
-			<input type="text" bind:value={filters.search} />
+<div class="reccuring-grid">
+	<section class="total-bills">total bills</section>
+	<section class="reccuring-summary">summary</section>
+	<section class="transactions-list">
+		<div class="transactions-list__filters">
+			<div class="transactions-list__filter">
+				<input type="text" bind:value={filters.search} />
+			</div>
+			<div class="transactions-list__filter">
+				<select bind:value={filters.sort}
+					>{#each transactionSortOptions as sortOption}
+						<option value={sortOption.id}>{sortOption.label}</option>
+					{/each}</select
+				>
+			</div>
 		</div>
-		<div class="transactions-list__filter">
-			<select bind:value={filters.sort}
-				>{#each transactionSortOptions as sortOption}
-					<option value={sortOption.id}>{sortOption.label}</option>
-				{/each}</select
-			>
-		</div>
-	</div>
-	<ul class="transactions-list__items">
-		{#each paginationData.items as transaction}
-			<li class="transactions-list__item">
-				<p>{transaction.name} {transaction.amount} {transaction.date}</p>
-			</li>
+		<TransactionsList transactions={paginationData.items} reccuring />
+		<button onclick={prevPage}>prev</button>
+		{#each Array.from({ length: paginationData.totalPages }, (_, i) => i + 1) as page}
+			<button onclick={() => goToPage(page)}>{page}</button>
 		{/each}
-	</ul>
-	<button onclick={prevPage}>prev</button>
-	{#each Array.from({ length: paginationData.totalPages }, (_, i) => i + 1) as page}
-		<button onclick={() => goToPage(page)}>{page}</button>
-	{/each}
-	<button onclick={nextPage}>next</button>
-</section>
+		<button onclick={nextPage}>next</button>
+	</section>
+</div>
 
 <style lang="scss">
 	.page-header {
@@ -131,5 +130,27 @@
 		font-size: 2rem;
 		line-height: 1.2;
 		font-weight: 550;
+	}
+	.reccuring-grid {
+		display: grid;
+		gap: 1.5rem;
+		@media (min-width: 0px) and (max-width: 1023px) {
+			grid-template-areas: 'totals summary' 'transactions transactions';
+		}
+		@media (min-width: 1024px) {
+			height: 100%;
+			grid-template-areas:
+				'totals transactions'
+				'summary transactions';
+		}
+	}
+	.total-bills {
+		grid-area: totals;
+	}
+	.reccuring-summary {
+		grid-area: summary;
+	}
+	.transactions-list {
+		grid-area: transactions;
 	}
 </style>
