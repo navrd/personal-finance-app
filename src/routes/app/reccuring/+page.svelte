@@ -1,16 +1,15 @@
 <script lang="ts">
+	import ReccuringBillsSummary from '$lib/components/reccuring/ReccuringBillsSummary.svelte';
+	import ReccuringBillsTotals from '$lib/components/reccuring/ReccuringBillsTotals.svelte';
 	import TransactionsList from '$lib/components/transactions/TransactionsList.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
 		PaginationData,
-		StateWrapper,
 		Transaction,
 		TransactionFilters,
 		TransactionSortOption
 	} from '$lib/types';
 	import { getContext } from 'svelte';
-
-	let { children } = $props();
 
 	let transactions: () => Transaction[] = getContext('transactions');
 	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
@@ -20,7 +19,7 @@
 	let filters: Omit<TransactionFilters, 'category'> = $state({
 		search: '',
 		debouncedSearch: '',
-		sort: transactionSortOptions[4].id
+		sort: transactionSortOptions[2].id
 	});
 
 	let debounceTimeout: ReturnType<typeof setTimeout>;
@@ -45,6 +44,8 @@
 			return searchFlag && reccuringFlag;
 		});
 	});
+
+	let totalBills = $derived(filteredTransactions.reduce((sum, { amount }) => sum + amount, 0));
 
 	let sortedTransactions = $derived.by(() => {
 		let sorted = [...filteredTransactions];
@@ -94,9 +95,11 @@
 </header>
 
 <div class="reccuring-grid">
-	<section class="total-bills">total bills</section>
-	<section class="reccuring-summary">summary</section>
-	<section class="transactions-list">
+	<section class="bills">
+		<ReccuringBillsTotals {totalBills} />
+		<ReccuringBillsSummary transactions={transactions()} />
+	</section>
+	<section class="section transactions-list">
 		<div class="transactions-list__filters">
 			<div class="transactions-list__filter">
 				<input type="text" bind:value={filters.search} />
@@ -135,22 +138,33 @@
 		display: grid;
 		gap: 1.5rem;
 		@media (min-width: 0px) and (max-width: 1023px) {
-			grid-template-areas: 'totals summary' 'transactions transactions';
+			grid-template-areas: 'bills bills' 'transactions transactions';
 		}
 		@media (min-width: 1024px) {
 			height: 100%;
 			grid-template-areas:
-				'totals transactions'
-				'summary transactions';
+				'bills transactions transactions'
+				'bills transactions transactions';
 		}
 	}
-	.total-bills {
-		grid-area: totals;
+	.section {
+		background: white;
+		border-radius: 0.75rem;
 	}
-	.reccuring-summary {
-		grid-area: summary;
+	.bills {
+		grid-area: bills;
+		display: flex;
+		gap: 1.5rem;
+		@media (min-width: 0px) and (max-width: 1023px) {
+			flex-direction: row;
+		}
+		@media (min-width: 1024px) {
+			flex-direction: column;
+		}
 	}
+
 	.transactions-list {
+		padding: 1.5rem 1.25rem;
 		grid-area: transactions;
 	}
 </style>

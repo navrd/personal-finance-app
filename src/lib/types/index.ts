@@ -3,6 +3,7 @@ export interface NavLinkProps {
     href: string;
     minimize: boolean;
     title: string;
+    icon: string;
 }
 
 export type StateWrapper<T> = {

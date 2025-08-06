@@ -9,17 +9,17 @@
 	let { minimize }: NavigationProps = $props();
 
 	const links: Omit<NavLinkProps, 'minimize'>[] = [
-		{ href: '/overview', title: 'overview' },
-		{ href: '/transactions', title: 'transactions' },
-		{ href: '/budgets', title: 'budgets' },
-		{ href: '/pots', title: 'pots' },
-		{ href: '/reccuring', title: 'reccuring' }
+		{ href: '/overview', title: 'overview', icon: 'overview' },
+		{ href: '/transactions', title: 'transactions', icon: 'transactions' },
+		{ href: '/budgets', title: 'budgets', icon: 'budgets' },
+		{ href: '/pots', title: 'pots', icon: 'pots' },
+		{ href: '/reccuring', title: 'reccuring bills', icon: 'reccuring' }
 	];
 </script>
 
 <ul class="sidebar__navigation" class:sidebar__navigation_minimized={minimize}>
-	{#each links as { title, href }}
-		<NavLink {title} {href} {minimize} />
+	{#each links as { title, href, icon }}
+		<NavLink {title} {href} {minimize} {icon} />
 	{/each}
 </ul>
 

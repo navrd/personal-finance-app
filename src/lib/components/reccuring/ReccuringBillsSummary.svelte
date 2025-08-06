@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { ArrowRight, Reccuring } from '$lib/assets/images';
 	import { sortTransactions } from '$lib/helpers/transactions';
-	import type { Transaction, TransactionSortOption } from '$lib/types';
+	import type { TransactionSortOption, Transaction } from '$lib/types';
 	import { getContext } from 'svelte';
 
-	interface ReccuringOverviewProps {
+	interface ReccuringBillSummaryProps {
 		transactions: Transaction[];
 	}
 
@@ -19,7 +18,7 @@
 		upcoming: ReccuringTotal;
 	}
 
-	let { transactions }: ReccuringOverviewProps = $props();
+	let { transactions }: ReccuringBillSummaryProps = $props();
 
 	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
 
@@ -52,8 +51,8 @@
 	let totals = $derived.by(() => {
 		let result: ReccuringBillsTotals = {
 			paid: { title: 'Paid', value: 0 },
-			dueSoon: { title: 'Due Soon', value: 0 },
-			upcoming: { title: 'Upcoming', value: 0 }
+			upcoming: { title: 'Upcoming', value: 0 },
+			dueSoon: { title: 'Due Soon', value: 0 }
 		};
 		result.paid.value = preparedReccuringTransactions
 			.filter((transaction) => transaction.paid)
@@ -69,96 +68,61 @@
 	});
 </script>
 
-<section class="reccuring-overview">
-	<div class="reccuring-overview__header">
-		<h2 class="reccuring-overview__title">Reccuring Bills</h2>
-		<a class="details" href="/app/reccuring"><span>See Details</span> {@html ArrowRight}</a>
-	</div>
-	<div class="reccuring-overview__data">
-		{#each Object.entries(totals) as [key, total]}
-			<div
-				class="reccuring-overview__segment"
-				class:reccuring-overview__segment_paid={key === 'paid'}
-				class:reccuring-overview__segment_due-soon={key === 'dueSoon'}
-				class:reccuring-overview__segment_upcoming={key === 'upcoming'}
-			>
-				<span class="segment__title">{total.title}</span><span class="segment__value"
+<section class="section bills-totals">
+	<p class="label">total bills {reccuringTransactions.length}</p>
+	<ul class="bills-totals__segments">
+		{#each Object.values(totals) as total}
+			<li class="bills-totals__segment">
+				<span class="segment__title" class:segment__title_due-soon={total.title === 'Due Soon'}
+					>{total.title}</span
+				><span class="segment__value" class:segment__value_due-soon={total.title === 'Due Soon'}
 					>{total.value.toFixed(2).toString().replace('-', '$')}</span
 				>
-			</div>
+			</li>
 		{/each}
-	</div>
+	</ul>
 </section>
 
 <style lang="scss">
-	.reccuring-overview {
-		display: flex;
-		gap: 1rem;
-		flex-direction: column;
+	.section {
 		background: white;
 		border-radius: 0.75rem;
-		padding: 1.5rem;
-		@media screen and (min-width: 1024px) {
-			height: 100%;
+	}
+	.bills-totals {
+		text-transform: capitalize;
+		padding: 1.25rem;
+		@media screen and (max-width: 1023px) {
+			flex: 1;
 		}
 	}
-	.reccuring-overview__header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
+	.label {
+		font-size: 0.875rem;
+		line-height: 1.5;
 	}
-	.reccuring-overview__data {
+	.bills-totals__segments {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
 	}
-	.reccuring-overview__segment {
-		background: var(--color-beige-100);
-		padding: 1rem 0.75rem;
+	.bills-totals__segment {
 		display: flex;
-		flex: 1;
 		justify-content: space-between;
-		border-left: 0.25rem solid chocolate;
-		border-radius: 8px;
-	}
-	.reccuring-overview__segment_paid {
-		border-left: 0.25rem solid var(--color-green);
-	}
-	.reccuring-overview__segment_due-soon {
-		border-left: 0.25rem solid var(--color-yellow);
-	}
-	.reccuring-overview__segment_upcoming {
-		border-left: 0.25rem solid var(--color-cyan);
+		border-bottom: 1px solid var(--color-grey-100);
+		padding: 1rem 0;
+		&:last-child {
+			border-bottom: none;
+		}
 	}
 	.segment__title {
+		font-size: 0.75rem;
+		line-height: 1.5;
 		color: var(--color-grey-500);
 	}
 	.segment__value {
-		font-size: 0.875rem;
-		line-height: 1.5;
-		font-weight: bolder;
+		font-size: 0.75rem;
+		color: var(--color-grey-900);
 	}
-	.details {
-		text-decoration: none;
-		display: flex;
-		gap: 0.75rem;
-		font-size: 0.875rem;
-		line-height: 1.5;
-		color: var(--color-grey-500);
-		align-items: center;
-		justify-content: center;
-		font-weight: 350;
-		font-style: normal;
-		* {
-			color: currentColor;
-			fill: currentColor;
-		}
-		&:hover {
-			color: var(--color-grey-900);
-			* {
-				color: currentColor;
-				fill: currentColor;
-			}
-		}
+	.segment__value_due-soon,
+	.segment__title_due-soon {
+		color: var(--color-red);
 	}
 </style>

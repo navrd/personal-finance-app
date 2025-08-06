@@ -3,7 +3,7 @@
 	import { BlankLink } from '$lib/components';
 	import { titleToIcon, type NavLinkProps } from '$lib/types';
 
-	let { href, minimize, title }: NavLinkProps = $props();
+	let { href, minimize, title, icon }: NavLinkProps = $props();
 
 	let active = $derived.by(() => {
 		return page.url.pathname === `/app${href}`;
@@ -19,7 +19,7 @@
 				class:navlink__overlay_active={active}
 				class:navlink__overlay_minimized={minimize}
 			>
-				<div class="navlink__icon">{@html titleToIcon[title]}</div>
+				<div class="navlink__icon">{@html titleToIcon[icon]}</div>
 				<span class="navlink__title" class:navlink__title_hidden={minimize}>{title}</span>
 			</div>
 		</div>
@@ -142,7 +142,9 @@
 		}
 	}
 	.navlink__title {
+		text-transform: capitalize;
 		display: flex;
+		
 		@media (min-width: 0px) and (max-width: 599px) {
 			display: none;
 		}

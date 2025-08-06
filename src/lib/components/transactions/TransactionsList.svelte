@@ -10,17 +10,19 @@
 		reccuring?: boolean;
 	}
 
+	let globalTransactions: () => Transaction[] = getContext('transactions');
+
 	let { transactions, overview = false, reccuring = false }: TransactionListProps = $props();
 
 	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let currentDate = $state(
 		new Date(
-			sortTransactions(transactions, transactionSortOptions[2].id, transactionSortOptions)[0].date
+			sortTransactions(globalTransactions(), transactionSortOptions[2].id, transactionSortOptions)[0].date
 		)
 	);
 
-	const dueSoonCutOffDate = new Date(currentDate);
+	const dueSoonCutOffDate = $state(new Date(currentDate));
 	dueSoonCutOffDate.setDate(currentDate.getDate() + 5);
 	let preparedReccuringTransactions: (Transaction & { paid: boolean; dueSoon: boolean })[] =
 		$derived.by(() => {

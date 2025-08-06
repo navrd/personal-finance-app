@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Category, Transaction } from '$lib/types';
+	import { OK, NotOK } from '$lib/assets/images';
 	import { getCategoryById } from '$lib/helpers/categories';
 	import { getContext } from 'svelte';
 
@@ -61,11 +62,13 @@
 			</div>{/if}
 
 		<div class="transactions-list__category" class:paid class:due-soon={dueSoon}>
-			<p>
-				{reccuring
+			<span
+				>{reccuring
 					? `Monthly — ${new Date(transaction.date).getDate()}`
-					: formatDate(transaction.date)}
-			</p>
+					: formatDate(transaction.date)}</span
+			>
+			{#if paid}{@html OK}{/if}
+			{#if dueSoon}{@html NotOK}{/if}
 		</div>
 	{/if}
 	<div class="transactions-list__category">
@@ -96,6 +99,8 @@
 	}
 	.transactions-list__category {
 		display: flex;
+		align-items: center;
+		gap: 0.25rem;
 		padding-block: 0.75rem;
 		color: var(--color-grey-500);
 		font-size: 0.75rem;

@@ -95,7 +95,7 @@
 	<h2 class="page-header__title">Transactions</h2>
 </header>
 
-<section class="transactions-list">
+<section class="section transactions-list">
 	<div class="transactions-list__filters">
 		<div class="transactions-list__filter">
 			<input type="text" bind:value={filters.search} />
@@ -135,5 +135,8 @@
 		font-size: 2rem;
 		line-height: 1.2;
 		font-weight: 550;
+	}
+	.section {
+		padding: 1.25rem;
 	}
 </style>
