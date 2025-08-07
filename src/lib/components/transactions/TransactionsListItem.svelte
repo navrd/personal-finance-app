@@ -19,7 +19,7 @@
 		paid = false,
 		dueSoon = false
 	}: TransactionsListItemProps = $props();
-	$inspect(paid, dueSoon);
+	
 	const formatDate = (dateString: string): string => {
 		let date = new Date(dateString);
 		const months = [

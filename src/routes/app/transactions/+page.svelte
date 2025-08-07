@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { FilterIcon, SortIcon } from '$lib/assets/images';
 	import { TransactionsList } from '$lib/components';
+	import DropdownFilter from '$lib/components/DropdownFilter.svelte';
+	import Spacer from '$lib/components/utility/Spacer.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
 		Category,
@@ -15,12 +18,13 @@
 	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
+	let innerWidth = $state(0)
 
 	let filters: TransactionFilters = $state({
 		search: '',
 		debouncedSearch: '',
 		sort: transactionSortOptions[4].id,
-		category: 'all'
+		category: 'All'
 	});
 
 	let debounceTimeout: ReturnType<typeof setTimeout>;
@@ -42,7 +46,7 @@
 						);
 
 			let categoryFlag =
-				filters.category === 'all' ? true : transaction.category_id === filters.category;
+				filters.category === 'All' ? true : transaction.category_id === filters.category;
 
 			return searchFlag && categoryFlag;
 		});
@@ -91,6 +95,8 @@
 	<meta name="description" content="Personal Finance App" />
 </svelte:head>
 
+<svelte:window bind:innerWidth />
+
 <header class="page-header">
 	<h2 class="page-header__title">Transactions</h2>
 </header>
@@ -100,22 +106,30 @@
 		<div class="transactions-list__filter">
 			<input type="text" bind:value={filters.search} />
 		</div>
+		<Spacer />
 		<div class="transactions-list__filter">
-			<select bind:value={filters.sort}
-				>{#each transactionSortOptions as sortOption}
-					<option value={sortOption.id}>{sortOption.label}</option>
-				{/each}</select
-			>
+			<DropdownFilter
+				options={transactionSortOptions}
+				valueKey="id"
+				labelKey="label"
+				label="Filter By"
+				bind:selected={filters.sort}
+				icon={FilterIcon}
+			/>
 		</div>
 		<div class="transactions-list__filter">
-			<select bind:value={filters.category}>
-				<option value="all">all</option>{#each categories as category}
-					<option value={category.id}>{category.category}</option>
-				{/each}</select
-			>
+			<DropdownFilter
+				options={categories}
+				valueKey="id"
+				labelKey="category"
+				bind:selected={filters.category}
+				label="Sort By"
+				defaultValue={true}
+				icon={SortIcon}
+			/>
 		</div>
 	</div>
-	<TransactionsList transactions={paginationData.items} />
+	<TransactionsList transactions={paginationData.items} overview={innerWidth <= 649} />
 	<button onclick={prevPage}>prev</button>
 	{#each Array.from({ length: paginationData.totalPages }, (_, i) => i + 1) as page}
 		<button onclick={() => goToPage(page)}>{page}</button>
@@ -138,5 +152,21 @@
 	}
 	.section {
 		padding: 1.25rem;
+	}
+	.transactions-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+	.transactions-list__filters {
+		display: flex;
+		gap: 0.75rem;
+	}
+	.transactions-list__filter {
+		display: flex;
+		align-items: center;
+		font-size: 0.875rem;
+		line-height: 1.5;
+		gap: 0.75rem;
 	}
 </style>

@@ -38,7 +38,6 @@
 				};
 			});
 		});
-	$inspect(preparedReccuringTransactions, currentDate);
 </script>
 
 <ul class="transactions-list__items">
@@ -50,7 +49,7 @@
 
 			{#if !reccuring}<div class="transactions-list__category"><p>Category</p></div>{/if}
 			<div class="transactions-list__category">
-				<p>{reccuring ? 'Due Date' : 'Transaction Date'}</p>
+				<p>{reccuring ? 'Due Date' : 'Date'}</p>
 			</div>
 			<div class="transactions-list__category">Amount</div>
 		</li>

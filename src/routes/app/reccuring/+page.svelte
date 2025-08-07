@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { SortIcon } from '$lib/assets/images';
+	import DropdownFilter from '$lib/components/DropdownFilter.svelte';
 	import ReccuringBillsSummary from '$lib/components/reccuring/ReccuringBillsSummary.svelte';
 	import ReccuringBillsTotals from '$lib/components/reccuring/ReccuringBillsTotals.svelte';
 	import TransactionsList from '$lib/components/transactions/TransactionsList.svelte';
@@ -105,11 +107,14 @@
 				<input type="text" bind:value={filters.search} />
 			</div>
 			<div class="transactions-list__filter">
-				<select bind:value={filters.sort}
-					>{#each transactionSortOptions as sortOption}
-						<option value={sortOption.id}>{sortOption.label}</option>
-					{/each}</select
-				>
+				<DropdownFilter
+					options={transactionSortOptions}
+					valueKey="id"
+					labelKey="label"
+					label="Sort By"
+					bind:selected={filters.sort}
+					icon={SortIcon}
+				/>
 			</div>
 		</div>
 		<TransactionsList transactions={paginationData.items} reccuring />
