@@ -69,7 +69,7 @@
 </script>
 
 <section class="section bills-totals">
-	<p class="label">total bills {reccuringTransactions.length}</p>
+	<p class="label">total bills</p>
 	<ul class="bills-totals__segments">
 		{#each Object.values(totals) as total}
 			<li class="bills-totals__segment">

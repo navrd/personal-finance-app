@@ -4,6 +4,7 @@
 	import ReccuringBillsSummary from '$lib/components/reccuring/ReccuringBillsSummary.svelte';
 	import ReccuringBillsTotals from '$lib/components/reccuring/ReccuringBillsTotals.svelte';
 	import TransactionsList from '$lib/components/transactions/TransactionsList.svelte';
+	import Spacer from '$lib/components/utility/Spacer.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
 		PaginationData,
@@ -106,6 +107,7 @@
 			<div class="transactions-list__filter">
 				<input type="text" bind:value={filters.search} />
 			</div>
+			<Spacer />
 			<div class="transactions-list__filter">
 				<DropdownFilter
 					options={transactionSortOptions}
@@ -117,6 +119,7 @@
 				/>
 			</div>
 		</div>
+
 		<TransactionsList transactions={paginationData.items} reccuring />
 		<button onclick={prevPage}>prev</button>
 		{#each Array.from({ length: paginationData.totalPages }, (_, i) => i + 1) as page}
@@ -171,5 +174,16 @@
 	.transactions-list {
 		padding: 1.5rem 1.25rem;
 		grid-area: transactions;
+	}
+	.transactions-list__filters {
+		display: flex;
+		gap: 0.75rem;
+	}
+	.transactions-list__filter {
+		display: flex;
+		align-items: center;
+		font-size: 0.875rem;
+		line-height: 1.5;
+		gap: 0.75rem;
 	}
 </style>

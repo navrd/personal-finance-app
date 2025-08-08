@@ -28,7 +28,7 @@
 	let desktopVisible = $state(false);
 	let optionsVisible = $state(false);
 	let innerWidth = $state(0);
-    
+
 	const onOptionClick = (option: string) => {
 		selected = option;
 		optionsVisible = false;
@@ -134,7 +134,7 @@
 							{selectedOptionLabel}{:else}
 							{labelKey}{/if}</span
 					>
-					<div class="dropdown-icon" class:dropdown-icon__active={optionsVisible}></div>
+					<div class="dropdown-icon" class:dropdown-icon__active={optionsVisible}>{@html ArrowRight}</div>
 				</button>
 			</div>
 			{#if optionsVisible}
