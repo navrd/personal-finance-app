@@ -199,9 +199,7 @@
 		line-height: 1.5;
 		color: var(--color-grey-500);
 	}
-	/* .filter-icon {
 
-	} */
 	.filter__active-option-wrapper {
 		cursor: pointer;
 		min-width: inherit;
@@ -224,7 +222,7 @@
 		justify-content: space-between;
 		padding: 1.25rem 0.75rem;
 		height: max-content;
-		border: 1px solid var(--color-grey-900);
+		border: 1px solid var(--color-beige-500);
 		border-radius: 0.5rem;
 		outline: none;
 		background: transparent;

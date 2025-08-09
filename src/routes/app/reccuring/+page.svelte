@@ -3,6 +3,7 @@
 	import DropdownFilter from '$lib/components/DropdownFilter.svelte';
 	import ReccuringBillsSummary from '$lib/components/reccuring/ReccuringBillsSummary.svelte';
 	import ReccuringBillsTotals from '$lib/components/reccuring/ReccuringBillsTotals.svelte';
+	import SearchInput from '$lib/components/SearchInput.svelte';
 	import TransactionsList from '$lib/components/transactions/TransactionsList.svelte';
 	import Spacer from '$lib/components/utility/Spacer.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
@@ -48,7 +49,11 @@
 		});
 	});
 
-	let totalBills = $derived(filteredTransactions.reduce((sum, { amount }) => sum + amount, 0));
+	let totalBills = $derived(
+		transactions()
+			.filter((transaction) => transaction.recurring)
+			.reduce((sum, { amount }) => sum + amount, 0)
+	);
 
 	let sortedTransactions = $derived.by(() => {
 		let sorted = [...filteredTransactions];
@@ -105,7 +110,7 @@
 	<section class="section transactions-list">
 		<div class="transactions-list__filters">
 			<div class="transactions-list__filter">
-				<input type="text" bind:value={filters.search} />
+				<SearchInput bind:value={filters.search} />
 			</div>
 			<Spacer />
 			<div class="transactions-list__filter">

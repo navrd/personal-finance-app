@@ -7,3 +7,5 @@ export * from './pots';
 export * from './transactions';
 export * from './reccuring';
 export { default as Sidebar } from './Sidebar.svelte';
+export { default as SearchInput } from './SearchInput.svelte';
+export { default as DropdownFilter } from './DropdownFilter.svelte';

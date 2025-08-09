@@ -5,6 +5,13 @@ export interface NavLinkProps {
     title: string;
     icon: string;
 }
+export const titleToIcon: Record<string, string> = {
+    overview: Home,
+    pots: Pots,
+    budgets: Budgets,
+    reccuring: Reccuring,
+    transactions: Transactions
+};
 
 export type StateWrapper<T> = {
     value: T;
@@ -13,13 +20,7 @@ export type StateWrapper<T> = {
 export interface BooleanContextValue {
     value: boolean;
 }
-export const titleToIcon: Record<string, string> = {
-    overview: Home,
-    pots: Pots,
-    budgets: Budgets,
-    reccuring: Reccuring,
-    transactions: Transactions
-};
+
 
 export interface Transaction {
     avatar: string;

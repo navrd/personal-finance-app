@@ -2,6 +2,7 @@
 	import { FilterIcon, SortIcon } from '$lib/assets/images';
 	import { TransactionsList } from '$lib/components';
 	import DropdownFilter from '$lib/components/DropdownFilter.svelte';
+	import SearchInput from '$lib/components/SearchInput.svelte';
 	import Spacer from '$lib/components/utility/Spacer.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
@@ -104,7 +105,7 @@
 <section class="section transactions-list">
 	<div class="transactions-list__filters">
 		<div class="transactions-list__filter">
-			<input type="text" bind:value={filters.search} />
+			<SearchInput bind:value={filters.search} />
 		</div>
 		<Spacer />
 		<div class="transactions-list__filter">

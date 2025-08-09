@@ -4,7 +4,9 @@
 	import { titleToIcon, type NavLinkProps } from '$lib/types';
 
 	let { href, minimize, title, icon }: NavLinkProps = $props();
+	// $inspect(icon, titleToIcon[icon]);
 
+	let iconHtml = $derived(titleToIcon[icon]);
 	let active = $derived.by(() => {
 		return page.url.pathname === `/app${href}`;
 	});
@@ -19,7 +21,7 @@
 				class:navlink__overlay_active={active}
 				class:navlink__overlay_minimized={minimize}
 			>
-				<div class="navlink__icon">{@html titleToIcon[icon]}</div>
+				<div class="navlink__icon">{@html iconHtml}</div>
 				<span class="navlink__title" class:navlink__title_hidden={minimize}>{title}</span>
 			</div>
 		</div>
