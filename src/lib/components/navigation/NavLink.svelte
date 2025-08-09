@@ -4,7 +4,6 @@
 	import { titleToIcon, type NavLinkProps } from '$lib/types';
 
 	let { href, minimize, title, icon }: NavLinkProps = $props();
-	// $inspect(icon, titleToIcon[icon]);
 
 	let iconHtml = $derived(titleToIcon[icon]);
 	let active = $derived.by(() => {

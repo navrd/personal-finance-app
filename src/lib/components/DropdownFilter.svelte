@@ -67,7 +67,6 @@
 	}
 
 	let selectedOptionLabel = $derived.by(() => {
-		console.log(defaultValue, selected);
 		if (defaultValue && selected === 'All') {
 			return 'All';
 		} else {
