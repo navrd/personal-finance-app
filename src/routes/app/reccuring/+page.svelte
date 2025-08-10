@@ -4,7 +4,7 @@
 	import ReccuringBillsSummary from '$lib/components/reccuring/ReccuringBillsSummary.svelte';
 	import ReccuringBillsTotals from '$lib/components/reccuring/ReccuringBillsTotals.svelte';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import TransactionsList from '$lib/components/transactions/TransactionsList.svelte';
+	import { TransactionsList, TransactionsPagination}  from '$lib/components';
 	import Spacer from '$lib/components/utility/Spacer.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
@@ -126,11 +126,7 @@
 		</div>
 
 		<TransactionsList transactions={paginationData.items} reccuring />
-		<button onclick={prevPage}>prev</button>
-		{#each Array.from({ length: paginationData.totalPages }, (_, i) => i + 1) as page}
-			<button onclick={() => goToPage(page)}>{page}</button>
-		{/each}
-		<button onclick={nextPage}>next</button>
+		<TransactionsPagination {paginationData} {prevPage} {nextPage} {goToPage} />
 	</section>
 </div>
 
@@ -177,6 +173,9 @@
 	}
 
 	.transactions-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
 		padding: 1.5rem 1.25rem;
 		grid-area: transactions;
 	}

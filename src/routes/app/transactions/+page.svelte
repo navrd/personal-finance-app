@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { FilterIcon, SortIcon } from '$lib/assets/images';
-	import { TransactionsList } from '$lib/components';
+	import { TransactionsList, TransactionsPagination } from '$lib/components';
 	import DropdownFilter from '$lib/components/DropdownFilter.svelte';
 	import SearchInput from '$lib/components/SearchInput.svelte';
 	import Spacer from '$lib/components/utility/Spacer.svelte';
@@ -19,7 +19,7 @@
 	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
-	let innerWidth = $state(0)
+	let innerWidth = $state(0);
 
 	let filters: TransactionFilters = $state({
 		search: '',
@@ -131,11 +131,7 @@
 		</div>
 	</div>
 	<TransactionsList transactions={paginationData.items} overview={innerWidth <= 649} />
-	<button onclick={prevPage}>prev</button>
-	{#each Array.from({ length: paginationData.totalPages }, (_, i) => i + 1) as page}
-		<button onclick={() => goToPage(page)}>{page}</button>
-	{/each}
-	<button onclick={nextPage}>next</button>
+	<TransactionsPagination {paginationData} {prevPage} {nextPage} {goToPage} />
 </section>
 
 <style lang="scss">
