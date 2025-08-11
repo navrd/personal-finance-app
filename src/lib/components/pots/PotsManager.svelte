@@ -3,6 +3,8 @@
 	import { invalidate } from '$app/navigation';
 	import type { CreatePotData, Pot, PotError } from '$lib/types';
 	import { getContext } from 'svelte';
+	import PotForm from './PotForm.svelte';
+	import { PotCard } from '.';
 
 	interface PotsManagerProps {
 		form?: PotError | null;
@@ -27,16 +29,6 @@
 	});
 
 	// Predefined theme colors
-	const themeColors = [
-		'#277C78',
-		'#82C9D7',
-		'#F2CDAC',
-		'#626070',
-		'#C94736',
-		'#854DFF',
-		'#AF81BA',
-		'#597C7C'
-	];
 
 	// Helper functions
 	function resetForm() {
@@ -48,17 +40,6 @@
 		};
 	}
 
-	function startEditing(pot: Pot) {
-		editingPot = pot;
-		formData = {
-			id: pot.id,
-			name: pot.name,
-			target: pot.target,
-			total: pot.total,
-			theme: pot.theme
-		};
-		showCreateForm = true;
-	}
 
 	function cancelEdit() {
 		editingPot = null;
@@ -66,9 +47,7 @@
 		showCreateForm = false;
 	}
 
-	function getProgressPercentage(pot: Pot): number {
-		return pot.target > 0 ? Math.min((pot.total / pot.target) * 100, 100) : 0;
-	}
+
 
 	async function clearForm() {
 		await applyAction({
@@ -89,7 +68,7 @@
 		<h1>My Pots</h1>
 		<button
 			class="btn btn-primary"
-			onclick={() => {
+						onclick={() => {
 				showCreateForm = !showCreateForm;
 				if (!showCreateForm) cancelEdit();
 			}}
@@ -105,94 +84,7 @@
 	{/if}
 
 	{#if showCreateForm}
-		<form
-			class="pot-form"
-			method="POST"
-			action={editingPot ? '?/updatePot' : '?/createPot'}
-			use:enhance={() => {
-				loading = true;
-				return async ({ result, update }) => {
-					if (result.type === 'success') {
-						// Only reload pots data, not everything
-						await invalidate('app:pots');
-						loading = false;
-						showCreateForm = false;
-						resetForm();
-					} else {
-						await update(); // Handle errors normally
-						loading = false;
-					}
-				};
-			}}
-		>
-			<h3>{editingPot ? 'Edit Pot' : 'Create New Pot'}</h3>
-			{#if editingPot}
-				<input type="hidden" name="id" value={formData.id} />
-			{/if}
-			<div class="form-group">
-				<label for="name">Name</label>
-				<input
-					id="name"
-					name="name"
-					type="text"
-					bind:value={formData.name}
-					placeholder="e.g., Vacation Fund"
-					required
-				/>
-			</div>
-
-			<div class="form-row">
-				<div class="form-group">
-					<label for="target">Target Amount</label>
-					<input
-						id="target"
-						name="target"
-						type="number"
-						step="0.01"
-						min="0"
-						bind:value={formData.target}
-						placeholder="2000.00"
-						required
-					/>
-				</div>
-
-				<div class="form-group">
-					<label for="total">Current Total</label>
-					<input
-						id="total"
-						name="total"
-						type="number"
-						step="0.01"
-						min="0"
-						bind:value={formData.total}
-						placeholder="159.00"
-					/>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="theme-color">Theme Color</label>
-				<div class="color-picker" id="theme-color">
-					{#each themeColors as color}
-						<button
-							type="button"
-							class="color-option {formData.theme === color ? 'active' : ''}"
-							style="background-color: {color}"
-							onclick={() => (formData.theme = color)}
-							aria-label="Select color {color}"
-						></button>
-					{/each}
-					<input type="hidden" name="theme" bind:value={formData.theme} />
-				</div>
-			</div>
-
-			<div class="form-actions">
-				<button type="button" class="btn btn-secondary" onclick={cancelEdit}> Cancel </button>
-				<button type="submit" class="btn btn-primary">
-					{loading ? 'Saving...' : editingPot ? 'Update Budget' : 'Create Budget'}
-				</button>
-			</div>
-		</form>
+		<PotForm bind:editingPot bind:loading bind:showCreateForm {formData}/>
 	{/if}
 
 	{#if loading}
@@ -204,66 +96,7 @@
 	{:else}
 		<div class="pots-grid">
 			{#each pots() as pot (pot.id)}
-				<div class="pot-card" style="border-left: 4px solid {pot.theme}">
-					<div class="pot-header">
-						<h3>{pot.name}</h3>
-						<div class="pot-actions">
-							<button
-								class="btn-icon"
-								onclick={() => startEditing(pot)}
-								aria-label="Edit {pot.name}"
-							>
-								✏️
-							</button>
-							<form
-								method="POST"
-								action="?/deletePot"
-								use:enhance={() => {
-									return async ({ result, update }) => {
-										if (!confirm('Are you sure you want to delete this budget?')) return;
-										loading = true;
-										if (result.type === 'success') {
-											// Only reload pots data, not everything
-											await invalidate('app:pots');
-											loading = false;
-										} else {
-											await update(); // Handle errors normally
-											loading = false;
-										}
-									};
-								}}
-							>
-								<input type="hidden" name="id" value={pot.id} />
-								<button type="submit" class="btn-icon delete" aria-label="Delete {pot.name}">
-									🗑️
-								</button>
-							</form>
-						</div>
-					</div>
-
-					<div class="pot-amounts">
-						<div class="amount">
-							<span class="label">Total</span>
-							<span class="value">${pot.total.toFixed(2)}</span>
-						</div>
-						<div class="amount">
-							<span class="label">Target</span>
-							<span class="value">${pot.target.toFixed(2)}</span>
-						</div>
-					</div>
-
-					<div class="progress-container">
-						<div class="progress-bar">
-							<div
-								class="progress-fill"
-								style="width: {getProgressPercentage(pot)}%; background-color: {pot.theme}"
-							></div>
-						</div>
-						<span class="progress-text">
-							{getProgressPercentage(pot).toFixed(1)}% complete
-						</span>
-					</div>
-				</div>
+				<PotCard bind:loading bind:showCreateForm bind:formData bind:editingPot {pot}/>
 			{/each}
 		</div>
 	{/if}
@@ -307,33 +140,9 @@
 				transform: translateY(-1px);
 			}
 		}
-
-		&.btn-secondary {
-			background-color: #f5f5f5;
-			color: #666;
-
-			&:hover {
-				background-color: #e0e0e0;
-			}
-		}
 	}
 
-	.btn-icon {
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 0.5rem;
-		border-radius: 4px;
-		transition: background-color 0.2s ease;
 
-		&:hover {
-			background-color: #f0f0f0;
-		}
-
-		&.delete:hover {
-			background-color: #fee;
-		}
-	}
 
 	.error-message {
 		background-color: #fee;
@@ -360,166 +169,14 @@
 		}
 	}
 
-	.pot-form {
-		background: white;
-		border: 1px solid #e0e0e0;
-		border-radius: 12px;
-		padding: 2rem;
-		margin-bottom: 2rem;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-		h3 {
-			margin: 0 0 1.5rem 0;
-			color: #1a1a1a;
-		}
-
-		.form-group {
-			margin-bottom: 1.5rem;
-
-			label {
-				display: block;
-				margin-bottom: 0.5rem;
-				font-weight: 600;
-				color: #333;
-			}
-
-			input {
-				width: 100%;
-				padding: 0.75rem;
-				border: 2px solid #e0e0e0;
-				border-radius: 8px;
-				font-size: 1rem;
-				transition: border-color 0.2s ease;
-
-				&:focus {
-					outline: none;
-					border-color: #277c78;
-				}
-			}
-		}
-
-		.form-row {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 1rem;
-		}
-
-		.color-picker {
-			display: flex;
-			gap: 0.5rem;
-			flex-wrap: wrap;
-
-			.color-option {
-				width: 40px;
-				height: 40px;
-				border-radius: 50%;
-				border: 3px solid transparent;
-				cursor: pointer;
-				transition: all 0.2s ease;
-
-				&:hover {
-					transform: scale(1.1);
-				}
-
-				&.active {
-					border-color: #1a1a1a;
-					transform: scale(1.15);
-				}
-			}
-		}
-
-		.form-actions {
-			display: flex;
-			gap: 1rem;
-			justify-content: flex-end;
-			margin-top: 2rem;
-		}
-	}
 
 	.pots-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		grid-template-columns: repeat(2, 1fr);
 		gap: 1.5rem;
 	}
 
-	.pot-card {
-		background: white;
-		border-radius: 12px;
-		padding: 1.5rem;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		transition:
-			transform 0.2s ease,
-			box-shadow 0.2s ease;
-
-		&:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-		}
-
-		.pot-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: flex-start;
-			margin-bottom: 1rem;
-
-			h3 {
-				margin: 0;
-				color: #1a1a1a;
-				font-size: 1.2rem;
-			}
-
-			.pot-actions {
-				display: flex;
-				gap: 0.25rem;
-			}
-		}
-
-		.pot-amounts {
-			display: flex;
-			justify-content: space-between;
-			margin-bottom: 1.5rem;
-
-			.amount {
-				text-align: center;
-
-				.label {
-					display: block;
-					font-size: 0.875rem;
-					color: #666;
-					margin-bottom: 0.25rem;
-				}
-
-				.value {
-					display: block;
-					font-size: 1.25rem;
-					font-weight: 700;
-					color: #1a1a1a;
-				}
-			}
-		}
-
-		.progress-container {
-			.progress-bar {
-				width: 100%;
-				height: 8px;
-				background-color: #e0e0e0;
-				border-radius: 4px;
-				overflow: hidden;
-				margin-bottom: 0.5rem;
-
-				.progress-fill {
-					height: 100%;
-					border-radius: 4px;
-					transition: width 0.3s ease;
-				}
-			}
-
-			.progress-text {
-				font-size: 0.875rem;
-				color: #666;
-			}
-		}
-	}
 
 	@media (max-width: 768px) {
 		.pots-container {
@@ -536,9 +193,6 @@
 			}
 		}
 
-		.pot-form .form-row {
-			grid-template-columns: 1fr;
-		}
 
 		.pots-grid {
 			grid-template-columns: 1fr;
