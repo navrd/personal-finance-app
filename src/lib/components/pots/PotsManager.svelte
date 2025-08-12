@@ -5,6 +5,7 @@
 	import { getContext } from 'svelte';
 	import PotForm from './PotForm.svelte';
 	import { PotCard } from '.';
+	import FormError from '../utility/FormError.svelte';
 
 	interface PotsManagerProps {
 		form?: PotError | null;
@@ -31,7 +32,7 @@
 	// Predefined theme colors
 
 	// Helper functions
-	function resetForm() {
+	function resetFormData() {
 		formData = {
 			name: '',
 			target: 0,
@@ -43,7 +44,7 @@
 
 	function cancelEdit() {
 		editingPot = null;
-		resetForm();
+		resetFormData();
 		showCreateForm = false;
 	}
 
@@ -57,12 +58,7 @@
 		});
 	}
 </script>
-
-{#if form && Object.keys(form).length > 0}
-	<h2>{form.message}</h2>
-	<button onclick={clearForm}>Clear errors</button>
-{/if}
-
+<FormError {form} {clearForm} />
 <div class="pots-container">
 	<header class="header">
 		<h1>My Pots</h1>
