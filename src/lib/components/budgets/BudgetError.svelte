@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { BudgetError, PotError } from '$lib/types';
 
-	interface FormErrorProps {
-		form?: PotError | BudgetError | null;
+	interface BudgetErrorProps {
+		form?: BudgetError | null;
 		clearForm: () => void;
 	}
 
-	let { form, clearForm }: FormErrorProps = $props();
+	let { form, clearForm }: BudgetErrorProps = $props();
 </script>
 
 {#if form && Object.keys(form).length > 0}

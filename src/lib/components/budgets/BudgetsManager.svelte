@@ -2,12 +2,8 @@
 	import { getContext } from 'svelte';
 	import type { Category, Budget, BudgetError } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
-	import { applyAction, enhance } from '$app/forms';
-	import { invalidate } from '$app/navigation';
-	import { getCategoryById } from '$lib/helpers/categories';
-	import FormError from '../utility/FormError.svelte';
-	import { BudgetForm } from '$lib/components';
-	import BudgetCard from './BudgetCard.svelte';
+	import { applyAction } from '$app/forms';
+	import { BudgetForm, BudgetCard, BudgetError as BudgetErrorForm } from '$lib/components';
 
 	interface BudgetFormData {
 		category_id: string;
@@ -23,7 +19,6 @@
 
 	let user: () => User = getContext('user');
 
-	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
 	// Reactive state
 	let budgets: () => Budget[] = getContext('budgets');
 	let loading = $state(false);
@@ -38,16 +33,6 @@
 		theme: '#277C78'
 	});
 
-	// Edit budget
-	function editBudget(budget: Budget) {
-		editingBudget = budget;
-		formData = {
-			category_id: budget.category_id,
-			maximum: budget.maximum.toString(),
-			theme: budget.theme
-		};
-		showForm = true;
-	}
 
 	function resetFormData() {
 		formData = {
@@ -69,7 +54,7 @@
 	}
 </script>
 
-<FormError {form} {clearForm} />
+<BudgetErrorForm {form} {clearForm} />
 
 <div class="budget-manager">
 	<div class="header">

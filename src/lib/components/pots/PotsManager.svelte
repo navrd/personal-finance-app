@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
-	import { invalidate } from '$app/navigation';
+	import { applyAction } from '$app/forms';
 	import type { CreatePotData, Pot, PotError } from '$lib/types';
 	import { getContext } from 'svelte';
 	import PotForm from './PotForm.svelte';
-	import { PotCard } from '.';
-	import FormError from '../utility/FormError.svelte';
+	import {PotCard, PotError as PotErrorForm} from '$lib/components'
 
 	interface PotsManagerProps {
 		form?: PotError | null;
@@ -41,14 +39,11 @@
 		};
 	}
 
-
 	function cancelEdit() {
 		editingPot = null;
 		resetFormData();
 		showCreateForm = false;
 	}
-
-
 
 	async function clearForm() {
 		await applyAction({
@@ -58,13 +53,14 @@
 		});
 	}
 </script>
-<FormError {form} {clearForm} />
+
+<PotErrorForm {form} {clearForm} />
 <div class="pots-container">
 	<header class="header">
 		<h1>My Pots</h1>
 		<button
 			class="btn btn-primary"
-						onclick={() => {
+			onclick={() => {
 				showCreateForm = !showCreateForm;
 				if (!showCreateForm) cancelEdit();
 			}}
@@ -80,7 +76,7 @@
 	{/if}
 
 	{#if showCreateForm}
-		<PotForm bind:editingPot bind:loading bind:showCreateForm {formData}/>
+		<PotForm bind:editingPot bind:loading bind:showCreateForm {formData} />
 	{/if}
 
 	{#if loading}
@@ -92,7 +88,7 @@
 	{:else}
 		<div class="pots-grid">
 			{#each pots() as pot (pot.id)}
-				<PotCard bind:loading bind:showCreateForm bind:formData bind:editingPot {pot}/>
+				<PotCard bind:loading bind:showCreateForm bind:formData bind:editingPot {pot} />
 			{/each}
 		</div>
 	{/if}
@@ -138,8 +134,6 @@
 		}
 	}
 
-
-
 	.error-message {
 		background-color: #fee;
 		color: #c53030;
@@ -165,14 +159,11 @@
 		}
 	}
 
-
-
 	.pots-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 1.5rem;
 	}
-
 
 	@media (max-width: 768px) {
 		.pots-container {
@@ -188,7 +179,6 @@
 				font-size: 1.5rem;
 			}
 		}
-
 
 		.pots-grid {
 			grid-template-columns: 1fr;
