@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { ArrowRight, Reccuring } from '$lib/assets/images';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type { Transaction, TransactionSortOption } from '$lib/types';
 	import { getContext } from 'svelte';
@@ -69,18 +68,13 @@
 	});
 </script>
 
-<section class="reccuring-overview">
-	<div class="reccuring-overview__header">
-		<h2 class="reccuring-overview__title">Reccuring Bills</h2>
-		<a class="details" href="/app/reccuring"><span>See Details</span> {@html ArrowRight}</a>
-	</div>
-	<div class="reccuring-overview__data">
+	<div class="segment__data">
 		{#each Object.entries(totals) as [key, total]}
 			<div
-				class="reccuring-overview__segment"
-				class:reccuring-overview__segment_paid={key === 'paid'}
-				class:reccuring-overview__segment_due-soon={key === 'dueSoon'}
-				class:reccuring-overview__segment_upcoming={key === 'upcoming'}
+				class="segment__particle"
+				class:segment__particle_paid={key === 'paid'}
+				class:segment__particle_due-soon={key === 'dueSoon'}
+				class:segment__particle_upcoming={key === 'upcoming'}
 			>
 				<span class="segment__title">{total.title}</span><span class="segment__value"
 					>{total.value.toFixed(2).toString().replace('-', '$')}</span
@@ -88,31 +82,14 @@
 			</div>
 		{/each}
 	</div>
-</section>
 
 <style lang="scss">
-	.reccuring-overview {
-		display: flex;
-		gap: 1rem;
-		flex-direction: column;
-		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
-		@media screen and (min-width: 1024px) {
-			height: 100%;
-		}
-	}
-	.reccuring-overview__header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	.reccuring-overview__data {
+	.segment__data {
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
 	}
-	.reccuring-overview__segment {
+	.segment__particle {
 		background: var(--color-beige-100);
 		padding: 1rem 0.75rem;
 		display: flex;
@@ -121,13 +98,13 @@
 		border-left: 0.25rem solid chocolate;
 		border-radius: 8px;
 	}
-	.reccuring-overview__segment_paid {
+	.segment__particle_paid {
 		border-left: 0.25rem solid var(--color-green);
 	}
-	.reccuring-overview__segment_due-soon {
+	.segment__particle_due-soon {
 		border-left: 0.25rem solid var(--color-yellow);
 	}
-	.reccuring-overview__segment_upcoming {
+	.segment__particle_upcoming {
 		border-left: 0.25rem solid var(--color-cyan);
 	}
 	.segment__title {
@@ -138,27 +115,5 @@
 		line-height: 1.5;
 		font-weight: bolder;
 	}
-	.details {
-		text-decoration: none;
-		display: flex;
-		gap: 0.75rem;
-		font-size: 0.875rem;
-		line-height: 1.5;
-		color: var(--color-grey-500);
-		align-items: center;
-		justify-content: center;
-		font-weight: 350;
-		font-style: normal;
-		* {
-			color: currentColor;
-			fill: currentColor;
-		}
-		&:hover {
-			color: var(--color-grey-900);
-			* {
-				color: currentColor;
-				fill: currentColor;
-			}
-		}
-	}
+
 </style>

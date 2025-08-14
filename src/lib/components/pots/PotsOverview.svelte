@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRight, PotsOutline } from '$lib/assets/images';
+	import { PotsOutline } from '$lib/assets/images';
 	import type { Pot } from '$lib/types';
 
 	interface PotsOverviewProps {
@@ -10,46 +10,27 @@
 	let { totalSavings, pots }: PotsOverviewProps = $props();
 </script>
 
-<div class="pots-overview">
-	<div class="pots-overview__header">
-		<h2 class="pots-overview__title">Pots</h2>
-		<a class="details" href="/app/pots"><span>See Details</span> {@html ArrowRight}</a>
+<div class="segment__data">
+	<div class="segment__total-savings">
+		<div class="total-savings__icon">{@html PotsOutline}</div>
+		<div class="total-savings__data">
+			<p class="total-savings__label">total saved</p>
+			<p class="total-savings__sum">${totalSavings.toFixed(2)}</p>
+		</div>
 	</div>
-	<div class="pots-overview__data">
-		<div class="pots-overview__total-savings">
-			<div class="total-savings__icon">{@html PotsOutline}</div>
-			<div class="total-savings__data">
-				<p class="total-savings__label">total saved</p>
-				<p class="total-savings__sum">${totalSavings.toFixed(2)}</p>
-			</div>
-		</div>
 
-		<div class="pots-overview__summary">
-			{#each pots as pot}
-				<div class="pot" style:--data-color={pot.theme}>
-					<h3 class="pot__label">{pot.name}</h3>
-					<p class="pot__sum">{pot.total}/{pot.target}</p>
-				</div>
-			{/each}
-		</div>
+	<div class="segment__summary">
+		{#each pots as pot}
+			<div class="pot" style:--data-color={pot.theme}>
+				<h3 class="pot__label">{pot.name}</h3>
+				<p class="pot__sum">{pot.total}/{pot.target}</p>
+			</div>
+		{/each}
 	</div>
 </div>
 
 <style lang="scss">
-	.pots-overview {
-		display: flex;
-		gap: 1rem;
-		flex-direction: column;
-		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
-	}
-	.pots-overview__header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	.pots-overview__data {
+	.segment__data {
 		gap: 0.75rem;
 		display: flex;
 		@media screen and (min-width: 0px) and (max-width: 670px) {
@@ -59,7 +40,7 @@
 			flex-direction: row;
 		}
 	}
-	.pots-overview__total-savings {
+	.segment__total-savings {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
@@ -82,7 +63,7 @@
 		font-size: 2rem;
 		line-height: 1.2;
 	}
-	.pots-overview__summary {
+	.segment__summary {
 		display: flex;
 		gap: 0.75rem;
 		flex-wrap: wrap;
@@ -109,28 +90,5 @@
 	.pot__sum {
 		font-size: 0.875rem;
 		line-height: 1.5;
-	}
-	.details {
-		text-decoration: none;
-		display: flex;
-		gap: 0.75rem;
-		font-size: 0.875rem;
-		line-height: 1.5;
-		color: var(--color-grey-500);
-		align-items: center;
-		justify-content: center;
-		font-weight: 350;
-		font-style: normal;
-		* {
-			color: currentColor;
-			fill: currentColor;
-		}
-		&:hover {
-			color: var(--color-grey-900);
-			* {
-				color: currentColor;
-				fill: currentColor;
-			}
-		}
 	}
 </style>
