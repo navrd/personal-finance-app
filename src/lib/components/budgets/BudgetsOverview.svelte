@@ -3,12 +3,21 @@
 	import { getCategoryById } from '$lib/helpers/categories';
 	import type { Budget, Category } from '$lib/types';
 	import { getContext } from 'svelte';
+	import { page } from '$app/state';
 
 	let budgets: () => Budget[] = getContext('budgets');
 	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
+
+	let getRouteBasedFlexDirection = $derived.by(() => {
+		if (page.url.pathname.includes('overview')) {
+			return false;
+		} else if (page.url.pathname.includes('budgets')) {
+			return true;
+		} else return false;
+	});
 </script>
 
-<div class="segment__data">
+<div class="segment__data" class:flex-direction-column={getRouteBasedFlexDirection}>
 	<PieChart />
 	<ul class="segment__legend">
 		{#each budgets() as budget}
@@ -21,6 +30,9 @@
 </div>
 
 <style lang="scss">
+	.flex-direction-column {
+		flex-direction: column;
+	}
 	.segment__data {
 		display: flex;
 		justify-content: space-between;

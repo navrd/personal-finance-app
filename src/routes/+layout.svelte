@@ -50,7 +50,8 @@
 <style lang="scss">
 	.app {
 		display: flex;
-		min-height: 100dvh;
+		min-height: 100vh;
+		overflow-y: auto;
 		min-width: 100%;
 		max-width: 100%;
 	}

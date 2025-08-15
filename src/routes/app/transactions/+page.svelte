@@ -113,7 +113,7 @@
 				options={transactionSortOptions}
 				valueKey="id"
 				labelKey="label"
-				label="Filter By"
+				label="Sort By"
 				bind:selected={filters.sort}
 				icon={FilterIcon}
 			/>
@@ -124,7 +124,7 @@
 				valueKey="id"
 				labelKey="category"
 				bind:selected={filters.category}
-				label="Sort By"
+				label="Filter By"
 				defaultValue={true}
 				icon={SortIcon}
 			/>

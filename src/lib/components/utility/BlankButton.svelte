@@ -2,16 +2,17 @@
 	import type { Snippet } from 'svelte';
 
 	interface BlankButtonProps {
-		onclick: (...args: any[]) => any;
+		onclick?: (...args: any[]) => any;
 		children?: Snippet;
 		ariaLabel?: string;
 		absolute?: boolean;
+		type?: "button" | "submit" | "reset" | null | undefined;
 	}
 
-	let { onclick, children, ariaLabel, absolute }: BlankButtonProps = $props();
+	let { onclick, children, ariaLabel, absolute, type = "button" }: BlankButtonProps = $props();
 </script>
 
-<button class="blank-button" {onclick} aria-label={ariaLabel} class:blank-button_absolute={absolute}
+<button class="blank-button" {onclick} aria-label={ariaLabel} {type} class:blank-button_absolute={absolute}
 	>{@render children?.()}</button
 >
 
@@ -30,6 +31,8 @@
 		font-style: inherit;
 		border: none;
 		outline: none;
+		color: inherit;
+		fill: inherit;
 	}
 	.blank-button_absolute {
 		position: absolute;

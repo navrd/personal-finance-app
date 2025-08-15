@@ -13,9 +13,10 @@
 
 	interface BudgetsManagerProps {
 		form?: BudgetError | null;
+		showForm: boolean;
 	}
 
-	let { form }: BudgetsManagerProps = $props();
+	let { form, showForm = $bindable() }: BudgetsManagerProps = $props();
 
 	let user: () => User = getContext('user');
 
@@ -25,7 +26,6 @@
 	let error: string | null | unknown = $state(null);
 
 	// Form state
-	let showForm = $state(false);
 	let editingBudget: Budget | null = $state(null);
 	let formData: BudgetFormData & { id?: string } = $state({
 		category_id: '',
@@ -57,15 +57,6 @@
 <BudgetErrorForm {form} {clearForm} />
 
 <div class="budget-manager">
-	<div class="header">
-		<h1>Budget Manager</h1>
-		{#if user().id}
-			<button onclick={() => (showForm = !showForm)} class="btn btn-primary">
-				{showForm ? 'Cancel' : 'Add Budget'}
-			</button>
-		{/if}
-	</div>
-
 	{#if error}
 		<div class="alert alert-error" role="alert">
 			{error}
@@ -111,44 +102,10 @@
 	.budget-manager {
 		display: flex;
 		flex-direction: column;
-		padding: 20px;
 	}
 	.budgets-list {
 		display: flex;
 		flex-direction: column;
-	}
-
-	.header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 30px;
-	}
-
-	.header h1 {
-		margin: 0;
-		color: #1f2937;
-	}
-
-	.btn {
-		padding: 10px 20px;
-		border: none;
-		border-radius: 8px;
-		font-size: 14px;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s;
-		text-decoration: none;
-		display: inline-block;
-	}
-
-	.btn-primary {
-		background: #277c78;
-		color: white;
-	}
-
-	.btn-primary:hover {
-		background: #1f5f5c;
 	}
 
 	.alert {
@@ -197,14 +154,12 @@
 	}
 
 	.budgets {
+		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
 	}
-
-
-
-	@media (max-width: 1023px) {
+	/* @media (max-width: 1023px) {
 		.header {
 			flex-direction: column;
 			gap: 15px;
@@ -214,5 +169,5 @@
 		.budgets {
 			flex-basis: calc((100%));
 		}
-	}
+	} */
 </style>

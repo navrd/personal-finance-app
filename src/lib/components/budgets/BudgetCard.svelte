@@ -2,9 +2,14 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { getCategoryById } from '$lib/helpers/categories';
-	import type { Budget, Category } from '$lib/types';
+	import type { Budget, Category, Transaction, TransactionSortOption } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
+	import BlankButton from '../utility/BlankButton.svelte';
+	import { ArrowRight, Dots } from '$lib/assets/images';
+	import { clickoutside } from '@svelte-put/clickoutside';
+	import TransactionsList from '../transactions/TransactionsList.svelte';
+	import { sortTransactions } from '$lib/helpers/transactions';
 
 	interface BudgetFormData {
 		category_id: string;
@@ -31,6 +36,10 @@
 	}: BudgetCardProps = $props();
 
 	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
+	let transactions: () => Transaction[] = getContext('transactions');
+	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
+
+	let showContextMenu = $state(false);
 
 	function editBudget(budget: Budget) {
 		editingBudget = budget;
@@ -50,8 +59,17 @@
 		}).format(amount);
 	}
 
-	const enhanceForm: SubmitFunction = async ({ formData, cancel }) => {
+	const enhanceForm: SubmitFunction = async ({ action, formData, cancel }) => {
+		// Check if it's a delete action
+		if (action.search.includes('deleteBudget') || action.pathname.includes('deleteBudget')) {
+			const confirmed = confirm('Are you sure you want to delete this budget?');
+			if (!confirmed) {
+				cancel(); // This prevents the form submission
+				return;
+			}
+		}
 		loading = true;
+		console.log(action);
 
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
@@ -64,112 +82,253 @@
 			}
 		};
 	};
+
+	function clickOutside(e: CustomEvent<MouseEvent>) {
+		e.stopPropagation();
+		showContextMenu = false;
+	}
+	let spent = $derived(
+		transactions()
+			.filter((transaction) => transaction.category_id === budget.category_id)
+			.reduce((sum, { amount }) => sum + amount, 0)
+	);
+
+	let latestTransactions = $derived(
+		sortTransactions(transactions(), transactionSortOptions[2].id, transactionSortOptions)
+			.filter((transaction) => transaction.category_id === budget.category_id)
+			.slice(0, 3)
+	);
 </script>
 
-<div class="budget-card" style="border-left: 4px solid {budget.theme}">
-	<div class="budget-header">
-		<h3 class="category">
+<div class="budget-card">
+	<div class="budget-card__header">
+		<h3 class="header-title" style:--data-color={budget.theme}>
 			{getCategoryById(categories, budget.category_id)?.category}
 		</h3>
-		<div class="actions">
-			<button onclick={() => editBudget(budget)} class="btn-icon" title="Edit"> ✏️ </button>
-			<form method="POST" action="?/deleteBudget" use:enhance={enhanceForm}>
-				<input type="hidden" name="id" value={budget.id} />
-				<button type="submit" class="btn-icon" title="Delete"> 🗑️ </button>
-			</form>
+		<div class="context-menu">
+			<BlankButton
+				onclick={(e: MouseEvent) => {
+					e.stopPropagation();
+					showContextMenu = !showContextMenu;
+				}}>{@html Dots}</BlankButton
+			>
+			{#if showContextMenu}
+				<ul class="context-menu__actions" use:clickoutside onclickoutside={clickOutside}>
+					<li class="action">
+						<BlankButton onclick={() => editBudget(budget)}>Edit budget</BlankButton>
+					</li>
+					<li class="action action_delete">
+						<form method="POST" action="?/deleteBudget" use:enhance={enhanceForm}>
+							<input type="hidden" name="id" value={budget.id} />
+							<BlankButton type="submit">Delete budget</BlankButton>
+						</form>
+					</li>
+				</ul>
+			{/if}
 		</div>
 	</div>
 
-	<div class="budget-amount">
-		<span class="amount">{formatCurrency(budget.maximum)}</span>
-		<span class="label">Maximum</span>
+	<p class="budget-amount">Maximum of ${budget.maximum}</p>
+
+	<div class="amount-progress">
+		<div
+			class="amount-progress__value"
+			style:--data-color={budget.theme}
+			style:--data-width={`${(spent * -100) / budget.maximum}%`}
+		></div>
 	</div>
 
-	<div class="budget-meta">
-		<small>Created: {new Date(budget.created_at).toLocaleDateString()}</small>
-		{#if budget.updated_at !== budget.created_at}
-			<small>Updated: {new Date(budget.updated_at).toLocaleDateString()}</small>
-		{/if}
+	<div class="budget-data">
+		<div class="spent" style:--data-color={budget.theme}>
+			<div class="data">
+				<p class="label">Spent</p>
+				<p class="sum">${(spent * -1).toFixed(0)}</p>
+			</div>
+		</div>
+		<div class="remaining">
+			<div class="data">
+				<p class="label">Remaining</p>
+				<p class="sum">${(budget.maximum - spent * -1).toFixed(0)}</p>
+			</div>
+		</div>
+	</div>
+	<div class="latest-transactions">
+		<div class="segment__header">
+			<h2 class="segment_title">Latest transactions</h2>
+			<a class="details" href="/app/transactions"><span>See Details</span> {@html ArrowRight}</a>
+		</div>
+		<TransactionsList transactions={latestTransactions} overview />
 	</div>
 </div>
 
 <style lang="scss">
-	.btn-icon {
-		background: none;
-		border: none;
-		font-size: 16px;
-		cursor: pointer;
-		padding: 5px;
-		border-radius: 4px;
-		transition: background-color 0.2s;
+	.action {
+		padding: 0.75rem 0.5rem;
+		border-bottom: 1px solid var(--color-grey-100);
+		color: var(--color-grey-900);
+		font-size: 0.875rem;
+		&:last-child {
+			border-bottom: none;
+		}
+		&:hover {
+			background: var(--color-grey-300);
+		}
+	}
+	.action_delete {
+		color: var(--color-red);
+	}
+	.segment__header {
+		font-size: 1rem;
+		line-height: 1.5;
+		color: var(--color-grey-900);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.segment_title {
+		font-size: 1rem;
+		font-weight: 600;
+	}
+	.details {
+		text-decoration: none;
+		display: flex;
+		gap: 0.75rem;
+		font-size: 0.875rem;
+		line-height: 1.5;
+		color: var(--color-grey-500);
+		align-items: center;
+		justify-content: center;
+		font-weight: 350;
+		font-style: normal;
+		* {
+			color: currentColor;
+			fill: currentColor;
+		}
+		&:hover {
+			color: var(--color-grey-900);
+			* {
+				color: currentColor;
+				fill: currentColor;
+			}
+		}
+	}
+	.latest-transactions {
+		display: flex;
+		flex-direction: column;
+		padding: 0.75rem;
+		border-radius: 0.75rem;
+		background: var(--color-beige-100);
+	}
+	.data {
+		display: flex;
+		flex-direction: column;
+	}
+	.budget-data {
+		display: flex;
+		width: 100%;
+	}
+	.spent,
+	.remaining {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 0.75rem;
+
+		flex: 1 1 auto;
+		&:before {
+			content: ' ';
+			width: 0.25rem;
+			height: 2rem;
+			background: var(--color-beige-100);
+			border-radius: 0.25rem;
+		}
 	}
 
-	.btn-icon:hover {
-		background: #f3f4f6;
+	.spent {
+		&:before {
+			background: var(--data-color);
+		}
+	}
+	.label {
+		color: var(--color-grey-500);
+		font-size: 0.75rem;
+		line-height: 1.5;
+	}
+	.sum {
+		color: var(--color-grey-900);
+		font-size: 0.875rem;
+		line-height: 1.5;
+		font-weight: 600;
+	}
+	.amount-progress {
+		padding: 0.25rem;
+		display: flex;
+		height: 2rem;
+		background: var(--color-beige-100);
+		border-radius: 0.25rem;
+	}
+	.amount-progress__value {
+		height: calc(2rem - 2 * 0.25rem);
+		background: var(--data-color);
+		width: var(--data-width);
+		border-radius: 0.25rem;
+	}
+	.context-menu {
+		position: relative;
+		display: flex;
+
+		align-items: center;
+		justify-content: center;
+		color: var(--color-grey-300);
+		fill: currentColor;
+	}
+
+	.context-menu__actions {
+		background: white;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		position: absolute;
+		top: calc(100% + 0.5rem);
+		right: 0;
+		min-width: 130px;
+		z-index: 3;
+		border-radius: 0.75rem;
+		box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
+	}
+
+	.header-title {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 0.75rem;
+		&:before {
+			content: ' ';
+			width: 0.75rem;
+			height: 0.75rem;
+			border-radius: 50%;
+			background: var(--data-color);
+		}
 	}
 	.budget-card {
-		flex-basis: calc((100% - 1rem) / 2);
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		width: 100%;
 		background: white;
-		border: 1px solid #e5e7eb;
 		border-radius: 12px;
 		padding: 20px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		transition:
-			transform 0.2s,
-			box-shadow 0.2s;
 	}
 
-	.budget-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	}
-
-	.budget-header {
+	.budget-card__header {
 		display: flex;
 		justify-content: space-between;
-		align-items: flex-start;
+		align-items: center;
 		margin-bottom: 15px;
 	}
-
-	.category {
-		margin: 0;
-		font-size: 18px;
-		font-weight: 600;
-		color: #1f2937;
-	}
-
-	.actions {
-		display: flex;
-		gap: 5px;
-	}
-
 	.budget-amount {
-		margin-bottom: 15px;
-	}
-
-	.amount {
-		display: block;
-		font-size: 24px;
-		font-weight: 700;
-		color: #277c78;
-	}
-
-	.label {
-		font-size: 12px;
-		color: #6b7280;
-		text-transform: uppercase;
-		font-weight: 500;
-	}
-
-	.budget-meta {
-		border-top: 1px solid #f3f4f6;
-		padding-top: 10px;
-	}
-
-	.budget-meta small {
-		display: block;
-		color: #9ca3af;
-		font-size: 12px;
-		margin-bottom: 2px;
+		font-size: 0.875rem;
+		line-height: 1.5;
+		color: var(--color-grey-500);
 	}
 </style>
