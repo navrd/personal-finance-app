@@ -59,7 +59,6 @@
 			}
 		};
 	};
-	$inspect(loading);
 </script>
 
 <form

@@ -52,25 +52,15 @@
 		showForm = true;
 	}
 
-	function formatCurrency(amount: number) {
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: 'USD'
-		}).format(amount);
-	}
-
 	const enhanceForm: SubmitFunction = async ({ action, formData, cancel }) => {
-		// Check if it's a delete action
 		if (action.search.includes('deleteBudget') || action.pathname.includes('deleteBudget')) {
 			const confirmed = confirm('Are you sure you want to delete this budget?');
 			if (!confirmed) {
-				cancel(); // This prevents the form submission
+				cancel();
 				return;
 			}
 		}
 		loading = true;
-		console.log(action);
-
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				await invalidate('app:budgets');
