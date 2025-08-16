@@ -4,7 +4,10 @@
 	import type { Budget, Category } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { getContext } from 'svelte';
+	import { getContext, onDestroy, onMount } from 'svelte';
+	import CustomSelect from '../CustomSelect.svelte';
+	import { getCategoryById } from '$lib/helpers/categories';
+	import { Spacer } from '../utility';
 
 	const colorThemes = [
 		'#277C78',
@@ -56,75 +59,134 @@
 			}
 		};
 	};
+
+	function onCategorySelect(category: Pick<Category, 'id' | 'category'>) {
+		formData.category_id = category.id;
+	}
+
+	function onColorSelect(color: string) {
+		formData.theme = color;
+	}
+
+	onMount(() => {
+		document.documentElement.classList.add('overflow-hidden');
+	});
+	onDestroy(() => {
+		document.documentElement.classList.remove('overflow-hidden');
+	});
 </script>
 
-<div class="form-container">
-	<form
-		method="POST"
-		class="budget-form"
-		action={editingBudget ? '?/updateBudget' : '?/createBudget'}
-		use:enhance={enhanceForm}
-	>
-		<h2>{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
-		<input type="hidden" name="user_id" value={user().id} />
-		{#if editingBudget}
-			<input type="hidden" name="id" value={editingBudget.id} />
-		{/if}
-
-		<div class="form-group">
-			<label for="category">Category *</label>
-			<select
-				name="category_id"
-				id="category"
-				bind:value={formData.category_id}
-				placeholder="e.g. Entertainment, Food, Transport"
-				required
-			>
-				{#each categories as category}
-					<option value={category.id}>{category.category}</option>
-				{/each}
-			</select>
-		</div>
-
-		<div class="form-group">
-			<label for="maximum">Maximum Amount *</label>
-			<input
-				id="maximum"
-				name="maximum"
-				type="number"
-				step="0.01"
-				bind:value={formData.maximum}
-				placeholder="0.00"
-				required
-			/>
-		</div>
-
-		<div class="form-group">
-			<label for="theme">Theme Color</label>
-			<div class="color-picker">
-				{#each colorThemes as color}
-					<button
-						type="button"
-						class="color-option {formData.theme === color ? 'selected' : ''}"
-						style="background-color: {color}"
-						onclick={() => (formData.theme = color)}
-						title={color}>x</button
-					>
-				{/each}
+<div class="budget-form-wrapper">
+	<div class="form-container">
+		<form
+			method="POST"
+			class="budget-form"
+			action={editingBudget ? '?/updateBudget' : '?/createBudget'}
+			use:enhance={enhanceForm}
+		>
+			<h2>{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
+			<p class="description">
+				{editingBudget
+					? 'As your budgets change, feel free to update your spending limits.'
+					: 'Choose a category to set a spending budget. These categories can help you monitor spending.'}
+			</p>
+			<input type="hidden" name="user_id" value={user().id} />
+			{#if editingBudget}
+				<input type="hidden" name="id" value={editingBudget.id} />
+			{/if}
+			<div class="form-group">
+				<label for="category">Category *</label>
+				<select
+					name="category_id"
+					id="category"
+					bind:value={formData.category_id}
+					placeholder="e.g. Entertainment, Food, Transport"
+					required
+				>
+					{#each categories as category}
+						<option value={category.id}>{category.category}</option>
+					{/each}
+				</select>
+				<CustomSelect
+					options={categories}
+					label="category"
+					onOptionClick={onCategorySelect}
+					selectedOption={getCategoryById(categories, formData?.category_id)!}
+				>
+					{#snippet children(category)}
+						<p style:color="red" style:background="blue">{category.category}</p>
+					{/snippet}
+				</CustomSelect>
 			</div>
-			<input id="theme" name="theme" type="color" bind:value={formData.theme} class="color-input" />
-		</div>
 
-		<div class="form-actions">
-			<button type="submit" class="btn btn-primary" disabled={loading}>
-				{loading ? 'Saving...' : editingBudget ? 'Update Budget' : 'Create Budget'}
-			</button>
-			<button type="button" onclick={resetFormData} class="btn btn-secondary"> Cancel </button>
-		</div>
-	</form>
+			<div class="form-group">
+				<label for="maximum">Maximum Amount *</label>
+				<input
+					id="maximum"
+					name="maximum"
+					type="number"
+					step="0.01"
+					bind:value={formData.maximum}
+					placeholder="0.00"
+					required
+				/>
+			</div>
+
+			<div class="form-group">
+				<label for="theme">Theme Color</label>
+				<div class="color-picker">
+					{#each colorThemes as color}
+						<button
+							type="button"
+							class="color-option {formData.theme === color ? 'selected' : ''}"
+							style="background-color: {color}"
+							onclick={() => (formData.theme = color)}
+							title={color}>x</button
+						>
+					{/each}
+				</div>
+				<input
+					id="theme"
+					name="theme"
+					type="color"
+					bind:value={formData.theme}
+					class="color-input"
+				/>
+				<CustomSelect
+					options={colorThemes}
+					label="color"
+					onOptionClick={onColorSelect}
+					selectedOption={formData.theme}
+				>
+					{#snippet children(color)}
+						<p style:color>{color}</p>
+					{/snippet}
+				</CustomSelect>
+			</div>
+
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary" disabled={loading}>
+					{loading ? 'Saving...' : editingBudget ? 'Update Budget' : 'Create Budget'}
+				</button>
+				<button type="button" onclick={resetFormData} class="btn btn-secondary"> Cancel </button>
+			</div>
+		</form>
+	</div>
 </div>
 
 <style lang="scss">
+	.budget-form-wrapper {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 2;
+		width: 100dvw;
+		height: 100dvh;
+		background: rgba(0, 0, 0, 0.25);
+	}
 	.form-container {
 		background: white;
 		border: 1px solid #e5e7eb;
@@ -232,5 +294,11 @@
 
 	.btn-secondary:hover {
 		background: #4b5563;
+	}
+
+	.description {
+		font-size: 0.875rem;
+		line-height: 1.5;
+		color: var(--color-grey-500);
 	}
 </style>

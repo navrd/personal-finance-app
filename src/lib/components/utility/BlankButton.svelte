@@ -7,12 +7,13 @@
 		ariaLabel?: string;
 		absolute?: boolean;
 		type?: "button" | "submit" | "reset" | null | undefined;
+		fullWidth?: boolean
 	}
 
-	let { onclick, children, ariaLabel, absolute, type = "button" }: BlankButtonProps = $props();
+	let { onclick, children, ariaLabel, absolute, type = "button", fullWidth = false }: BlankButtonProps = $props();
 </script>
 
-<button class="blank-button" {onclick} aria-label={ariaLabel} {type} class:blank-button_absolute={absolute}
+<button class="blank-button" {onclick} aria-label={ariaLabel} {type} class:blank-button_absolute={absolute} class:blank-button_full-width={fullWidth}
 	>{@render children?.()}</button
 >
 
@@ -43,5 +44,10 @@
 		border: none;
 		background: transparent;
 		cursor: pointer;
+	}
+	.blank-button_full-width {
+		width: 100%;
+		flex: 1;
+		justify-content: space-between;
 	}
 </style>

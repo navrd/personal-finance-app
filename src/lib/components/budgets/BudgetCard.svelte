@@ -50,6 +50,7 @@
 			id: budget.id
 		};
 		showForm = true;
+		showContextMenu = false;
 	}
 
 	const enhanceForm: SubmitFunction = async ({ action, formData, cancel }) => {
