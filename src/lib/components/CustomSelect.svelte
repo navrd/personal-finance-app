@@ -15,6 +15,9 @@
 		onOptionClick: (option: T) => void;
 		// Optional: custom placeholder when nothing is selected
 		placeholder?: string;
+		hiddenInput?: boolean;
+		inputName?: string;
+		inputValue?: string | number | boolean;
 	}
 
 	let {
@@ -24,7 +27,10 @@
 		options,
 		selectedOption,
 		onOptionClick,
-		placeholder = 'Select an option'
+		placeholder = 'Select an option',
+		hiddenInput,
+		inputName,
+		inputValue = $bindable()
 	}: CustomSelectProps<T> = $props();
 
 	let showOptions = $state(false);
@@ -57,6 +63,9 @@
 				{@html ArrowRight}
 			</div>
 		</BlankButton>
+		{#if hiddenInput}
+			<input type="hidden" name={inputName} value={inputValue} />
+		{/if}
 	</div>
 
 	{#if showOptions}

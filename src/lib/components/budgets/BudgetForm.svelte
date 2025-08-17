@@ -95,23 +95,14 @@
 				<input type="hidden" name="id" value={editingBudget.id} />
 			{/if}
 			<div class="form-group">
-				<label for="category">Category *</label>
-				<select
-					name="category_id"
-					id="category"
-					bind:value={formData.category_id}
-					placeholder="e.g. Entertainment, Food, Transport"
-					required
-				>
-					{#each categories as category}
-						<option value={category.id}>{category.category}</option>
-					{/each}
-				</select>
 				<CustomSelect
 					options={categories}
 					label="category"
 					onOptionClick={onCategorySelect}
 					selectedOption={getCategoryById(categories, formData?.category_id)!}
+					hiddenInput
+					inputName="category_id"
+					bind:inputValue={formData.category_id}
 				>
 					{#snippet children(category)}
 						<p style:color="red" style:background="blue">{category.category}</p>
@@ -120,7 +111,7 @@
 			</div>
 
 			<div class="form-group">
-				<label for="maximum">Maximum Amount *</label>
+				<label for="maximum">Maximum Amount</label>
 				<input
 					id="maximum"
 					name="maximum"
@@ -133,30 +124,14 @@
 			</div>
 
 			<div class="form-group">
-				<label for="theme">Theme Color</label>
-				<div class="color-picker">
-					{#each colorThemes as color}
-						<button
-							type="button"
-							class="color-option {formData.theme === color ? 'selected' : ''}"
-							style="background-color: {color}"
-							onclick={() => (formData.theme = color)}
-							title={color}>x</button
-						>
-					{/each}
-				</div>
-				<input
-					id="theme"
-					name="theme"
-					type="color"
-					bind:value={formData.theme}
-					class="color-input"
-				/>
 				<CustomSelect
 					options={colorThemes}
 					label="color"
 					onOptionClick={onColorSelect}
 					selectedOption={formData.theme}
+					hiddenInput
+					inputName="theme"
+					bind:inputValue={formData.theme}
 				>
 					{#snippet children(color)}
 						<p style:color>{color}</p>
@@ -225,35 +200,6 @@
 		border-color: #277c78;
 		box-shadow: 0 0 0 3px rgba(39, 124, 120, 0.1);
 	}
-
-	.color-picker {
-		display: flex;
-		gap: 8px;
-		margin-bottom: 10px;
-		flex-wrap: wrap;
-	}
-
-	.color-option {
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-		border: 2px solid transparent;
-		cursor: pointer;
-		transition: all 0.2s;
-	}
-
-	.color-option:hover,
-	.color-option.selected {
-		border-color: #1f2937;
-		transform: scale(1.1);
-	}
-
-	.color-input {
-		width: 60px !important;
-		height: 40px;
-		padding: 2px;
-	}
-
 	.form-actions {
 		display: flex;
 		gap: 12px;
