@@ -7,7 +7,8 @@
 	import { getContext, onDestroy, onMount } from 'svelte';
 	import CustomSelect from '../CustomSelect.svelte';
 	import { getCategoryById } from '$lib/helpers/categories';
-	import { Spacer } from '../utility';
+	import { Close } from '$lib/assets/images';
+	import CustomInput from '../CustomInput.svelte';
 
 	const colorThemes = [
 		'#277C78',
@@ -84,74 +85,67 @@
 			action={editingBudget ? '?/updateBudget' : '?/createBudget'}
 			use:enhance={enhanceForm}
 		>
-			<h2>{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
+			<header class="form-header">
+				<h2 class="title">{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
+				<button class="close" type="button" onclick={resetFormData}>{@html Close}</button>
+			</header>
 			<p class="description">
 				{editingBudget
 					? 'As your budgets change, feel free to update your spending limits.'
 					: 'Choose a category to set a spending budget. These categories can help you monitor spending.'}
 			</p>
 			<input type="hidden" name="user_id" value={user().id} />
+
 			{#if editingBudget}
 				<input type="hidden" name="id" value={editingBudget.id} />
 			{/if}
-			<div class="form-group">
-				<CustomSelect
-					options={categories}
-					label="category"
-					onOptionClick={onCategorySelect}
-					selectedOption={getCategoryById(categories, formData?.category_id)!}
-					hiddenInput
-					inputName="category_id"
-					bind:inputValue={formData.category_id}
-				>
-					{#snippet children(category)}
-						<p style:color="red" style:background="blue">{category.category}</p>
-					{/snippet}
-				</CustomSelect>
-			</div>
+			<CustomSelect
+				options={categories}
+				label="category"
+				onOptionClick={onCategorySelect}
+				selectedOption={getCategoryById(categories, formData?.category_id)!}
+				hiddenInput
+				inputName="category_id"
+				bind:inputValue={formData.category_id}
+			>
+				{#snippet children(category)}
+					<p class="category-option">{category.category}</p>
+				{/snippet}
+			</CustomSelect>
 
-			<div class="form-group">
-				<label for="maximum">Maximum Amount</label>
-				<input
-					id="maximum"
-					name="maximum"
-					type="number"
-					step="0.01"
-					bind:value={formData.maximum}
-					placeholder="0.00"
-					required
-				/>
-			</div>
+			<CustomInput
+				bind:value={formData.maximum}
+				type="number"
+				placeholder="e.g. 200"
+				symbol="$"
+				name="maximum"
+				id="maximum"
+				label="Maximum Spending"
+			/>
 
-			<div class="form-group">
-				<CustomSelect
-					options={colorThemes}
-					label="color"
-					onOptionClick={onColorSelect}
-					selectedOption={formData.theme}
-					hiddenInput
-					inputName="theme"
-					bind:inputValue={formData.theme}
-				>
-					{#snippet children(color)}
-						<p style:color>{color}</p>
-					{/snippet}
-				</CustomSelect>
-			</div>
-
-			<div class="form-actions">
-				<button type="submit" class="btn btn-primary" disabled={loading}>
-					{loading ? 'Saving...' : editingBudget ? 'Update Budget' : 'Create Budget'}
-				</button>
-				<button type="button" onclick={resetFormData} class="btn btn-secondary"> Cancel </button>
-			</div>
+			<CustomSelect
+				options={colorThemes}
+				label="color"
+				onOptionClick={onColorSelect}
+				selectedOption={formData.theme}
+				hiddenInput
+				inputName="theme"
+				bind:inputValue={formData.theme}
+			>
+				{#snippet children(color)}
+					<p class="color-option" style:--data-color={color}>{color}</p>
+				{/snippet}
+			</CustomSelect>
+			<button type="submit" class="button" disabled={loading}>
+				{loading ? 'Saving...' : editingBudget ? 'Update Budget' : 'Create Budget'}
+			</button>
 		</form>
 	</div>
 </div>
 
 <style lang="scss">
 	.budget-form-wrapper {
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		display: flex;
@@ -162,6 +156,11 @@
 		height: 100dvh;
 		background: rgba(0, 0, 0, 0.25);
 	}
+	.budget-form {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
 	.form-container {
 		background: white;
 		border: 1px solid #e5e7eb;
@@ -170,81 +169,71 @@
 		margin-bottom: 30px;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	}
-
-	.budget-form h2 {
-		margin: 0 0 20px 0;
-		color: #1f2937;
-	}
-
-	.form-group {
-		margin-bottom: 20px;
-	}
-
-	.form-group label {
-		display: block;
-		margin-bottom: 5px;
-		font-weight: 500;
-		color: #374151;
-	}
-
-	.form-group input {
-		width: 100%;
-		padding: 10px 12px;
-		border: 1px solid #d1d5db;
-		border-radius: 6px;
-		font-size: 14px;
-	}
-
-	.form-group input:focus {
-		outline: none;
-		border-color: #277c78;
-		box-shadow: 0 0 0 3px rgba(39, 124, 120, 0.1);
-	}
-	.form-actions {
-		display: flex;
-		gap: 12px;
-		margin-top: 30px;
-	}
-
-	@media (max-width: 1023px) {
-		.form-actions {
-			flex-direction: column;
-		}
-	}
-
-	.btn {
-		padding: 10px 20px;
-		border: none;
-		border-radius: 8px;
-		font-size: 14px;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s;
-		text-decoration: none;
-		display: inline-block;
-	}
-
-	.btn-primary {
-		background: #277c78;
-		color: white;
-	}
-
-	.btn-primary:hover {
-		background: #1f5f5c;
-	}
-
-	.btn-secondary {
-		background: #6b7280;
-		color: white;
-	}
-
-	.btn-secondary:hover {
-		background: #4b5563;
-	}
-
 	.description {
 		font-size: 0.875rem;
 		line-height: 1.5;
 		color: var(--color-grey-500);
+	}
+	.category-option {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+		text-transform: capitalize;
+		border: 1px solid transparent;
+		color: var(--color-grey-900);
+	}
+	.color-option {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+		text-transform: capitalize;
+		border: 1px solid transparent;
+		color: var(--color-grey-900);
+		&:before {
+			content: ' ';
+			height: 1rem;
+			width: 1rem;
+			border-radius: 50%;
+			background: var(--data-color);
+		}
+	}
+	.form-header {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.close {
+		width: 1.5rem;
+		height: 1.5rem;
+		border-radius: 50%;
+		border: 0;
+		outline: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		&:hover {
+			background: var(--color-grey-300);
+		}
+	}
+	.title {
+		margin: 0;
+	}
+	.button {
+		border: 0;
+		color: var(--color-white);
+		background-color: var(--color-grey-900);
+		line-height: 1.5;
+		padding-inline: 1rem;
+		padding-block: 1rem;
+		border-radius: 0.5rem;
+		font-size: 0.875rem;
+		&:hover,
+		&:active,
+		&:focus {
+			cursor: pointer;
+			opacity: 50%;
+		}
 	}
 </style>

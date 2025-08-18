@@ -263,6 +263,7 @@
 		background: var(--data-color);
 		width: var(--data-width);
 		border-radius: 0.25rem;
+		transition: width 0.25s ease;
 	}
 	.context-menu {
 		position: relative;

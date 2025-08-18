@@ -92,6 +92,7 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
+        gap: 0.25rem;
 	}
 	.custom-select__label {
 		text-transform: capitalize;

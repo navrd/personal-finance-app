@@ -6,7 +6,7 @@
 	interface PotCardProps {
 		pot: Pot;
 		editingPot: Pot | null;
-		showCreateForm: boolean;
+		showForm: boolean;
 		formData: CreatePotData & { id?: string };
 		loading: boolean;
 	}
@@ -14,7 +14,7 @@
 	let {
 		pot,
 		editingPot = $bindable(),
-		showCreateForm = $bindable(),
+		showForm = $bindable(),
 		formData = $bindable(),
 		loading = $bindable()
 	}: PotCardProps = $props();
@@ -31,7 +31,7 @@
 			total: pot.total,
 			theme: pot.theme
 		};
-		showCreateForm = true;
+		showForm = true;
 	}
 </script>
 

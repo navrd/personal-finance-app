@@ -3,20 +3,20 @@
 	import type { CreatePotData, Pot, PotError } from '$lib/types';
 	import { getContext } from 'svelte';
 	import PotForm from './PotForm.svelte';
-	import {PotCard, PotError as PotErrorForm} from '$lib/components'
+	import { PotCard, PotError as PotErrorForm } from '$lib/components';
 
 	interface PotsManagerProps {
 		form?: PotError | null;
+		showForm: boolean;
 	}
 
-	let { form }: PotsManagerProps = $props();
+	let { form, showForm = $bindable() }: PotsManagerProps = $props();
 
 	let pots: () => Pot[] = getContext('pots');
 
 	// Reactive state
 	let loading = $state(false);
 	let error = $state<string | null>(null);
-	let showCreateForm = $state(false);
 	let editingPot = $state<Pot | null>(null);
 
 	// Form state
@@ -42,7 +42,7 @@
 	function cancelEdit() {
 		editingPot = null;
 		resetFormData();
-		showCreateForm = false;
+		showForm = false;
 	}
 
 	async function clearForm() {
@@ -56,27 +56,14 @@
 
 <PotErrorForm {form} {clearForm} />
 <div class="pots-container">
-	<header class="header">
-		<h1>My Pots</h1>
-		<button
-			class="btn btn-primary"
-			onclick={() => {
-				showCreateForm = !showCreateForm;
-				if (!showCreateForm) cancelEdit();
-			}}
-		>
-			{showCreateForm ? 'Cancel' : '+ Add New Pot'}
-		</button>
-	</header>
-
 	{#if error}
 		<div class="error-message">
 			{error}
 		</div>
 	{/if}
 
-	{#if showCreateForm}
-		<PotForm bind:editingPot bind:loading bind:showCreateForm {formData} />
+	{#if showForm}
+		<PotForm bind:editingPot bind:loading {formData} bind:showForm />
 	{/if}
 
 	{#if loading}
@@ -88,7 +75,7 @@
 	{:else}
 		<div class="pots-grid">
 			{#each pots() as pot (pot.id)}
-				<PotCard bind:loading bind:showCreateForm bind:formData bind:editingPot {pot} />
+				<PotCard bind:loading bind:showForm bind:formData bind:editingPot {pot} />
 			{/each}
 		</div>
 	{/if}
@@ -99,39 +86,6 @@
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 2rem;
-	}
-
-	.header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 2rem;
-
-		h1 {
-			margin: 0;
-			color: #1a1a1a;
-			font-size: 2rem;
-			font-weight: 700;
-		}
-	}
-
-	.btn {
-		padding: 0.75rem 1.5rem;
-		border: none;
-		border-radius: 8px;
-		font-weight: 600;
-		cursor: pointer;
-		transition: all 0.2s ease;
-
-		&.btn-primary {
-			background-color: #277c78;
-			color: white;
-
-			&:hover {
-				background-color: #1e5d5a;
-				transform: translateY(-1px);
-			}
-		}
 	}
 
 	.error-message {
@@ -168,16 +122,6 @@
 	@media (max-width: 768px) {
 		.pots-container {
 			padding: 1rem;
-		}
-
-		.header {
-			flex-direction: column;
-			gap: 1rem;
-			align-items: stretch;
-
-			h1 {
-				font-size: 1.5rem;
-			}
 		}
 
 		.pots-grid {

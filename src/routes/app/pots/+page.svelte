@@ -8,7 +8,9 @@
 		form?: PotError | null;
 	}
 
-	let { form, data }: Props = $props();
+	let { form }: Props = $props();
+
+	let showForm = $state(false);
 </script>
 
 <svelte:head>
@@ -18,10 +20,10 @@
 
 <header class="page-header">
 	<h2 class="page-header__title">Pots</h2>
-	<div class="page-header__buttons"><button class="button">+ Add new pot</button></div>
+	<div class="page-header__buttons"><button class="button" onclick={() => showForm = true}>+ Add new pot</button></div>
 </header>
 
-<PotsManager {form} />
+<PotsManager {form} bind:showForm/>
 
 <style lang="scss">
 	.page-header {

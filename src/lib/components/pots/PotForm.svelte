@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
+	import { Close } from '$lib/assets/images';
 	import type { CreatePotData, Pot } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
+	import { onMount, onDestroy } from 'svelte';
+	import CustomInput from '../CustomInput.svelte';
+	import CustomSelect from '../CustomSelect.svelte';
 
-	const themeColors = [
+	const colorThemes = [
 		'#277C78',
 		'#82C9D7',
 		'#F2CDAC',
@@ -19,17 +23,17 @@
 		editingPot: Pot | null;
 		formData: CreatePotData & { id?: string };
 		loading: boolean;
-		showCreateForm: boolean;
+		showForm: boolean;
 	}
 
 	let {
 		editingPot = $bindable(),
 		formData,
 		loading = $bindable(),
-		showCreateForm = $bindable()
+		showForm = $bindable()
 	}: PotFormProps = $props();
 
-	function resetForm() {
+	function resetFormData() {
 		formData = {
 			name: '',
 			target: 0,
@@ -40,8 +44,8 @@
 
 	function cancelEdit() {
 		editingPot = null;
-		resetForm();
-		showCreateForm = false;
+		resetFormData();
+		showForm = false;
 	}
 
 	const enhanceForm: SubmitFunction = async ({ formData, cancel }) => {
@@ -51,195 +55,169 @@
 			if (result.type === 'success') {
 				await invalidate('app:pots');
 				loading = false;
-				showCreateForm = false;
-				resetForm();
+				showForm = false;
+				resetFormData();
 			} else {
 				await update();
 				loading = false;
 			}
 		};
 	};
+
+	function onColorSelect(color: string) {
+		formData.theme = color;
+	}
+
+	onMount(() => {
+		document.documentElement.classList.add('overflow-hidden');
+	});
+	onDestroy(() => {
+		document.documentElement.classList.remove('overflow-hidden');
+	});
 </script>
 
-<form
-	class="pot-form"
-	method="POST"
-	action={editingPot ? '?/updatePot' : '?/createPot'}
-	use:enhance={enhanceForm}
->
-	<h3>{editingPot ? 'Edit Pot' : 'Create New Pot'}</h3>
-	{#if editingPot}
-		<input type="hidden" name="id" value={formData.id} />
-	{/if}
-	<div class="form-group">
-		<label for="name">Name</label>
-		<input
-			id="name"
-			name="name"
-			type="text"
-			bind:value={formData.name}
-			placeholder="e.g., Vacation Fund"
-			required
-		/>
-	</div>
+<div class="pot-form-wrapper">
+	<div class="form-container">
+		<form
+			class="pot-form"
+			method="POST"
+			action={editingPot ? '?/updatePot' : '?/createPot'}
+			use:enhance={enhanceForm}
+		>
+			<header class="form-header">
+				<h2 class="title">{editingPot ? 'Edit Pot' : 'Create New Pot'}</h2>
 
-	<div class="form-row">
-		<div class="form-group">
-			<label for="target">Target Amount</label>
-			<input
-				id="target"
-				name="target"
-				type="number"
-				step="0.01"
-				min="0"
+				<button class="close" type="button" onclick={cancelEdit}>{@html Close}</button>
+			</header>
+			<p class="description">
+				{editingPot
+					? 'If your saving targets change, feel free to update your pots.'
+					: 'Create a pot to set savings targets. These can help keep you on track as you save for special purchases.'}
+			</p>
+			{#if editingPot}
+				<input type="hidden" name="id" value={formData.id} />
+			{/if}
+			<CustomInput
+				id="name"
+				name="name"
+				label="Pot Name"
+				placeholder="e.g., Vacation Fund"
+				type="text"
+				bind:value={formData.name}
+			/>
+			<CustomInput
 				bind:value={formData.target}
-				placeholder="2000.00"
-				required
-			/>
-		</div>
-
-		<div class="form-group">
-			<label for="total">Current Total</label>
-			<input
-				id="total"
-				name="total"
 				type="number"
-				step="0.01"
-				min="0"
-				bind:value={formData.total}
-				placeholder="159.00"
+				placeholder="e.g. 200"
+				symbol="$"
+				name="target"
+				id="target"
+				label="Target"
 			/>
-		</div>
-	</div>
+			<CustomSelect
+				options={colorThemes}
+				label="color"
+				onOptionClick={onColorSelect}
+				selectedOption={formData.theme}
+				hiddenInput
+				inputName="theme"
+				bind:inputValue={formData.theme}
+			>
+				{#snippet children(color)}
+					<p class="color-option" style:--data-color={color}>{color}</p>
+				{/snippet}</CustomSelect
+			>
 
-	<div class="form-group">
-		<label for="theme-color">Theme Color</label>
-		<div class="color-picker" id="theme-color">
-			{#each themeColors as color}
-				<button
-					type="button"
-					class="color-option {formData.theme === color ? 'active' : ''}"
-					style="background-color: {color}"
-					onclick={() => (formData.theme = color)}
-					aria-label="Select color {color}"
-				></button>
-			{/each}
-			<input type="hidden" name="theme" bind:value={formData.theme} />
-		</div>
+				<button type="submit" class="button">
+					{loading ? 'Saving...' : editingPot ? 'Update Budget' : 'Create Budget'}
+				</button>
+		</form>
 	</div>
-
-	<div class="form-actions">
-		<button type="button" class="btn btn-secondary" onclick={cancelEdit}> Cancel </button>
-		<button type="submit" class="btn btn-primary">
-			{loading ? 'Saving...' : editingPot ? 'Update Budget' : 'Create Budget'}
-		</button>
-	</div>
-</form>
+</div>
 
 <style lang="scss">
-	.pot-form {
+	.pot-form-wrapper {
+		position: fixed;
+		top: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 2;
+		width: 100dvw;
+		height: 100dvh;
+		background: rgba(0, 0, 0, 0.25);
+	}
+	.form-container {
 		background: white;
-		border: 1px solid #e0e0e0;
+		border: 1px solid #e5e7eb;
 		border-radius: 12px;
-		padding: 2rem;
-		margin-bottom: 2rem;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-		h3 {
-			margin: 0 0 1.5rem 0;
-			color: #1a1a1a;
-		}
-
-		.form-group {
-			margin-bottom: 1.5rem;
-
-			label {
-				display: block;
-				margin-bottom: 0.5rem;
-				font-weight: 600;
-				color: #333;
-			}
-
-			input {
-				width: 100%;
-				padding: 0.75rem;
-				border: 2px solid #e0e0e0;
-				border-radius: 8px;
-				font-size: 1rem;
-				transition: border-color 0.2s ease;
-
-				&:focus {
-					outline: none;
-					border-color: #277c78;
-				}
-			}
-		}
-
-		.form-row {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 1rem;
-		}
-
-		.color-picker {
-			display: flex;
-			gap: 0.5rem;
-			flex-wrap: wrap;
-
-			.color-option {
-				width: 40px;
-				height: 40px;
-				border-radius: 50%;
-				border: 3px solid transparent;
-				cursor: pointer;
-				transition: all 0.2s ease;
-
-				&:hover {
-					transform: scale(1.1);
-				}
-
-				&.active {
-					border-color: #1a1a1a;
-					transform: scale(1.15);
-				}
-			}
-		}
-
-		.form-actions {
-			display: flex;
-			gap: 1rem;
-			justify-content: flex-end;
-			margin-top: 2rem;
+		padding: 30px;
+		margin-bottom: 30px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	}
+	.pot-form {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.description {
+		font-size: 0.875rem;
+		line-height: 1.5;
+		color: var(--color-grey-500);
+	}
+	.color-option {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+		text-transform: capitalize;
+		border: 1px solid transparent;
+		color: var(--color-grey-900);
+		&:before {
+			content: ' ';
+			height: 1rem;
+			width: 1rem;
+			border-radius: 50%;
+			background: var(--data-color);
 		}
 	}
-	.pot-form .form-row {
-		grid-template-columns: 1fr;
+	.form-header {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
-	.btn {
-		padding: 0.75rem 1.5rem;
-		border: none;
-		border-radius: 8px;
-		font-weight: 600;
-		cursor: pointer;
-		transition: all 0.2s ease;
-
-		&.btn-primary {
-			background-color: #277c78;
-			color: white;
-
-			&:hover {
-				background-color: #1e5d5a;
-				transform: translateY(-1px);
-			}
+	.close {
+		width: 1.5rem;
+		height: 1.5rem;
+		border-radius: 50%;
+		border: 0;
+		outline: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		&:hover {
+			background: var(--color-grey-300);
 		}
-
-		&.btn-secondary {
-			background-color: #f5f5f5;
-			color: #666;
-
-			&:hover {
-				background-color: #e0e0e0;
-			}
+	}
+	.title {
+		margin: 0;
+	}
+	.button {
+		border: 0;
+		color: var(--color-white);
+		background-color: var(--color-grey-900);
+		line-height: 1.5;
+		padding-inline: 1rem;
+		padding-block: 1rem;
+		border-radius: 0.5rem;
+		font-size: 0.875rem;
+		&:hover,
+		&:active,
+		&:focus {
+			cursor: pointer;
+			opacity: 50%;
 		}
 	}
 </style>

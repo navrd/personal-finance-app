@@ -1,0 +1,87 @@
+<script lang="ts">
+	import type { HTMLInputTypeAttribute } from 'svelte/elements';
+
+	interface CustomInputProps {
+		value: string | number;
+		icon?: string;
+		type: HTMLInputTypeAttribute;
+		placeholder?: string;
+		symbol?: string;
+		name?: string;
+		id?: string;
+		label?: string;
+	}
+
+	let {
+		value = $bindable(),
+		icon,
+		type,
+		placeholder = '',
+		symbol,
+		name,
+		id,
+		label
+	}: CustomInputProps = $props();
+</script>
+
+<div class="wrapper">
+	{#if label}
+		<label for={id} class="label">{label}</label>
+	{/if}
+	<div class="container">
+		{#if icon}
+			<div class="icon">
+				{@html icon}
+			</div>
+		{/if}
+		{#if symbol}<div class="symbol">{symbol}</div>{/if}
+		<input class="input" {id} {type} {name} {placeholder} bind:value />
+	</div>
+</div>
+
+<style lang="scss">
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+	.label {
+		text-transform: capitalize;
+		font-size: 0.75rem;
+		line-height: 1.5;
+		color: var(--color-grey-500);
+		font-weight: bolder;
+	}
+	.container {
+		position: relative;
+		width: 100%;
+		color: var(--color-grey-900);
+		border: 1px solid var(--color-beige-500);
+		border-radius: 0.5rem;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 0.875rem;
+		line-height: 1.5;
+		padding: 1.25rem 0.75rem;
+	}
+
+	.input {
+		border-radius: inherit;
+		width: 100%;
+		border: 0;
+		outline: none;
+		font-size: 0.875rem;
+	}
+
+	.icon,
+	.symbol {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 1rem;
+		height: 1rem;
+		pointer-events: none;
+	}
+</style>
