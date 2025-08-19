@@ -152,6 +152,7 @@
 	</div>
 </div>
 
+
 <style lang="scss">
 	.action {
 		padding: 0.75rem 0.5rem;
@@ -294,6 +295,8 @@
 		align-items: center;
 		justify-content: flex-start;
 		gap: 0.75rem;
+		font-weight: bolder;
+		color: var(--color-grey-900);
 		&:before {
 			content: ' ';
 			width: 0.75rem;
@@ -308,15 +311,14 @@
 		gap: 0.75rem;
 		width: 100%;
 		background: white;
-		border-radius: 12px;
-		padding: 20px;
+		border-radius: 0.75rem;
+		padding: 1.5rem;
 	}
 
 	.budget-card__header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 15px;
 	}
 	.budget-amount {
 		font-size: 0.875rem;

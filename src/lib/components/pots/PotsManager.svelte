@@ -65,17 +65,14 @@
 	{#if showForm}
 		<PotForm bind:editingPot bind:loading {formData} bind:showForm />
 	{/if}
-
-	{#if loading}
-		<div class="loading">Loading pots...</div>
-	{:else if pots().length === 0}
+	{#if pots().length === 0}
 		<div class="empty-state">
 			<p>No pots created yet. Start saving by creating your first pot!</p>
 		</div>
 	{:else}
 		<div class="pots-grid">
 			{#each pots() as pot (pot.id)}
-				<PotCard bind:loading bind:showForm bind:formData bind:editingPot {pot} />
+				<PotCard bind:loading bind:showForm bind:formData bind:editingPot {pot} {resetFormData} />
 			{/each}
 		</div>
 	{/if}
@@ -83,9 +80,8 @@
 
 <style lang="scss">
 	.pots-container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 2rem;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.error-message {
@@ -95,12 +91,6 @@
 		border-radius: 8px;
 		margin-bottom: 1rem;
 		border-left: 4px solid #c53030;
-	}
-
-	.loading {
-		text-align: center;
-		padding: 3rem;
-		color: #666;
 	}
 
 	.empty-state {
@@ -119,11 +109,7 @@
 		gap: 1.5rem;
 	}
 
-	@media (max-width: 768px) {
-		.pots-container {
-			padding: 1rem;
-		}
-
+	@media (max-width: 1024px) {
 		.pots-grid {
 			grid-template-columns: 1fr;
 		}
