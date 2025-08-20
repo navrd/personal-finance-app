@@ -73,6 +73,7 @@
 	}
 	function withdraw() {
 		showPotControls = true;
+		addMoney=false;
 	}
 </script>
 

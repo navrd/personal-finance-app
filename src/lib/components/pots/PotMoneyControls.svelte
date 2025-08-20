@@ -23,9 +23,9 @@
 
 	let newAmount = $derived.by(() => {
 		if (addMoney) {
-			return pot.total + amount;
+			return pot.total + amount > pot.target ? pot.target : pot.total + amount;
 		} else {
-			return pot.total - amount;
+			return pot.total - amount < 0 ? 0 : pot.total - amount;
 		}
 	});
 	let newPercentage = $derived(pot.target > 0 ? Math.min((newAmount / pot.target) * 100, 100) : 0);
@@ -38,6 +38,7 @@
 				await invalidate('app:pots');
 				loading = false;
 				showPotControls = false;
+				addMoney = false;
 			} else {
 				await update();
 				loading = false;
@@ -50,6 +51,13 @@
 	}
 	function getProgressPercentage(total: number): number {
 		return pot.target > 0 ? Math.min((total / pot.target) * 100, 100) : 0;
+	}
+	function getWithdrawProgressPercentage(total: number): number {
+		let amount = total > pot.total ? pot.total : total;
+		return pot.target > 0 ? Math.min((amount / pot.total) * 100, 100) : 0;
+	}
+	function getRequiredToFillPercentage() {
+		return Math.min(((pot.target - pot.total) / pot.target) * 100, 100);
 	}
 </script>
 
@@ -69,28 +77,41 @@
 					: 'Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot.'}
 			</p>
 			<input type="hidden" name="id" value={pot.id} />
-            <input type="hidden" name="name" value={pot.name} />
-            <input type="hidden" name="target" value={pot.target} />
+			<input type="hidden" name="name" value={pot.name} />
+			<input type="hidden" name="target" value={pot.target} />
 			<div class="pot-amount">
 				<span class="label">Total</span>
-				<span class="value">${newAmount.toFixed(2)}</span>
+				<span class="value">${newAmount > pot.target ? pot.target : newAmount.toFixed(2)}</span>
 			</div>
 			<div class="progress-bar">
 				<div
 					class="progress-fill"
+					class:progress-fill_withdraw={!addMoney}
 					style:width={`${getProgressPercentage(pot.total)}%`}
 					style:background-color="var(--color-grey-900)"
-				></div>
-				<div
-					class="progress-new-amount"
-
-					style:width={`${getProgressPercentage(amount)}%`}
-					style:background-color={pot.theme}
-				></div>
+				>
+					{#if !addMoney}
+						<div
+							class="progress-new-amount"
+							class:progress-new-amount_withdraw={!addMoney}
+							style:width={`${getWithdrawProgressPercentage(amount)}%`}
+							style:background-color="var(--color-red)"
+						></div>
+					{/if}
+				</div>
+				{#if addMoney}
+					<div
+						class="progress-new-amount"
+						style:width={newAmount > pot.target
+							? `${getRequiredToFillPercentage()}%`
+							: `${getProgressPercentage(amount)}%`}
+						style:background-color={pot.theme}
+					></div>
+				{/if}
 			</div>
 			<div class="progress-data">
 				<span class="progress-amount">
-					{newPercentage}%
+					{newPercentage.toFixed(2)}%
 				</span>
 				<span class="progress-target">Target of ${pot.target}</span>
 			</div>
@@ -102,7 +123,7 @@
 				bind:value={amount}
 				placeholder="e.g. 300"
 			/>
-			<input type="hidden" name="total" bind:value={newAmount} />
+			<input type="hidden" name="total" value={newAmount} />
 			<button type="submit" class="button">
 				{loading ? 'Saving...' : addMoney ? 'Confirm Addition' : 'Confirm Withdraw'}
 			</button>
@@ -112,7 +133,7 @@
 
 <style lang="scss">
 	.progress-bar {
-        display: flex;
+		display: flex;
 		width: 100%;
 		height: 8px;
 		background-color: var(--color-beige-100);
@@ -124,10 +145,21 @@
 		border-radius: 4px;
 		transition: width 0.3s ease;
 	}
+	.progress-fill_withdraw {
+		position: relative;
+	}
+
 	.progress-new-amount {
 		height: 100%;
 		border-radius: 4px;
 		transition: width 0.3s ease;
+	}
+	.progress-new-amount_withdraw {
+		position: absolute;
+		right: 0;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		border-left: 1px solid white;
 	}
 	.progress-data {
 		display: flex;
