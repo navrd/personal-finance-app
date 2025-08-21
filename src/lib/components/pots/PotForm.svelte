@@ -4,7 +4,6 @@
 	import { Close } from '$lib/assets/images';
 	import type { CreatePotData, Pot } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { onMount, onDestroy } from 'svelte';
 	import CustomInput from '../CustomInput.svelte';
 	import CustomSelect from '../CustomSelect.svelte';
 
@@ -67,13 +66,6 @@
 	function onColorSelect(color: string) {
 		formData.theme = color;
 	}
-
-	onMount(() => {
-		document.documentElement.classList.add('overflow-hidden');
-	});
-	onDestroy(() => {
-		document.documentElement.classList.remove('overflow-hidden');
-	});
 </script>
 
 <div class="pot-form-wrapper">

@@ -4,7 +4,7 @@
 	import type { Budget, Category } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { getContext, onDestroy, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import CustomSelect from '../CustomSelect.svelte';
 	import { getCategoryById } from '$lib/helpers/categories';
 	import { Close } from '$lib/assets/images';
@@ -68,13 +68,6 @@
 	function onColorSelect(color: string) {
 		formData.theme = color;
 	}
-
-	onMount(() => {
-		document.documentElement.classList.add('overflow-hidden');
-	});
-	onDestroy(() => {
-		document.documentElement.classList.remove('overflow-hidden');
-	});
 </script>
 
 <div class="budget-form-wrapper">

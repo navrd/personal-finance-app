@@ -186,7 +186,7 @@
 				stroke-width={strokeWidth / 2}
 			/>
 			<!-- Render each segment -->
-			{#each outerSegments as segment, index}
+			{#each outerSegments as segment}
 				<circle
 					data-segment={segment.label}
 					cx={conditionalCenter}
@@ -230,15 +230,4 @@
 </div>
 
 <style>
-	svg {
-		transition:
-			width 0.3s ease,
-			height 0.3s ease;
-	}
-
-	circle {
-		transition:
-			cx 0.3s ease,
-			cy 0.3s ease;
-	}
 </style>
