@@ -2,7 +2,7 @@
 	import type { HTMLInputTypeAttribute } from 'svelte/elements';
 
 	interface CustomInputProps {
-		value: string | number;
+		value?: string | number;
 		icon?: string;
 		type: HTMLInputTypeAttribute;
 		placeholder?: string;
@@ -10,6 +10,7 @@
 		name?: string;
 		id?: string;
 		label?: string;
+		disabled?: boolean;
 	}
 
 	let {
@@ -20,7 +21,8 @@
 		symbol,
 		name,
 		id,
-		label
+		label,
+		disabled
 	}: CustomInputProps = $props();
 </script>
 
@@ -35,7 +37,7 @@
 			</div>
 		{/if}
 		{#if symbol}<div class="symbol">{symbol}</div>{/if}
-		<input class="input" {id} {type} {name} {placeholder} bind:value />
+		<input class="input" {id} {type} {name} {placeholder} {disabled} bind:value />
 	</div>
 </div>
 

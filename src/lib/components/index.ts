@@ -9,3 +9,5 @@ export * from './reccuring';
 export { default as Sidebar } from './Sidebar.svelte';
 export { default as SearchInput } from './SearchInput.svelte';
 export { default as DropdownFilter } from './DropdownFilter.svelte';
+export { default as CustomSelect } from './CustomSelect.svelte';
+export { default as CustomInput } from './CustomInput.svelte';
