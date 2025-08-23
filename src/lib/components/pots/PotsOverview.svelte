@@ -23,7 +23,7 @@
 		{#each pots as pot}
 			<div class="pot" style:--data-color={pot.theme}>
 				<h3 class="pot__label">{pot.name}</h3>
-				<p class="pot__sum">{pot.total}/{pot.target}</p>
+				<p class="pot__sum">${pot.total}</p>
 			</div>
 		{/each}
 	</div>
@@ -62,6 +62,7 @@
 	.total-savings__sum {
 		font-size: 2rem;
 		line-height: 1.2;
+		font-weight: bolder;
 	}
 	.segment__summary {
 		display: flex;
@@ -90,5 +91,6 @@
 	.pot__sum {
 		font-size: 0.875rem;
 		line-height: 1.5;
+		font-weight: bolder;
 	}
 </style>

@@ -69,7 +69,7 @@
 </script>
 
 <section class="section bills-totals">
-	<p class="label">total bills</p>
+	<p class="label">Summary</p>
 	<ul class="bills-totals__segments">
 		{#each Object.values(totals) as total}
 			<li class="bills-totals__segment">
@@ -98,6 +98,7 @@
 	.label {
 		font-size: 0.875rem;
 		line-height: 1.5;
+		font-weight: bolder;
 	}
 	.bills-totals__segments {
 		display: flex;
@@ -120,6 +121,7 @@
 	.segment__value {
 		font-size: 0.75rem;
 		color: var(--color-grey-900);
+		font-weight: bolder;
 	}
 	.segment__value_due-soon,
 	.segment__title_due-soon {

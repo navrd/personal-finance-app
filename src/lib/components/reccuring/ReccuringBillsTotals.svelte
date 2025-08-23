@@ -8,7 +8,7 @@
 
 <section class="section bills-totals">
 	{@html ReccuringWhite}
-	<p class="label">Summary</p>
+	<p class="label">Total Bills</p>
 	<h2 class="sum">{totalBills.toString().replace('-', '$')}</h2>
 </section>
 
@@ -31,6 +31,7 @@
 	.label {
 		font-size: 0.875rem;
 		line-height: 1.5;
+		font-weight: bolder;
 	}
 	.sum {
 		font-size: 2rem;

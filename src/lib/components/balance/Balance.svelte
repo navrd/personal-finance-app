@@ -46,5 +46,6 @@
 		font-size: 2rem;
 		line-height: 1.2;
 		font-weight: normal;
+		font-weight: bolder;
 	}
 </style>

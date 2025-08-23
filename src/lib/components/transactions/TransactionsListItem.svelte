@@ -79,8 +79,8 @@
 			class:due-soon={dueSoon}
 		>
 			{transaction.amount > 0
-				? `+$${transaction.amount}`
-				: transaction.amount.toString().replace('-', '-$')}
+				? `+$${transaction.amount.toFixed(2)}`
+				: transaction.amount.toFixed(2).replace('-', '-$')}
 		</p>
 		{#if overview}
 			<p>{formatDate(transaction.date)}</p>
@@ -138,7 +138,7 @@
 		color: var(--color-grey-900);
 		font-size: 0.875rem;
 		line-height: 1.5;
-		font-weight: 600;
+		font-weight: 700;
 	}
 	.amount_plus {
 		color: var(--color-green);

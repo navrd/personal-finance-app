@@ -146,6 +146,7 @@
 		font-size: 2rem;
 		line-height: 1.2;
 		font-weight: 550;
+		font-weight: bolder;
 	}
 	.section {
 		padding: 1.25rem;

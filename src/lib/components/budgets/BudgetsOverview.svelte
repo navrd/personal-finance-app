@@ -23,7 +23,7 @@
 		{#each budgets() as budget}
 			<li class="legend-item" style:--data-color={budget.theme}>
 				<h3 class="budget__label">{getCategoryById(categories, budget.category_id)?.category}</h3>
-				<p class="budget__sum">{budget.maximum}</p>
+				<p class="budget__sum">${budget.maximum}</p>
 			</li>
 		{/each}
 	</ul>
@@ -67,5 +67,6 @@
 	.budget__sum {
 		font-size: 0.875rem;
 		line-height: 1.5;
+		font-weight: bolder;
 	}
 </style>

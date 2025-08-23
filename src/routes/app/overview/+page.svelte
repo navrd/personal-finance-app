@@ -48,28 +48,28 @@
 	</div>
 	<div class="overview-grid__segment overview-grid__segment_pots">
 		<div class="segment__header">
-			<h2 class="segment_title">Pots</h2>
+			<h2 class="segment__title">Pots</h2>
 			<a class="details" href="/app/pots"><span>See Details</span> {@html ArrowRight}</a>
 		</div>
 		<PotsOverview {totalSavings} pots={pots()} />
 	</div>
 	<div class="overview-grid__segment overview-grid__segment_budgets">
 		<div class="segment__header">
-			<h2 class="segment_title">Budgets</h2>
+			<h2 class="segment__title">Budgets</h2>
 			<a class="details" href="/app/budgets"><span>See Details</span> {@html ArrowRight}</a>
 		</div>
 		<BudgetsOverview />
 	</div>
 	<div class="overview-grid__segment overview-grid__segment_transactions">
 		<div class="segment__header">
-			<h2 class="segment_title">Transactions</h2>
+			<h2 class="segment__title">Transactions</h2>
 			<a class="details" href="/app/reccuring"><span>See Details</span> {@html ArrowRight}</a>
 		</div>
 		<TransactionsOverview transactions={transactionsSortedByDate.slice(0, 5)} />
 	</div>
 	<div class="overview-grid__segment overview-grid__segment_reccuring">
 		<div class="segment__header">
-			<h2 class="segment_title">Reccuring Bills</h2>
+			<h2 class="segment__title">Reccuring Bills</h2>
 			<a class="details" href="/app/reccuring"><span>See Details</span> {@html ArrowRight}</a>
 		</div>
 		<ReccuringOverview transactions={transactions()} />
@@ -87,7 +87,7 @@
 		color: var(--color-grey-900);
 		font-size: 2rem;
 		line-height: 1.2;
-		font-weight: 550;
+		font-weight: bolder;
 	}
 	.overview-grid {
 		display: grid;
@@ -137,6 +137,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+	}
+	.segment__title {
+		font-weight: bolder;
 	}
 	.details {
 		text-decoration: none;

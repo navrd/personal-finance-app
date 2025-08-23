@@ -106,7 +106,7 @@
 		<div class="message message_error">
 			<strong>Error:</strong>
 			{displayError}
-			<button onclick={clearMessages}>×</button>
+			<button class="button" onclick={clearMessages}>×</button>
 		</div>
 	{/if}
 	<!-- Signup Form -->

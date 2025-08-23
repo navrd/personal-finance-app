@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getCategoryById } from '$lib/helpers/categories';
-	import type { Budget, Category } from '$lib/types';
+	import type { Budget, Category, Transaction } from '$lib/types';
 	import { getContext, onMount } from 'svelte';
 
 	interface DataSegment {
@@ -18,7 +18,17 @@
 	let { radius = 100, strokeWidth = 20, animationDuration = 2000 }: Props = $props();
 
 	let budgets: () => Budget[] = getContext('budgets');
+	let transactions: () => Transaction[] = getContext('transactions');
 	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
+
+	let getTotalSpentOnBudgetedCategories = $derived.by(() => {
+		const budgetCategoryIds = new Set(budgets().map((budget) => budget.category_id));
+		let total = transactions().reduce((total, transaction) => {
+			return budgetCategoryIds.has(transaction.category_id) ? total + transaction.amount : total;
+		}, 0);
+
+		return Math.abs(total)
+	});
 
 	let totalLimit = $derived(budgets().reduce((acc, { maximum }) => acc + maximum, 0));
 	let preparedBudgets = $derived.by(() => {
@@ -32,6 +42,7 @@
 		});
 		return result;
 	});
+
 	let outerAnimatedValues: number[] = $derived(preparedBudgets.map(() => 0));
 	let innerAnimatedValues: number[] = $derived(preparedBudgets.map(() => 0));
 	let animationId: number | null = null;
@@ -215,17 +226,37 @@
 					style="transform-origin: {conditionalCenter}px {conditionalCenter}px;"
 				/>
 			{/each}
-			<text
+			<!-- <text
 				x={conditionalCenter}
 				y={conditionalCenter}
 				text-anchor="middle"
 				dominant-baseline="central"
 				font-size="16"
 				fill="black"
+				style="font-weight: 700;"
 			>
 				${totalLimit}
+			</text> -->
+			<text
+				x={conditionalCenter}
+				y={conditionalCenter - 10}
+				text-anchor="middle"
+				font-size="1.5rem"
+				style="font-weight: bold"
+			>
+				${getTotalSpentOnBudgetedCategories}
 			</text>
-		</svg>
+
+			<text
+				x={conditionalCenter}
+				y={conditionalCenter + 25}
+				text-anchor="middle"
+				font-size="0.875rem"
+				style="fill: #666;"
+			>
+				of ${totalLimit} limit
+			</text></svg
+		>
 	</div>
 </div>
 

@@ -99,7 +99,7 @@
 </svelte:head>
 
 <header class="page-header">
-	<h2 class="page-header__title">Reccuring bills</h2>
+	<h2 class="page-header__title">Reccuring Bills</h2>
 </header>
 
 <div class="reccuring-grid">
@@ -142,6 +142,7 @@
 		font-size: 2rem;
 		line-height: 1.2;
 		font-weight: 550;
+		font-weight: bolder;
 	}
 	.reccuring-grid {
 		display: grid;
