@@ -11,6 +11,7 @@
 		id?: string;
 		label?: string;
 		disabled?: boolean;
+		validator?: (value: string | number) => string | null; // New prop for validation function
 	}
 
 	let {
@@ -22,23 +23,39 @@
 		name,
 		id,
 		label,
-		disabled
+		disabled,
+		validator
 	}: CustomInputProps = $props();
+
+	// Internal touched state
+	let touched = $state(false);
+
+	// Computed error message - only show if touched and validator exists
+	const errorMessage = $derived.by(() => {
+		if (!touched || !validator) return null;
+		return validator(value || '');
+	});
+	function onblur() {
+		touched = true;
+	}
 </script>
 
 <div class="wrapper">
 	{#if label}
 		<label for={id} class="label">{label}</label>
 	{/if}
-	<div class="container">
+	<div class="container" class:container_error={errorMessage}>
 		{#if icon}
 			<div class="icon">
 				{@html icon}
 			</div>
 		{/if}
 		{#if symbol}<div class="symbol">{symbol}</div>{/if}
-		<input class="input" {id} {type} {name} {placeholder} {disabled} bind:value />
+		<input class="input" {id} {type} {name} {placeholder} {disabled} bind:value {onblur} />
 	</div>
+	{#if errorMessage}
+		<p class="error">{errorMessage}</p>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -68,6 +85,9 @@
 		line-height: 1.5;
 		padding: 1.25rem 0.75rem;
 	}
+	.container_error {
+		border-color: var(--color-red);
+	}
 
 	.input {
 		border-radius: inherit;
@@ -85,5 +105,9 @@
 		width: 1rem;
 		height: 1rem;
 		pointer-events: none;
+	}
+	.error {
+		font-size: 0.875rem;
+		color: var(--color-red);
 	}
 </style>

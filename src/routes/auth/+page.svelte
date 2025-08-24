@@ -20,10 +20,91 @@
 	type AuthTabs = 'login' | 'signup';
 
 	// Svelte 5 reactive state
-	let isLoading = $state(false);
+	// let isLoading = $state(false);
 	let successMessage = $state('');
 	let errorMessage = $state('');
 	let currentTab = $state<AuthTabs>('login');
+	// Form state variables
+	// Form state variables
+	let loginMail = $state('');
+	let loginPassword = $state('');
+	let signupName = $state('');
+	let signupEmail = $state('');
+	let signupPasswordOne = $state('');
+	let signupPasswordTwo = $state('');
+	let isLoading = $state(false);
+	let loginMailTouched = $state(false);
+	let loginPasswordTouched = $state(false);
+	let signupNameTouched = $state(false);
+	let signupEmailTouched = $state(false);
+	let signupPasswordOneTouched = $state(false);
+	let signupPasswordTwoTouched = $state(false);
+
+	// Validator functions (pure functions that take a value and return error or null)
+	function validateEmail(value: string | number): string | null {
+		const email = String(value).trim();
+		if (!email) return 'Email is required';
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(email)) return 'Please enter a valid email address';
+		return null;
+	}
+
+	function validatePassword(value: string | number): string | null {
+		const password = String(value);
+		if (!password) return 'Password is required';
+		return null;
+	}
+
+	function validateName(value: string | number): string | null {
+		const name = String(value).trim();
+		if (!name) return 'Name is required';
+		if (name.length < 2) return 'Name must be at least 2 characters';
+		return null;
+	}
+
+	function validateSignupPassword(value: string | number): string | null {
+		const password = String(value);
+		if (!password) return 'Password is required';
+		if (password.length < 8) return 'Password must be at least 8 characters';
+		if (!/[A-Z]/.test(password)) return 'Password must contain at least one uppercase letter';
+		if (!/[a-z]/.test(password)) return 'Password must contain at least one lowercase letter';
+		if (!/\d/.test(password)) return 'Password must contain at least one number';
+		return null;
+	}
+
+	function validateConfirmPassword(value: string | number): string | null {
+		const confirmPassword = String(value);
+		if (!confirmPassword) return 'Please confirm your password';
+		if (signupPasswordOne !== confirmPassword) return 'Passwords do not match';
+		return null;
+	}
+
+	// Form validation states (for submit buttons - check actual values, not just touched state)
+	const isLoginFormValid = $derived.by(() => {
+		return (
+			validateEmail(loginMail) === null &&
+			validatePassword(loginPassword) === null &&
+			loginMail.trim().length > 0 &&
+			loginPassword.length > 0
+		);
+	});
+
+	const isSignupFormValid = $derived.by(() => {
+		return (
+			validateName(signupName) === null &&
+			validateEmail(signupEmail) === null &&
+			validateSignupPassword(signupPasswordOne) === null &&
+			validateConfirmPassword(signupPasswordTwo) === null &&
+			signupName.trim().length > 0 &&
+			signupEmail.trim().length > 0 &&
+			signupPasswordOne.length > 0 &&
+			signupPasswordTwo.length > 0
+		);
+	});
+
+	// Submit states
+	const canSubmitLogin = $derived.by(() => Boolean(isLoginFormValid && !isLoading));
+	const canSubmitSignup = $derived.by(() => Boolean(isSignupFormValid && !isLoading));
 
 	// Derived state for form data
 	let formData = $derived($page.form as (FormError | FormSuccess) | null);
@@ -89,6 +170,9 @@
 	let displaySuccess = $derived(
 		successMessage || (formData && 'success' in formData ? formData.message : '')
 	);
+	$inspect(canSubmitLogin, canSubmitSignup);
+	$inspect(isLoginFormValid, isSignupFormValid);
+	$inspect(loginMail, loginPassword);
 </script>
 
 <div class="login-wrapper">
@@ -126,6 +210,8 @@
 						disabled={isLoading}
 						id="signup-fullname"
 						label="Full Name"
+						bind:value={signupName}
+						validator={validateName}
 					/>
 
 					<CustomInput
@@ -134,7 +220,8 @@
 						disabled={isLoading}
 						id="signup-email"
 						label="Email"
-						value={formData && 'email' in formData ? (formData.email ?? '') : ''}
+						bind:value={signupEmail}
+						validator={validateEmail}
 					/>
 
 					<CustomInput
@@ -143,9 +230,20 @@
 						disabled={isLoading}
 						id="signup-password"
 						label="Password"
+						bind:value={signupPasswordOne}
+						validator={validateSignupPassword}
+					/>
+					<CustomInput
+						type="password"
+						name="password"
+						disabled={isLoading}
+						id="signup-password"
+						label="Password"
+						bind:value={signupPasswordTwo}
+						validator={validateConfirmPassword}
 					/>
 
-					<button class="button" type="submit" disabled={isLoading}>
+					<button class="button" type="submit" disabled={!canSubmitSignup}>
 						{#if isLoading}
 							<div class="button__loading">
 								<div class="loading__dot"></div>
@@ -179,7 +277,8 @@
 						disabled={isLoading}
 						id="login-email"
 						label="Email"
-						value={formData && 'email' in formData ? (formData.email ?? '') : ''}
+						bind:value={loginMail}
+						validator={validateEmail}
 					/>
 
 					<CustomInput
@@ -188,16 +287,18 @@
 						disabled={isLoading}
 						id="login-password"
 						label="Password"
+						bind:value={loginPassword}
+						validator={validatePassword}
 					/>
 
-					<button type="submit" class="button" disabled={isLoading}>
+					<button type="submit" class="button" disabled={!canSubmitLogin}>
 						{#if isLoading}
 							<div class="button__loading">
 								<div class="loading__dot"></div>
 								<div class="loading__dot"></div>
 								<div class="loading__dot"></div>
 							</div>
-						{:else}Sign Up{/if}
+						{:else}Login{/if}
 					</button>
 				</form>
 				<h2 class="auth-switch">
@@ -258,7 +359,8 @@
 		justify-content: center;
 		&:hover,
 		&:active,
-		&:focus {
+		&:focus,
+		&:disabled {
 			cursor: pointer;
 			opacity: 50%;
 		}
