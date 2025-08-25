@@ -2,9 +2,10 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { Close } from '$lib/assets/images';
-	import type { Pot } from '$lib/types';
+	import type { Balance, Pot } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import CustomInput from '../CustomInput.svelte';
+	import { getContext } from 'svelte';
 
 	interface PotMoneyControlsProps {
 		pot: Pot;
@@ -20,6 +21,7 @@
 		addMoney = $bindable()
 	}: PotMoneyControlsProps = $props();
 	let amount = $state(0);
+	let balance: () => Balance = getContext('balance');
 
 	let newAmount = $derived.by(() => {
 		if (addMoney) {
@@ -59,6 +61,21 @@
 	function getRequiredToFillPercentage() {
 		return Math.min(((pot.target - pot.total) / pot.target) * 100, 100);
 	}
+	function validateAmount(value: string | number): string | null {
+		if (String(value).trim().length < 1) return 'Amount could not be empty';
+		if (Number(value) <= 0) return 'Amount should be positive';
+		if (addMoney) {
+			if (Number(value) > balance().current)
+				return `Amount should not exceed current balance($${balance().current})`;
+		}
+		if (!addMoney) {
+			if (Number(value) > pot.total) return 'Amount of withdrawal should not exceed total pot sum';
+		}
+		return null;
+	}
+	let isFormValid = $derived.by(() => {
+		return validateAmount(amount) === null && !loading;
+	});
 </script>
 
 <div class="pot-controls-wrapper">
@@ -122,9 +139,10 @@
 				label={addMoney ? 'Amount to Add' : 'Amount to Withdraw'}
 				bind:value={amount}
 				placeholder="e.g. 300"
+				validator={validateAmount}
 			/>
 			<input type="hidden" name="total" value={newAmount} />
-			<button type="submit" class="button">
+			<button type="submit" class="button" disabled={!isFormValid}>
 				{loading ? 'Saving...' : addMoney ? 'Confirm Addition' : 'Confirm Withdraw'}
 			</button>
 		</form>
@@ -205,7 +223,8 @@
 		font-size: 0.875rem;
 		&:hover,
 		&:active,
-		&:focus {
+		&:focus,
+		&:disabled {
 			cursor: pointer;
 			opacity: 50%;
 		}

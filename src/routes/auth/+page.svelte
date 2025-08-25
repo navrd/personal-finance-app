@@ -33,12 +33,6 @@
 	let signupPasswordOne = $state('');
 	let signupPasswordTwo = $state('');
 	let isLoading = $state(false);
-	let loginMailTouched = $state(false);
-	let loginPasswordTouched = $state(false);
-	let signupNameTouched = $state(false);
-	let signupEmailTouched = $state(false);
-	let signupPasswordOneTouched = $state(false);
-	let signupPasswordTwoTouched = $state(false);
 
 	// Validator functions (pure functions that take a value and return error or null)
 	function validateEmail(value: string | number): string | null {
