@@ -39,12 +39,6 @@
 		};
 	}
 
-	function cancelEdit() {
-		editingPot = null;
-		resetFormData();
-		showForm = false;
-	}
-
 	async function clearForm() {
 		await applyAction({
 			type: 'success',
@@ -63,7 +57,7 @@
 	{/if}
 
 	{#if showForm}
-		<PotForm bind:editingPot bind:loading {formData} bind:showForm />
+		<PotForm bind:editingPot bind:loading bind:formData bind:showForm />
 	{/if}
 	{#if pots().length === 0}
 		<div class="empty-state">

@@ -27,7 +27,7 @@
 
 	let {
 		editingPot = $bindable(),
-		formData,
+		formData = $bindable(),
 		loading = $bindable(),
 		showForm = $bindable()
 	}: PotFormProps = $props();
@@ -55,6 +55,8 @@
 				await invalidate('app:pots');
 				loading = false;
 				showForm = false;
+				editingPot = null;
+				console.log(editingPot);
 				resetFormData();
 			} else {
 				await update();
@@ -66,6 +68,33 @@
 	function onColorSelect(color: string) {
 		formData.theme = color;
 	}
+
+	function validatePotName(name: string | number): string | null {
+		if (String(name).length < 1) return 'Pot name could not be empty';
+		if (String(name).length > 30) return 'Pot name should not exceed 30 characters';
+		return null;
+	}
+
+	function validatePotTarget(target: string | number): string | null {
+		if (Number(target) < 0) return 'Pot target should be positive';
+		if (String(target).length < 1) return 'Pot target could not be epmty';
+		if (editingPot && Number(target) < editingPot.total)
+			return 'Current pot total exceeds new target. Withdraw money and try again';
+		return null;
+	}
+	function validatePotTheme(theme: string): string | null {
+		if (String(theme).length < 1) return 'Pot theme could not be epmty';
+		return null;
+	}
+
+	let isFormValid = $derived.by(() => {
+		return (
+			validatePotName(formData.name) === null &&
+			validatePotTarget(formData.target) === null &&
+			validatePotTheme(formData.theme) === null &&
+			!loading
+		);
+	});
 </script>
 
 <div class="pot-form-wrapper">
@@ -96,6 +125,7 @@
 				placeholder="e.g., Vacation Fund"
 				type="text"
 				bind:value={formData.name}
+				validator={validatePotName}
 			/>
 			<CustomInput
 				bind:value={formData.target}
@@ -105,6 +135,7 @@
 				name="target"
 				id="target"
 				label="Target"
+				validator={validatePotTarget}
 			/>
 			<CustomSelect
 				options={colorThemes}
@@ -114,15 +145,16 @@
 				hiddenInput
 				inputName="theme"
 				bind:inputValue={formData.theme}
+				validator={validatePotTheme}
 			>
 				{#snippet children(color)}
 					<p class="color-option" style:--data-color={color}>{color}</p>
 				{/snippet}</CustomSelect
 			>
 
-				<button type="submit" class="button">
-					{loading ? 'Saving...' : editingPot ? 'Update Budget' : 'Create Budget'}
-				</button>
+			<button type="submit" class="button" disabled={!isFormValid}>
+				{loading ? 'Saving...' : editingPot ? 'Update Budget' : 'Create Budget'}
+			</button>
 		</form>
 	</div>
 </div>
@@ -207,7 +239,8 @@
 		font-size: 0.875rem;
 		&:hover,
 		&:active,
-		&:focus {
+		&:focus,
+		&:disabled {
 			cursor: pointer;
 			opacity: 50%;
 		}

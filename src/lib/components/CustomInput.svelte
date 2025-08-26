@@ -109,5 +109,6 @@
 	.error {
 		font-size: 0.875rem;
 		color: var(--color-red);
+		text-wrap: wrap;
 	}
 </style>

@@ -17,7 +17,9 @@
 		placeholder?: string;
 		hiddenInput?: boolean;
 		inputName?: string;
-		inputValue?: string | number | boolean;
+		inputValue?: string | number;
+		disabled?: boolean;
+		validator?: (value: string) => string | null; // New prop for validation function
 	}
 
 	let {
@@ -30,19 +32,35 @@
 		placeholder = 'Select an option',
 		hiddenInput,
 		inputName,
-		inputValue = $bindable()
+		inputValue = $bindable(),
+		validator,
+		disabled
 	}: CustomSelectProps<T> = $props();
+
+	// Internal touched state
+	let touched = $state(false);
 
 	let showOptions = $state(false);
 	function clickOutside(e: CustomEvent<MouseEvent>) {
 		e.stopPropagation();
 		showOptions = false;
 	}
+	// Computed error message - only show if touched and validator exists
+	const errorMessage = $derived.by(() => {
+		if (!touched || !validator) return null;
+		return validator(String(inputValue) || '');
+	});
+	function onblur() {
+		touched = true;
+	}
 </script>
 
 <div class="custom-select" use:clickoutside onclickoutside={clickOutside}>
 	<p class="custom-select__label">{label}</p>
-	<div class="custom-select__selected-option">
+	<div
+		class="custom-select__selected-option"
+		class:custom-select__selected-option_error={errorMessage}
+	>
 		<BlankButton onclick={() => (showOptions = !showOptions)} fullWidth>
 			<div class="selected-option__content">
 				{#if selectedDisplay}
@@ -67,6 +85,7 @@
 			<input type="hidden" name={inputName} value={inputValue} />
 		{/if}
 	</div>
+	{#if errorMessage}<p class="error">{errorMessage}</p>{/if}
 
 	{#if showOptions}
 		<ul class="custom-select__options">
@@ -92,7 +111,7 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-        gap: 0.25rem;
+		gap: 0.25rem;
 	}
 	.custom-select__label {
 		text-transform: capitalize;
@@ -111,6 +130,9 @@
 		font-size: 0.875rem;
 		line-height: 1.5;
 		padding: 1.25rem 0.75rem;
+	}
+	.custom-select__selected-option_error {
+		border-color: var(--color-red);
 	}
 	.selected-option__content {
 		display: flex;
@@ -150,5 +172,10 @@
 		overflow: auto;
 		border-radius: 0.5rem;
 		box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
+	}
+	.error {
+		font-size: 0.875rem;
+		color: var(--color-red);
+		text-wrap: wrap;
 	}
 </style>

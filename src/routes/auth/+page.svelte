@@ -5,7 +5,6 @@
 	import BlankButton from '$lib/components/utility/BlankButton.svelte';
 	import type { SubmitFunction } from '@sveltejs/kit';
 
-	// Define types for our form data
 	interface FormError {
 		error: string;
 		email?: string;
@@ -19,13 +18,10 @@
 
 	type AuthTabs = 'login' | 'signup';
 
-	// Svelte 5 reactive state
-	// let isLoading = $state(false);
 	let successMessage = $state('');
 	let errorMessage = $state('');
 	let currentTab = $state<AuthTabs>('login');
-	// Form state variables
-	// Form state variables
+
 	let loginMail = $state('');
 	let loginPassword = $state('');
 	let signupName = $state('');
@@ -34,7 +30,6 @@
 	let signupPasswordTwo = $state('');
 	let isLoading = $state(false);
 
-	// Validator functions (pure functions that take a value and return error or null)
 	function validateEmail(value: string | number): string | null {
 		const email = String(value).trim();
 		if (!email) return 'Email is required';
@@ -164,9 +159,6 @@
 	let displaySuccess = $derived(
 		successMessage || (formData && 'success' in formData ? formData.message : '')
 	);
-	$inspect(canSubmitLogin, canSubmitSignup);
-	$inspect(isLoginFormValid, isSignupFormValid);
-	$inspect(loginMail, loginPassword);
 </script>
 
 <div class="login-wrapper">
