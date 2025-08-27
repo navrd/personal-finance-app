@@ -2,7 +2,13 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { getCategoryById } from '$lib/helpers/categories';
-	import type { Budget, Category, Transaction, TransactionSortOption } from '$lib/types';
+	import type {
+		Budget,
+		Category,
+		ColorTheme,
+		Transaction,
+		TransactionSortOption
+	} from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
 	import BlankButton from '../utility/BlankButton.svelte';
@@ -10,11 +16,12 @@
 	import { clickoutside } from '@svelte-put/clickoutside';
 	import TransactionsList from '../transactions/TransactionsList.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
+	import { getThemeById } from '$lib/helpers/themes';
 
 	interface BudgetFormData {
 		category_id: string;
 		maximum: string;
-		theme: string;
+		theme_id: string;
 	}
 
 	interface BudgetCardProps {
@@ -35,6 +42,7 @@
 		resetFormData
 	}: BudgetCardProps = $props();
 
+	let themes: ColorTheme[] = getContext('themes');
 	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
 	let transactions: () => Transaction[] = getContext('transactions');
 	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
@@ -46,7 +54,7 @@
 		formData = {
 			category_id: budget.category_id,
 			maximum: budget.maximum.toString(),
-			theme: budget.theme,
+			theme_id: budget.theme_id,
 			id: budget.id
 		};
 		showForm = true;
@@ -93,7 +101,7 @@
 
 <div class="budget-card">
 	<div class="budget-card__header">
-		<h3 class="header-title" style:--data-color={budget.theme}>
+		<h3 class="header-title" style:--data-color={getThemeById(themes, budget.theme_id)?.theme}>
 			{getCategoryById(categories, budget.category_id)?.category}
 		</h3>
 		<div class="context-menu">
@@ -124,13 +132,13 @@
 	<div class="amount-progress">
 		<div
 			class="amount-progress__value"
-			style:--data-color={budget.theme}
+			style:--data-color={getThemeById(themes, budget.theme_id)?.theme}
 			style:--data-width={`${(spent * -100) / budget.maximum}%`}
 		></div>
 	</div>
 
 	<div class="budget-data">
-		<div class="spent" style:--data-color={budget.theme}>
+		<div class="spent" style:--data-color={getThemeById(themes, formData.theme_id)?.theme}>
 			<div class="data">
 				<p class="label">Spent</p>
 				<p class="sum">${(spent * -1).toFixed(0)}</p>
@@ -151,7 +159,6 @@
 		<TransactionsList transactions={latestTransactions} overview />
 	</div>
 </div>
-
 
 <style lang="scss">
 	.action {

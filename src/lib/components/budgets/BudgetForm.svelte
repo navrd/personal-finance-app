@@ -1,30 +1,19 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
-	import type { Budget, Category } from '$lib/types';
+	import type { Budget, Category, ColorTheme } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
-	import CustomSelect from '../CustomSelect.svelte';
+	import { CustomSelect, CustomInput } from '$lib/components';
 	import { getCategoryById } from '$lib/helpers/categories';
 	import { Close } from '$lib/assets/images';
-	import CustomInput from '../CustomInput.svelte';
-
-	const colorThemes = [
-		'#277C78',
-		'#82C341',
-		'#F2CDAC',
-		'#626070',
-		'#597081',
-		'#AF81BA',
-		'#FF9500',
-		'#DC2626'
-	];
+	import { getThemeById } from '$lib/helpers/themes';
 
 	interface BudgetFormData {
 		category_id: string;
 		maximum: string;
-		theme: string;
+		theme_id: string;
 	}
 
 	interface BudgetFormProps {
@@ -38,13 +27,15 @@
 	let {
 		editingBudget = $bindable(),
 		showForm = $bindable(),
-		formData,
+		formData = $bindable(),
 		resetFormData,
 		loading = $bindable()
 	}: BudgetFormProps = $props();
 
 	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
 	let user: () => User = getContext('user');
+	let budgets: () => Budget[] = getContext('budgets');
+	let themes: ColorTheme[] = getContext('themes');
 
 	const enhanceForm: SubmitFunction = async ({ formData, cancel }) => {
 		loading = true;
@@ -65,9 +56,38 @@
 		formData.category_id = category.id;
 	}
 
-	function onColorSelect(color: string) {
-		formData.theme = color;
+	function onColorSelect(theme: ColorTheme) {
+		formData.theme_id = theme.id;
 	}
+	function validateBudgetCategory(category: string): string | null {
+		if (String(category).length < 1) return 'Budget category could not be epmty';
+		console.log(
+			'budget already exists: ',
+			budgets().filter((budget) => budget.category_id === category).length > 0
+		);
+		if (!editingBudget && budgets().filter((budget) => budget.category_id === category).length > 0)
+			return 'Budget with this category already exists';
+		return null;
+	}
+
+	function validateBudgetMaximum(maximum: string | number): string | null {
+		if (Number(maximum) < 0) return 'Budget maximum should be positive';
+		if (String(maximum).length < 1) return 'Pot target could not be epmty';
+		return null;
+	}
+	function validateBudgetTheme(theme: string): string | null {
+		if (String(theme).length < 1) return 'Pot theme could not be epmty';
+		return null;
+	}
+
+	let isFormValid = $derived.by(() => {
+		return (
+			validateBudgetCategory(formData.category_id) === null &&
+			validateBudgetMaximum(formData.maximum) === null &&
+			validateBudgetTheme(formData.theme_id) === null &&
+			!loading
+		);
+	});
 </script>
 
 <div class="budget-form-wrapper">
@@ -100,6 +120,7 @@
 				hiddenInput
 				inputName="category_id"
 				bind:inputValue={formData.category_id}
+				validator={validateBudgetCategory}
 			>
 				{#snippet children(category)}
 					<p class="category-option">{category.category}</p>
@@ -114,22 +135,24 @@
 				name="maximum"
 				id="maximum"
 				label="Maximum Spending"
+				validator={validateBudgetMaximum}
 			/>
 
 			<CustomSelect
-				options={colorThemes}
+				options={themes}
 				label="color"
 				onOptionClick={onColorSelect}
-				selectedOption={formData.theme}
+				selectedOption={getThemeById(themes, formData.theme_id)}
 				hiddenInput
-				inputName="theme"
-				bind:inputValue={formData.theme}
+				inputName="theme_id"
+				bind:inputValue={formData.theme_id}
+				validator={validateBudgetTheme}
 			>
-				{#snippet children(color)}
-					<p class="color-option" style:--data-color={color}>{color}</p>
+				{#snippet children(theme)}
+					<p class="color-option" style:--data-color={theme.theme}>{theme.name}</p>
 				{/snippet}
 			</CustomSelect>
-			<button type="submit" class="button" disabled={loading}>
+			<button type="submit" class="button" disabled={!isFormValid}>
 				{loading ? 'Saving...' : editingBudget ? 'Update Budget' : 'Create Budget'}
 			</button>
 		</form>
@@ -224,7 +247,8 @@
 		font-size: 0.875rem;
 		&:hover,
 		&:active,
-		&:focus {
+		&:focus,
+		&:disabled {
 			cursor: pointer;
 			opacity: 50%;
 		}

@@ -41,18 +41,24 @@
 	let touched = $state(false);
 
 	let showOptions = $state(false);
+
 	function clickOutside(e: CustomEvent<MouseEvent>) {
-		e.stopPropagation();
+		if (showOptions) {
+			touched = true;
+		}
 		showOptions = false;
+		e.stopPropagation();
+	}
+
+	function onSelectedOptionClick() {
+		showOptions = !showOptions;
 	}
 	// Computed error message - only show if touched and validator exists
 	const errorMessage = $derived.by(() => {
 		if (!touched || !validator) return null;
 		return validator(String(inputValue) || '');
 	});
-	function onblur() {
-		touched = true;
-	}
+	$inspect(selectedOption)
 </script>
 
 <div class="custom-select" use:clickoutside onclickoutside={clickOutside}>
@@ -61,7 +67,7 @@
 		class="custom-select__selected-option"
 		class:custom-select__selected-option_error={errorMessage}
 	>
-		<BlankButton onclick={() => (showOptions = !showOptions)} fullWidth>
+		<BlankButton onclick={onSelectedOptionClick} fullWidth>
 			<div class="selected-option__content">
 				{#if selectedDisplay}
 					<!-- Use custom selected display snippet -->
@@ -96,6 +102,7 @@
 						onclick={() => {
 							onOptionClick(option);
 							showOptions = false;
+							touched = true;
 						}}
 					>
 						{@render children(option)}

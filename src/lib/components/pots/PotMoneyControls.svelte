@@ -2,10 +2,11 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { Close } from '$lib/assets/images';
-	import type { Balance, Pot } from '$lib/types';
+	import type { Balance, ColorTheme, Pot } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import CustomInput from '../CustomInput.svelte';
 	import { getContext } from 'svelte';
+	import { getThemeById } from '$lib/helpers/themes';
 
 	interface PotMoneyControlsProps {
 		pot: Pot;
@@ -21,6 +22,7 @@
 		addMoney = $bindable()
 	}: PotMoneyControlsProps = $props();
 	let amount = $state(0);
+	let themes: ColorTheme[] = getContext('themes');
 	let balance: () => Balance = getContext('balance');
 
 	let newAmount = $derived.by(() => {
@@ -122,7 +124,7 @@
 						style:width={newAmount > pot.target
 							? `${getRequiredToFillPercentage()}%`
 							: `${getProgressPercentage(amount)}%`}
-						style:background-color={pot.theme}
+						style:background-color={getThemeById(themes, pot.theme_id)?.theme}
 					></div>
 				{/if}
 			</div>

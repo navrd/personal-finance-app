@@ -122,7 +122,7 @@ export interface Pot {
     name: string;
     target: number;
     total: number;
-    theme: string;
+    theme_id: string;
     created_at?: string;
     updated_at?: string;
 }
@@ -131,7 +131,7 @@ export interface PotError {
     id?: string;
     target?: number;
     name?: string;
-    theme?: string;
+    theme_id?: string;
     message?: string;
 }
 
@@ -139,7 +139,7 @@ export interface CreatePotData {
     name: string;
     target: number;
     total: number;
-    theme: string;
+    theme_id: string;
 }
 
 
@@ -148,7 +148,7 @@ export interface Budget {
     category_id: string;
     user_id: string;
     maximum: number;
-    theme: string;
+    theme_id: string;
     created_at: string;
     updated_at: string;
 }
@@ -156,12 +156,18 @@ export interface UpdateBudgetData {
     category_id?: string;
     user_id: string;
     maximum?: number;
-    theme?: string;
+    theme_id?: string;
 }
 
 export interface BudgetError {
     category_id?: string;
     maximum?: number;
-    theme?: string;
+    theme_id?: string;
     message?: string;
+}
+
+export interface ColorTheme {
+    id: string;
+    name: string;
+    theme: string;
 }

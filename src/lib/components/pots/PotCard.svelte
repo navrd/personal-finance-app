@@ -2,11 +2,14 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { Dots } from '$lib/assets/images';
-	import type { CreatePotData, Pot } from '$lib/types';
+	import type { ColorTheme, CreatePotData, Pot } from '$lib/types';
 	import { clickoutside } from '@svelte-put/clickoutside';
 	import { BlankButton } from '../utility';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import PotMoneyControls from './PotMoneyControls.svelte';
+	import { getThemeById } from '$lib/helpers/themes';
+	import { getContext } from 'svelte';
+	import type { User } from '@supabase/supabase-js';
 
 	interface PotCardProps {
 		pot: Pot;
@@ -25,6 +28,9 @@
 		loading = $bindable(),
 		resetFormData
 	}: PotCardProps = $props();
+
+	let themes: ColorTheme[] = getContext('themes');
+	let user: () => User = getContext('user');
 	let showContextMenu = $state(false);
 	let showPotControls = $state(false);
 	let addMoney = $state(false);
@@ -38,7 +44,7 @@
 			name: pot.name,
 			target: pot.target,
 			total: pot.total,
-			theme: pot.theme
+			theme_id: pot.theme_id
 		};
 		showForm = true;
 		showContextMenu = false;
@@ -48,7 +54,7 @@
 		showContextMenu = false;
 	}
 	const enhanceDeleteForm: SubmitFunction = async ({ action, formData, cancel }) => {
-		if (action.search.includes('deleteBudget') || action.pathname.includes('deleteBudget')) {
+		if (action.search.includes('deletePot') || action.pathname.includes('deletePot')) {
 			const confirmed = confirm('Are you sure you want to delete this budget?');
 			if (!confirmed) {
 				cancel();
@@ -57,6 +63,7 @@
 		}
 		loading = true;
 		return async ({ result, update }) => {
+			console.log(result, update);
 			if (result.type === 'success') {
 				await invalidate('app:budgets');
 				loading = false;
@@ -73,13 +80,15 @@
 	}
 	function withdraw() {
 		showPotControls = true;
-		addMoney=false;
+		addMoney = false;
 	}
 </script>
 
 <div class="pot-card">
 	<div class="pot-card__header">
-		<h3 class="header-title" style:--data-color={pot.theme}>{pot.name}</h3>
+		<h3 class="header-title" style:--data-color={getThemeById(themes, pot.theme_id)?.theme}>
+			{pot.name}
+		</h3>
 		<div class="context-menu">
 			<BlankButton
 				onclick={(e: MouseEvent) => {
@@ -90,12 +99,12 @@
 			{#if showContextMenu}
 				<ul class="context-menu__actions" use:clickoutside onclickoutside={clickOutside}>
 					<li class="action">
-						<BlankButton onclick={() => editPot(pot)}>Edit budget</BlankButton>
+						<BlankButton onclick={() => editPot(pot)}>Edit pot</BlankButton>
 					</li>
 					<li class="action action_delete">
-						<form method="POST" action="?/deleteBudget" use:enhance={enhanceDeleteForm}>
+						<form method="POST" action="?/deletePot" use:enhance={enhanceDeleteForm}>
 							<input type="hidden" name="id" value={pot.id} />
-							<BlankButton type="submit">Delete budget</BlankButton>
+							<BlankButton type="submit">Delete pot</BlankButton>
 						</form>
 					</li>
 				</ul>
@@ -112,7 +121,10 @@
 		<div class="progress-bar">
 			<div
 				class="progress-fill"
-				style="width: {getProgressPercentage(pot)}%; background-color: {pot.theme}"
+				style="width: {getProgressPercentage(pot)}%; background-color: {getThemeById(
+					themes,
+					pot.theme_id
+				)?.theme}"
 			></div>
 		</div>
 		<div class="progress-data">

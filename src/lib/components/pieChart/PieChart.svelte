@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getCategoryById } from '$lib/helpers/categories';
-	import type { Budget, Category, Transaction } from '$lib/types';
+	import { getThemeById } from '$lib/helpers/themes';
+	import type { Budget, Category, ColorTheme, Transaction } from '$lib/types';
 	import { getContext, onMount } from 'svelte';
 
 	interface DataSegment {
@@ -16,7 +17,7 @@
 	}
 
 	let { radius = 100, strokeWidth = 20, animationDuration = 2000 }: Props = $props();
-
+	let themes: ColorTheme[] = getContext('themes')
 	let budgets: () => Budget[] = getContext('budgets');
 	let transactions: () => Transaction[] = getContext('transactions');
 	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
@@ -37,7 +38,7 @@
 			let segment: DataSegment = { label: '', value: 0, color: '' };
 			segment.label = getCategoryById(categories, budget.category_id)!.category;
 			segment.value = Math.round((budget.maximum / totalLimit) * 100);
-			segment.color = budget.theme;
+			segment.color = getThemeById(themes, budget.theme_id)!.theme;
 			result.push(segment);
 		});
 		return result;

@@ -66,13 +66,13 @@ export const actions: Actions = {
             const formData = await request.formData();
             const category_id = formData.get('category_id')?.toString().trim();
             const maximumStr = formData.get('maximum')?.toString();
-            const theme = formData.get('theme')?.toString() || 'blue';
+            const theme_id = formData.get('theme_id')?.toString() || 'blue';
 
             // Validation
             if (!category_id) {
                 return fail(400, {
                     error: 'Budget category is required',
-                    category_id, maximumStr, theme
+                    category_id, maximumStr, theme_id
                 });
             }
 
@@ -81,7 +81,7 @@ export const actions: Actions = {
             if (isNaN(maximum) || maximum <= 0) {
                 return fail(400, {
                     error: 'Maximum amount must be a positive number',
-                    category_id, maximumStr, theme
+                    category_id, maximumStr, theme_id
                 });
             }
 
@@ -95,7 +95,7 @@ export const actions: Actions = {
             if (existingBudget) {
                 return fail(400, {
                     message: 'A budget with this category already exists',
-                    category_id, maximum, theme
+                    category_id, maximum, theme_id
                 } satisfies BudgetError);
             }
             //create the budget
@@ -105,7 +105,7 @@ export const actions: Actions = {
                     {
                         category_id,
                         maximum,
-                        theme,
+                        theme_id,
                         user_id: session.user.id
                     }
                 ])
@@ -116,7 +116,7 @@ export const actions: Actions = {
                 console.error('Error creating budget:', error);
                 return fail(500, {
                     message: 'Failed to create budget. Please try again.',
-                    category_id, maximum, theme
+                    category_id, maximum, theme_id
                 } satisfies BudgetError);
             }
 
@@ -139,7 +139,7 @@ export const actions: Actions = {
             const id = formData.get('id')?.toString();
             const category_id = formData.get('category_id')?.toString().trim();
             const maximumStr = formData.get('maximum')?.toString();
-            const theme = formData.get('theme')?.toString() || 'blue';
+            const theme_id = formData.get('theme_id')?.toString();
 
             if (!id) {
                 return fail(400, { message: 'Budget ID is required' } satisfies BudgetError);
@@ -151,14 +151,14 @@ export const actions: Actions = {
             if (isNaN(maximum) || maximum <= 0) {
                 return fail(400, {
                     message: 'Maximum amount must be a positive number',
-                    category_id, maximum, theme
+                    category_id, maximum, theme_id
                 } satisfies BudgetError);
             }
 
             if (!category_id) {
                 return fail(400, {
                     message: 'Budget category is required',
-                    category_id, maximum, theme
+                    category_id, maximum, theme_id
                 } satisfies BudgetError);
             }
 
@@ -177,7 +177,7 @@ export const actions: Actions = {
             // Update the budget
             const { error } = await supabase
                 .from('budgets')
-                .update({ category_id, maximum, theme })
+                .update({ category_id, maximum, theme_id })
                 .eq('id', id)
                 .eq('user_id', session.user.id);
 

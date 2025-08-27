@@ -24,7 +24,7 @@
 		name: '',
 		target: 0,
 		total: 0,
-		theme: '#277C78'
+		theme_id: ''
 	});
 
 	// Predefined theme colors
@@ -35,7 +35,7 @@
 			name: '',
 			target: 0,
 			total: 0,
-			theme: '#277C78'
+			theme_id: ''
 		};
 	}
 
@@ -101,6 +101,13 @@
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 1.5rem;
+	}
+	.empty-state {
+		text-align: center;
+		padding: 40px;
+		background: #f9fafb;
+		border-radius: 12px;
+		color: #6b7280;
 	}
 
 	@media (max-width: 1024px) {

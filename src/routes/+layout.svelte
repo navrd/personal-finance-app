@@ -17,6 +17,7 @@
 	//non-reactive data contexts
 	setContext('categories', data.categories);
 	setContext('transactionSortOptions', data.transactionSortOptions);
+	setContext('themes', data.themes);
 
 	//reactive data contexts
 	setContext('user', () => data.user);
@@ -36,6 +37,18 @@
 			}
 		});
 		return () => data.subscription.unsubscribe();
+	});
+	onMount(() => {
+		const channel = supabase.value
+			.channel('app-sync')
+			.on('postgres_changes', { event: '*', schema: 'public', table: 'budgets' }, () =>
+				invalidate('app:budgets')
+			)
+			.on('postgres_changes', { event: '*', schema: 'public', table: 'pots' }, () =>
+				invalidate('app:pots')
+			)
+			// etc...
+			.subscribe();
 	});
 </script>
 

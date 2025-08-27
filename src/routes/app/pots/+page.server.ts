@@ -65,28 +65,28 @@ export const actions: Actions = {
             const formData = await request.formData();
             const name = formData.get('name')?.toString().trim();
             const targetStr = formData.get('target')?.toString();
-            const theme = formData.get('theme')?.toString() || 'blue';
+            const theme_id = formData.get('theme_id')?.toString() || 'blue';
             const total = formData.get('total')?.toString();
 
             // Validation
             if (!name) {
                 return fail(400, {
                     message: 'Pot name is required',
-                    name, target: parseFloat(targetStr || '0'), theme
+                    name, target: parseFloat(targetStr || '0'), theme_id
                 } satisfies PotError);
             }
             const target = parseFloat(targetStr || '0');
             if (isNaN(target) || target <= 0) {
                 return fail(400, {
                     message: 'Target amount must be a positive number',
-                    name, target, theme
+                    name, target, theme_id
                 } satisfies PotError);
             }
 
             if (name.length > 30) {
                 return fail(400, {
                     message: 'Pot name must be 30 characters or less',
-                    name, target, theme
+                    name, target, theme_id
                 } satisfies PotError);
             }
 
@@ -95,7 +95,7 @@ export const actions: Actions = {
             if (target > 1000000) {
                 return fail(400, {
                     message: 'Target amount cannot exceed $1,000,000',
-                    name, target, theme
+                    name, target, theme_id
                 } satisfies PotError);
             }
 
@@ -110,7 +110,7 @@ export const actions: Actions = {
             if (existingPot) {
                 return fail(400, {
                     message: 'A pot with this name already exists',
-                    name, target, theme
+                    name, target, theme_id
                 } satisfies PotError);
             }
 
@@ -120,7 +120,7 @@ export const actions: Actions = {
                 .insert({
                     name,
                     target,
-                    theme,
+                    theme_id,
                     total,
                     user_id: session.user.id
                 });
@@ -129,7 +129,7 @@ export const actions: Actions = {
                 console.error('Error creating pot:', error);
                 return fail(500, {
                     message: 'Failed to create pot. Please try again.',
-                    name, target, theme
+                    name, target, theme_id
                 } satisfies PotError);
             }
 
@@ -152,7 +152,7 @@ export const actions: Actions = {
             const id = formData.get('id')?.toString();
             const name = formData.get('name')?.toString().trim();
             const targetStr = formData.get('target')?.toString();
-            const theme = formData.get('theme')?.toString();
+            const theme_id = formData.get('theme_id')?.toString();
             const total = formData.get('total')?.toString();
 
             if (!id) {
@@ -163,7 +163,7 @@ export const actions: Actions = {
             if (!name) {
                 return fail(400, {
                     message: 'Pot name is required',
-                    id, name, target: parseFloat(targetStr || '0'), theme
+                    id, name, target: parseFloat(targetStr || '0'), theme_id
                 } satisfies PotError);
             }
 
@@ -171,7 +171,7 @@ export const actions: Actions = {
             if (isNaN(target) || target <= 0) {
                 return fail(400, {
                     message: 'Target amount must be a positive number',
-                    id, name, target, theme
+                    id, name, target, theme_id
                 } satisfies PotError);
             }
 
@@ -191,14 +191,14 @@ export const actions: Actions = {
             if (target < existingPot.total) {
                 return fail(400, {
                     message: `Target cannot be less than current saved amount ($${existingPot.total})`,
-                    id, name, target, theme
+                    id, name, target, theme_id
                 } satisfies PotError);
             }
 
             // Update the pot
             const { error } = await supabase
                 .from('pots')
-                .update({ name, target, theme, total })
+                .update({ name, target, theme_id, total })
                 .eq('id', id)
                 .eq('user_id', session.user.id);
 
@@ -224,11 +224,12 @@ export const actions: Actions = {
         try {
             const formData = await request.formData();
             const id = formData.get('id')?.toString();
+            const user_id = formData.get('user_id')?.toString();
 
             if (!id) {
                 return fail(400, { message: 'Pot ID is required' } satisfies PotError);
             }
-
+            console.log(id, user_id, session.user.id)
             // Check if pot exists and belongs to user
             const { data: existingPot } = await supabase
                 .from('pots')
@@ -236,6 +237,7 @@ export const actions: Actions = {
                 .eq('id', id)
                 .eq('user_id', session.user.id)
                 .single();
+                
 
             if (!existingPot) {
                 return fail(404, { message: 'Pot not found' } satisfies PotError);

@@ -1,8 +1,24 @@
-import type { Category, TransactionSortOption, Transaction, Balance, Pot, Budget } from '$lib/types';
+import type { Category, TransactionSortOption, Transaction, Balance, Pot, Budget, ColorTheme } from '$lib/types';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabase }, cookies, depends }) => {
     const { session } = await safeGetSession();
+
+    async function fetchColorThemes(): Promise<ColorTheme[]> {
+        try {
+            const { data, error } = await supabase
+                .from('colors')
+                .select('*')
+            if (error) {
+                console.error('Error fetching color themes:', error);
+                return [];
+            }
+            return data || [];
+        } catch (err: unknown) {
+            console.error('Failed to get color themes:', err);
+            throw err;
+        }
+    }
 
     async function fetchCategoriesMinimal(): Promise<Pick<Category, 'id' | 'category'>[]> {
         try {
@@ -33,7 +49,7 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
             }
 
             return data || [];
-        } catch (err:unknown) {
+        } catch (err: unknown) {
             console.error('Failed to get transactions sort options:', err);
             throw err;
         }
@@ -114,7 +130,8 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
         transactions: await fetchUserTransactions(),
         balance: await fetchUserBalance(),
         pots: await fetchPots(),
-        budgets: await fetchBudgets()
+        budgets: await fetchBudgets(), 
+        themes: await fetchColorThemes(),
     };
 };
 

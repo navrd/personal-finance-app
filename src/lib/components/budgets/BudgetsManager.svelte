@@ -8,7 +8,7 @@
 	interface BudgetFormData {
 		category_id: string;
 		maximum: string;
-		theme: string;
+		theme_id: string;
 	}
 
 	interface BudgetsManagerProps {
@@ -30,7 +30,7 @@
 	let formData: BudgetFormData & { id?: string } = $state({
 		category_id: '',
 		maximum: '',
-		theme: '#277C78'
+		theme_id: ''
 	});
 
 
@@ -38,7 +38,7 @@
 		formData = {
 			category_id: '',
 			maximum: '',
-			theme: '#277C78'
+			theme_id: ''
 		};
 		editingBudget = null;
 		showForm = false;
@@ -70,7 +70,7 @@
 		</div>
 	{:else}
 		{#if showForm}
-			<BudgetForm bind:showForm bind:loading bind:editingBudget {formData} {resetFormData} />
+			<BudgetForm bind:showForm bind:loading bind:editingBudget bind:formData {resetFormData} />
 		{/if}
 
 		<div class="budgets-list">
@@ -159,15 +159,4 @@
 		flex-wrap: wrap;
 		gap: 1rem;
 	}
-	/* @media (max-width: 1023px) {
-		.header {
-			flex-direction: column;
-			gap: 15px;
-			text-align: center;
-		}
-
-		.budgets {
-			flex-basis: calc((100%));
-		}
-	} */
 </style>

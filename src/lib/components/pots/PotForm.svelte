@@ -2,21 +2,11 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { Close } from '$lib/assets/images';
-	import type { CreatePotData, Pot } from '$lib/types';
+	import type { ColorTheme, CreatePotData, Pot } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import CustomInput from '../CustomInput.svelte';
-	import CustomSelect from '../CustomSelect.svelte';
-
-	const colorThemes = [
-		'#277C78',
-		'#82C9D7',
-		'#F2CDAC',
-		'#626070',
-		'#C94736',
-		'#854DFF',
-		'#AF81BA',
-		'#597C7C'
-	];
+	import { CustomInput, CustomSelect } from '$lib/components';
+	import { getContext } from 'svelte';
+	import { getThemeById } from '$lib/helpers/themes';
 
 	interface PotFormProps {
 		editingPot: Pot | null;
@@ -32,12 +22,14 @@
 		showForm = $bindable()
 	}: PotFormProps = $props();
 
+	let themes: ColorTheme[] = getContext('themes');
+
 	function resetFormData() {
 		formData = {
 			name: '',
 			target: 0,
 			total: 0,
-			theme: '#277C78'
+			theme_id: ''
 		};
 	}
 
@@ -65,8 +57,8 @@
 		};
 	};
 
-	function onColorSelect(color: string) {
-		formData.theme = color;
+	function onThemeSelect(theme: ColorTheme) {
+		formData.theme_id = theme.id;
 	}
 
 	function validatePotName(name: string | number): string | null {
@@ -91,7 +83,7 @@
 		return (
 			validatePotName(formData.name) === null &&
 			validatePotTarget(formData.target) === null &&
-			validatePotTheme(formData.theme) === null &&
+			validatePotTheme(formData.theme_id) === null &&
 			!loading
 		);
 	});
@@ -138,22 +130,22 @@
 				validator={validatePotTarget}
 			/>
 			<CustomSelect
-				options={colorThemes}
-				label="color"
-				onOptionClick={onColorSelect}
-				selectedOption={formData.theme}
+				options={themes}
+				label="theme"
+				onOptionClick={onThemeSelect}
+				selectedOption={getThemeById(themes, formData.theme_id)}
 				hiddenInput
-				inputName="theme"
-				bind:inputValue={formData.theme}
+				inputName="theme_id"
+				bind:inputValue={formData.theme_id}
 				validator={validatePotTheme}
 			>
-				{#snippet children(color)}
-					<p class="color-option" style:--data-color={color}>{color}</p>
+				{#snippet children(theme)}
+					<p class="color-option" style:--data-color={theme.theme}>{theme.name}</p>
 				{/snippet}</CustomSelect
 			>
 
 			<button type="submit" class="button" disabled={!isFormValid}>
-				{loading ? 'Saving...' : editingPot ? 'Update Budget' : 'Create Budget'}
+				{loading ? 'Saving...' : editingPot ? 'Update Pot' : 'Create Pot'}
 			</button>
 		</form>
 	</div>

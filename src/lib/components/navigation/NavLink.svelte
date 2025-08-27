@@ -66,7 +66,7 @@
 		}
 	}
 	.navlink__underlay_active {
-		background: white;
+		background: var(--color-beige-100);
 	}
 	.navlink__content {
 		width: 100%;
