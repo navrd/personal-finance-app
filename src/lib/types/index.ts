@@ -171,3 +171,6 @@ export interface ColorTheme {
     name: string;
     theme: string;
 }
+export interface PreparedTheme extends ColorTheme {
+    isUsed: boolean
+}

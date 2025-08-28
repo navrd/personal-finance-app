@@ -6,7 +6,7 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import CustomInput from '../CustomInput.svelte';
 	import { getContext } from 'svelte';
-	import { getThemeById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers/themes';
 
 	interface PotMoneyControlsProps {
 		pot: Pot;
@@ -124,7 +124,7 @@
 						style:width={newAmount > pot.target
 							? `${getRequiredToFillPercentage()}%`
 							: `${getProgressPercentage(amount)}%`}
-						style:background-color={getThemeById(themes, pot.theme_id)?.theme}
+						style:background-color={getById(themes, pot.theme_id)?.theme}
 					></div>
 				{/if}
 			</div>

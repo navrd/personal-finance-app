@@ -7,7 +7,7 @@
 	import { BlankButton } from '../utility';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import PotMoneyControls from './PotMoneyControls.svelte';
-	import { getThemeById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers/themes';
 	import { getContext } from 'svelte';
 	import type { User } from '@supabase/supabase-js';
 
@@ -86,7 +86,7 @@
 
 <div class="pot-card">
 	<div class="pot-card__header">
-		<h3 class="header-title" style:--data-color={getThemeById(themes, pot.theme_id)?.theme}>
+		<h3 class="header-title" style:--data-color={getById(themes, pot.theme_id)?.theme}>
 			{pot.name}
 		</h3>
 		<div class="context-menu">
@@ -121,7 +121,7 @@
 		<div class="progress-bar">
 			<div
 				class="progress-fill"
-				style="width: {getProgressPercentage(pot)}%; background-color: {getThemeById(
+				style="width: {getProgressPercentage(pot)}%; background-color: {getById(
 					themes,
 					pot.theme_id
 				)?.theme}"

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getCategoryById } from '$lib/helpers/categories';
-	import { getThemeById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers/themes';
 	import type { Budget, Category, ColorTheme, Transaction } from '$lib/types';
 	import { getContext, onMount } from 'svelte';
 
@@ -38,7 +38,7 @@
 			let segment: DataSegment = { label: '', value: 0, color: '' };
 			segment.label = getCategoryById(categories, budget.category_id)!.category;
 			segment.value = Math.round((budget.maximum / totalLimit) * 100);
-			segment.color = getThemeById(themes, budget.theme_id)!.theme;
+			segment.color = getById(themes, budget.theme_id)!.theme;
 			result.push(segment);
 		});
 		return result;

@@ -16,7 +16,7 @@
 	import { clickoutside } from '@svelte-put/clickoutside';
 	import TransactionsList from '../transactions/TransactionsList.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
-	import { getThemeById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers/themes';
 
 	interface BudgetFormData {
 		category_id: string;
@@ -101,7 +101,7 @@
 
 <div class="budget-card">
 	<div class="budget-card__header">
-		<h3 class="header-title" style:--data-color={getThemeById(themes, budget.theme_id)?.theme}>
+		<h3 class="header-title" style:--data-color={getById(themes, budget.theme_id)?.theme}>
 			{getCategoryById(categories, budget.category_id)?.category}
 		</h3>
 		<div class="context-menu">
@@ -132,13 +132,13 @@
 	<div class="amount-progress">
 		<div
 			class="amount-progress__value"
-			style:--data-color={getThemeById(themes, budget.theme_id)?.theme}
+			style:--data-color={getById(themes, budget.theme_id)?.theme}
 			style:--data-width={`${(spent * -100) / budget.maximum}%`}
 		></div>
 	</div>
 
 	<div class="budget-data">
-		<div class="spent" style:--data-color={getThemeById(themes, formData.theme_id)?.theme}>
+		<div class="spent" style:--data-color={getById(themes, formData.theme_id)?.theme}>
 			<div class="data">
 				<p class="label">Spent</p>
 				<p class="sum">${(spent * -1).toFixed(0)}</p>

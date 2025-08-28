@@ -2,11 +2,11 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { Close } from '$lib/assets/images';
-	import type { ColorTheme, CreatePotData, Pot } from '$lib/types';
+	import type { ColorTheme, CreatePotData, Pot, PreparedTheme } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { CustomInput, CustomSelect } from '$lib/components';
 	import { getContext } from 'svelte';
-	import { getThemeById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers/themes';
 
 	interface PotFormProps {
 		editingPot: Pot | null;
@@ -23,6 +23,7 @@
 	}: PotFormProps = $props();
 
 	let themes: ColorTheme[] = getContext('themes');
+	let pots: () => Pot[] = getContext('pots');
 
 	function resetFormData() {
 		formData = {
@@ -57,7 +58,7 @@
 		};
 	};
 
-	function onThemeSelect(theme: ColorTheme) {
+	function onThemeSelect(theme: PreparedTheme) {
 		formData.theme_id = theme.id;
 	}
 
@@ -78,6 +79,22 @@
 		if (String(theme).length < 1) return 'Pot theme could not be epmty';
 		return null;
 	}
+	let usedThemes = $derived(pots().map((pot) => pot.theme_id));
+
+	let usedThemesIds = $derived(
+		new Set(
+			editingPot ? usedThemes.filter((themeId) => themeId !== editingPot!.theme_id) : usedThemes
+		)
+	);
+
+	let preparedThemes: PreparedTheme[] = $derived(
+		themes
+			.map((theme) => ({
+				...theme,
+				isUsed: usedThemesIds.has(theme.id)
+			}))
+			.sort((a, b) => Number(b.isUsed) - Number(a.isUsed))
+	);
 
 	let isFormValid = $derived.by(() => {
 		return (
@@ -130,17 +147,24 @@
 				validator={validatePotTarget}
 			/>
 			<CustomSelect
-				options={themes}
+				options={preparedThemes}
 				label="theme"
 				onOptionClick={onThemeSelect}
-				selectedOption={getThemeById(themes, formData.theme_id)}
+				selectedOption={getById(preparedThemes, formData.theme_id)}
 				hiddenInput
 				inputName="theme_id"
 				bind:inputValue={formData.theme_id}
 				validator={validatePotTheme}
 			>
 				{#snippet children(theme)}
-					<p class="color-option" style:--data-color={theme.theme}>{theme.name}</p>
+					<p
+						class="color-option"
+						class:color-option_used={theme.isUsed}
+						style:--data-color={theme.theme}
+					>
+						<span class="color-option__name">{theme.name}</span>
+						{#if theme.isUsed}<span>Already used</span>{/if}
+					</p>
 				{/snippet}</CustomSelect
 			>
 
@@ -183,18 +207,33 @@
 		color: var(--color-grey-500);
 	}
 	.color-option {
+		width: 100%;
 		display: flex;
 		gap: 0.75rem;
 		align-items: center;
 		text-transform: capitalize;
 		border: 1px solid transparent;
 		color: var(--color-grey-900);
+		justify-content: space-between;
+	}
+	.color-option__name {
+		display: flex;
+		gap: 0.75rem;
 		&:before {
 			content: ' ';
 			height: 1rem;
 			width: 1rem;
 			border-radius: 50%;
 			background: var(--data-color);
+		}
+	}
+	.color-option_used {
+		pointer-events: none;
+		color: color-mix(in srgb, var(--color-grey-500) 100%, var(--color-white) 100%);
+		.color-option__name {
+			&:before {
+				background: color-mix(in srgb, var(--data-color) 100%, var(--color-white) 100%);
+			}
 		}
 	}
 	.form-header {

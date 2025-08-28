@@ -58,7 +58,6 @@
 		if (!touched || !validator) return null;
 		return validator(String(inputValue) || '');
 	});
-	$inspect(selectedOption)
 </script>
 
 <div class="custom-select" use:clickoutside onclickoutside={clickOutside}>

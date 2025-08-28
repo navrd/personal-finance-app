@@ -8,7 +8,7 @@
 	import { CustomSelect, CustomInput } from '$lib/components';
 	import { getCategoryById } from '$lib/helpers/categories';
 	import { Close } from '$lib/assets/images';
-	import { getThemeById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers/themes';
 
 	interface BudgetFormData {
 		category_id: string;
@@ -142,7 +142,7 @@
 				options={themes}
 				label="color"
 				onOptionClick={onColorSelect}
-				selectedOption={getThemeById(themes, formData.theme_id)}
+				selectedOption={getById(themes, formData.theme_id)}
 				hiddenInput
 				inputName="theme_id"
 				bind:inputValue={formData.theme_id}
