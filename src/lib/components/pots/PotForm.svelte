@@ -79,13 +79,13 @@
 		if (String(theme).length < 1) return 'Pot theme could not be epmty';
 		return null;
 	}
-	let usedThemes = $derived(pots().map((pot) => pot.theme_id));
 
-	let usedThemesIds = $derived(
-		new Set(
+	let usedThemesIds = $derived.by(() => {
+		let usedThemes = pots().map((pot) => pot.theme_id);
+		return new Set(
 			editingPot ? usedThemes.filter((themeId) => themeId !== editingPot!.theme_id) : usedThemes
-		)
-	);
+		);
+	});
 
 	let preparedThemes: PreparedTheme[] = $derived(
 		themes
