@@ -97,10 +97,6 @@
 	}
 	function validateBudgetCategory(category: string): string | null {
 		if (String(category).length < 1) return 'Budget category could not be epmty';
-		console.log(
-			'budget already exists: ',
-			budgets().filter((budget) => budget.category_id === category).length > 0
-		);
 		if (!editingBudget && budgets().filter((budget) => budget.category_id === category).length > 0)
 			return 'Budget with this category already exists';
 		return null;

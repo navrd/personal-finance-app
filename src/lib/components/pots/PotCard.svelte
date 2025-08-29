@@ -63,7 +63,6 @@
 		}
 		loading = true;
 		return async ({ result, update }) => {
-			console.log(result, update);
 			if (result.type === 'success') {
 				await invalidate('app:budgets');
 				loading = false;

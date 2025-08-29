@@ -49,7 +49,6 @@
 				loading = false;
 				showForm = false;
 				editingPot = null;
-				console.log(editingPot);
 				resetFormData();
 			} else {
 				await update();

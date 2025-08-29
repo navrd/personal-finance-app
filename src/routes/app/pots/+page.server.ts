@@ -224,12 +224,11 @@ export const actions: Actions = {
         try {
             const formData = await request.formData();
             const id = formData.get('id')?.toString();
-            const user_id = formData.get('user_id')?.toString();
+            // const user_id = formData.get('user_id')?.toString();
 
             if (!id) {
                 return fail(400, { message: 'Pot ID is required' } satisfies PotError);
             }
-            console.log(id, user_id, session.user.id)
             // Check if pot exists and belongs to user
             const { data: existingPot } = await supabase
                 .from('pots')
