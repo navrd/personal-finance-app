@@ -174,3 +174,6 @@ export interface ColorTheme {
 export interface PreparedTheme extends ColorTheme {
     isUsed: boolean
 }
+export interface PreparedCategory extends Category {
+    isUsed: boolean
+}

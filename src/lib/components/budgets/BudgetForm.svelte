@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
-	import type { Budget, Category, ColorTheme } from '$lib/types';
+	import type { Budget, Category, ColorTheme, PreparedCategory, PreparedTheme } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
@@ -37,6 +37,42 @@
 	let budgets: () => Budget[] = getContext('budgets');
 	let themes: ColorTheme[] = getContext('themes');
 
+	let usedCategoriesIds = $derived.by(() => {
+		let usedCategories = budgets().map((budget) => budget.category_id);
+		return new Set(
+			editingBudget
+				? usedCategories.filter((categoryId) => categoryId !== editingBudget!.category_id)
+				: usedCategories
+		);
+	});
+
+	let preparedCategories: Pick<PreparedCategory, 'id' | 'category' | 'isUsed'>[] = $derived(
+		categories
+			.map((category) => ({
+				...category,
+				isUsed: usedCategoriesIds.has(category.id)
+			}))
+			.sort((a, b) => Number(b.isUsed) - Number(a.isUsed))
+	);
+
+	let usedThemesIds = $derived.by(() => {
+		let usedThemes = budgets().map((budget) => budget.theme_id);
+		return new Set(
+			editingBudget
+				? usedThemes.filter((themeId) => themeId !== editingBudget!.theme_id)
+				: usedThemes
+		);
+	});
+
+	let preparedThemes: PreparedTheme[] = $derived(
+		themes
+			.map((theme) => ({
+				...theme,
+				isUsed: usedThemesIds.has(theme.id)
+			}))
+			.sort((a, b) => Number(b.isUsed) - Number(a.isUsed))
+	);
+
 	const enhanceForm: SubmitFunction = async ({ formData, cancel }) => {
 		loading = true;
 
@@ -52,11 +88,11 @@
 		};
 	};
 
-	function onCategorySelect(category: Pick<Category, 'id' | 'category'>) {
+	function onCategorySelect(category: Pick<PreparedCategory, 'id' | 'category' | 'isUsed'>) {
 		formData.category_id = category.id;
 	}
 
-	function onColorSelect(theme: ColorTheme) {
+	function onThemeSelect(theme: PreparedTheme) {
 		formData.theme_id = theme.id;
 	}
 	function validateBudgetCategory(category: string): string | null {
@@ -113,17 +149,19 @@
 				<input type="hidden" name="id" value={editingBudget.id} />
 			{/if}
 			<CustomSelect
-				options={categories}
+				options={preparedCategories}
 				label="category"
 				onOptionClick={onCategorySelect}
-				selectedOption={getCategoryById(categories, formData?.category_id)!}
+				selectedOption={getById(preparedCategories, formData?.category_id)!}
 				hiddenInput
 				inputName="category_id"
 				bind:inputValue={formData.category_id}
 				validator={validateBudgetCategory}
 			>
 				{#snippet children(category)}
-					<p class="category-option">{category.category}</p>
+					<p class="category-option" class:category-option_used={category.isUsed}>
+						{category.category}{#if category.isUsed}<span>Already used</span>{/if}
+					</p>
 				{/snippet}
 			</CustomSelect>
 
@@ -139,19 +177,26 @@
 			/>
 
 			<CustomSelect
-				options={themes}
-				label="color"
-				onOptionClick={onColorSelect}
-				selectedOption={getById(themes, formData.theme_id)}
+				options={preparedThemes}
+				label="theme"
+				onOptionClick={onThemeSelect}
+				selectedOption={getById(preparedThemes, formData.theme_id)}
 				hiddenInput
 				inputName="theme_id"
 				bind:inputValue={formData.theme_id}
 				validator={validateBudgetTheme}
 			>
 				{#snippet children(theme)}
-					<p class="color-option" style:--data-color={theme.theme}>{theme.name}</p>
-				{/snippet}
-			</CustomSelect>
+					<p
+						class="color-option"
+						class:color-option_used={theme.isUsed}
+						style:--data-color={theme.theme}
+					>
+						<span class="color-option__name">{theme.name}</span>
+						{#if theme.isUsed}<span>Already used</span>{/if}
+					</p>
+				{/snippet}</CustomSelect
+			>
 			<button type="submit" class="button" disabled={!isFormValid}>
 				{loading ? 'Saving...' : editingBudget ? 'Update Budget' : 'Create Budget'}
 			</button>
@@ -191,26 +236,48 @@
 		color: var(--color-grey-500);
 	}
 	.category-option {
+		width: 100%;
 		display: flex;
 		gap: 0.75rem;
 		align-items: center;
+		justify-content: space-between;
 		text-transform: capitalize;
 		border: 1px solid transparent;
 		color: var(--color-grey-900);
 	}
+	.category-option_used {
+		pointer-events: none;
+		color: color-mix(in srgb, var(--color-grey-500) 100%, var(--color-white) 100%);
+	}
+
 	.color-option {
+		width: 100%;
 		display: flex;
 		gap: 0.75rem;
 		align-items: center;
 		text-transform: capitalize;
 		border: 1px solid transparent;
 		color: var(--color-grey-900);
+		justify-content: space-between;
+	}
+	.color-option__name {
+		display: flex;
+		gap: 0.75rem;
 		&:before {
 			content: ' ';
 			height: 1rem;
 			width: 1rem;
 			border-radius: 50%;
 			background: var(--data-color);
+		}
+	}
+	.color-option_used {
+		pointer-events: none;
+		color: color-mix(in srgb, var(--color-grey-500) 100%, var(--color-white) 100%);
+		.color-option__name {
+			&:before {
+				background: color-mix(in srgb, var(--data-color) 100%, var(--color-white) 100%);
+			}
 		}
 	}
 	.form-header {

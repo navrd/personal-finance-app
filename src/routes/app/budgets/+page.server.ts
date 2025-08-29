@@ -165,10 +165,10 @@ export const actions: Actions = {
             const { data: existingBudget } = await supabase
                 .from('budgets')
                 .select('id')
-                .eq('category_id', category_id)
+                .eq('id', id)
                 .eq('user_id', session.user.id)
                 .single();
-
+                
             if (!existingBudget) {
                 return fail(404, { message: 'Budget not found' } satisfies BudgetError);
             }
