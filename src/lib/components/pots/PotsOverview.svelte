@@ -21,7 +21,7 @@
 
 	<div class="segment__summary">
 		{#each pots as pot}
-			<div class="pot" style:--data-color={pot.theme}>
+			<div class="pot" style:--data-color={pot.theme_id}>
 				<h3 class="pot__label">{pot.name}</h3>
 				<p class="pot__sum">${pot.total}</p>
 			</div>

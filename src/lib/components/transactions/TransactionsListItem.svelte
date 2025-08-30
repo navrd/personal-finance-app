@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Category, Transaction } from '$lib/types';
 	import { OK, NotOK } from '$lib/assets/images';
-	import { getCategoryById } from '$lib/helpers/categories';
+	import { getById } from '$lib/helpers/';
 	import { getContext } from 'svelte';
 
 	interface TransactionsListItemProps {
@@ -58,7 +58,7 @@
 	</div>
 	{#if !overview}
 		{#if !reccuring}<div class="transactions-list__category">
-				<p>{getCategoryById(categories, transaction.category_id)?.category}</p>
+				<p>{getById(categories, transaction.category_id)?.category}</p>
 			</div>{/if}
 
 		<div class="transactions-list__category" class:paid class:due-soon={dueSoon}>

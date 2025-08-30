@@ -7,7 +7,7 @@
 	import { BlankButton } from '../utility';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import PotMoneyControls from './PotMoneyControls.svelte';
-	import { getById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers';
 	import { getContext } from 'svelte';
 	import type { User } from '@supabase/supabase-js';
 

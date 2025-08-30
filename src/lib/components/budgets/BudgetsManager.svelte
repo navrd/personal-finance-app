@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import type { Category, Budget, BudgetError } from '$lib/types';
+	import type { Budget, BudgetError } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import { applyAction } from '$app/forms';
 	import { BudgetForm, BudgetCard, BudgetError as BudgetErrorForm } from '$lib/components';

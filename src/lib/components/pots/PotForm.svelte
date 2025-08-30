@@ -6,7 +6,7 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { CustomInput, CustomSelect } from '$lib/components';
 	import { getContext } from 'svelte';
-	import { getById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers';
 
 	interface PotFormProps {
 		editingPot: Pot | null;

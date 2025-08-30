@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { BudgetError, PotError } from '$lib/types';
+	import type { BudgetError } from '$lib/types';
 
 	interface BudgetErrorProps {
 		form?: BudgetError | null;

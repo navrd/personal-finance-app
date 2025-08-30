@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { PieChart } from '$lib/components';
-	import { getCategoryById } from '$lib/helpers/categories';
+	import { getById } from '$lib/helpers/';
 	import type { Budget, Category } from '$lib/types';
 	import { getContext } from 'svelte';
 	import { page } from '$app/state';
@@ -21,8 +21,8 @@
 	<PieChart />
 	<ul class="segment__legend">
 		{#each budgets() as budget}
-			<li class="legend-item" style:--data-color={budget.theme}>
-				<h3 class="budget__label">{getCategoryById(categories, budget.category_id)?.category}</h3>
+			<li class="legend-item" style:--data-color={budget.theme_id}>
+				<h3 class="budget__label">{getById(categories, budget.category_id)?.category}</h3>
 				<p class="budget__sum">${budget.maximum}</p>
 			</li>
 		{/each}

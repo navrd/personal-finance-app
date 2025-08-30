@@ -6,7 +6,7 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import CustomInput from '../CustomInput.svelte';
 	import { getContext } from 'svelte';
-	import { getById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers';
 
 	interface PotMoneyControlsProps {
 		pot: Pot;

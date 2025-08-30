@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
-	import { getCategoryById } from '$lib/helpers/categories';
 	import type {
 		Budget,
 		Category,
@@ -14,9 +13,9 @@
 	import BlankButton from '../utility/BlankButton.svelte';
 	import { ArrowRight, Dots } from '$lib/assets/images';
 	import { clickoutside } from '@svelte-put/clickoutside';
-	import TransactionsList from '../transactions/TransactionsList.svelte';
+	import { TransactionsList } from '$lib/components';
 	import { sortTransactions } from '$lib/helpers/transactions';
-	import { getById } from '$lib/helpers/themes';
+	import { getById } from '$lib/helpers';
 
 	interface BudgetFormData {
 		category_id: string;
@@ -102,7 +101,7 @@
 <div class="budget-card">
 	<div class="budget-card__header">
 		<h3 class="header-title" style:--data-color={getById(themes, budget.theme_id)?.theme}>
-			{getCategoryById(categories, budget.category_id)?.category}
+			{getById(categories, budget.category_id)?.category}
 		</h3>
 		<div class="context-menu">
 			<BlankButton

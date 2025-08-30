@@ -6,9 +6,8 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
 	import { CustomSelect, CustomInput } from '$lib/components';
-	import { getCategoryById } from '$lib/helpers/categories';
+	import { getById } from '$lib/helpers/';
 	import { Close } from '$lib/assets/images';
-	import { getById } from '$lib/helpers/themes';
 
 	interface BudgetFormData {
 		category_id: string;
