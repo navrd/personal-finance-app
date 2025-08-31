@@ -117,7 +117,7 @@
 					</li>
 					<li class="action action_delete">
 						<form method="POST" action="?/deleteBudget" use:enhance={enhanceForm}>
-							<input type="hidden" name="id" value={budget.id} />
+							<!-- <input type="hidden" name="id" value={budget.id} /> -->
 							<BlankButton type="submit">Delete budget</BlankButton>
 						</form>
 					</li>

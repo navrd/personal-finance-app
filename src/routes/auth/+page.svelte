@@ -343,6 +343,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		height: 3.5rem;
 		&:hover,
 		&:active,
 		&:focus,

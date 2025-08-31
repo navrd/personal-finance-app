@@ -226,17 +226,6 @@
 					style="transform-origin: {conditionalCenter}px {conditionalCenter}px;"
 				/>
 			{/each}
-			<!-- <text
-				x={conditionalCenter}
-				y={conditionalCenter}
-				text-anchor="middle"
-				dominant-baseline="central"
-				font-size="16"
-				fill="black"
-				style="font-weight: 700;"
-			>
-				${totalLimit}
-			</text> -->
 			<text
 				x={conditionalCenter}
 				y={conditionalCenter - 10}

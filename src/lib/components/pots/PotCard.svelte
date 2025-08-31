@@ -70,6 +70,7 @@
 			} else {
 				await update();
 				loading = false;
+				showContextMenu = false;
 			}
 		};
 	};

@@ -186,7 +186,7 @@ export const actions: Actions = {
                 return fail(500, { message: 'Failed to update budget' } satisfies BudgetError);
             }
 
-            return { success: true, message: 'Pot updated successfully!' };
+            return { success: true, message: 'Budget updated successfully!' };
 
         } catch (err) {
             console.error('Unexpected error updating budget:', err);
@@ -208,7 +208,7 @@ export const actions: Actions = {
                 return fail(400, { message: 'Budget ID is required' } satisfies BudgetError);
             }
 
-            // Check if pot exists and belongs to user
+            // Check if budget exists and belongs to user
             const { data: existingBudget } = await supabase
                 .from('budgets')
                 .select('id')
@@ -221,7 +221,7 @@ export const actions: Actions = {
             }
 
 
-            // Delete the pot
+            // Delete the budget
             const { error } = await supabase
                 .from('budgets')
                 .delete()

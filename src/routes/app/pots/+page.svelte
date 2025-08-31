@@ -54,6 +54,7 @@
 		padding-block: 1rem;
 		border-radius: 0.5rem;
 		font-size: 0.875rem;
+		height: 3.5rem;
 		&:hover,
 		&:active,
 		&:focus {

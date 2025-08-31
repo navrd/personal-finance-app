@@ -168,7 +168,13 @@
 			>
 
 			<button type="submit" class="button" disabled={!isFormValid}>
-				{loading ? 'Saving...' : editingPot ? 'Update Pot' : 'Create Pot'}
+				{#if loading}
+					<div class="button__loading">
+						<div class="loading__dot"></div>
+						<div class="loading__dot"></div>
+						<div class="loading__dot"></div>
+					</div>
+				{:else}{editingPot ? 'Update Pot' : 'Create Pot'}{/if}
 			</button>
 		</form>
 	</div>
@@ -259,6 +265,9 @@
 		margin: 0;
 	}
 	.button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		border: 0;
 		color: var(--color-white);
 		background-color: var(--color-grey-900);
@@ -267,6 +276,7 @@
 		padding-block: 1rem;
 		border-radius: 0.5rem;
 		font-size: 0.875rem;
+		height: 3.5rem;
 		&:hover,
 		&:active,
 		&:focus,
@@ -274,5 +284,35 @@
 			cursor: pointer;
 			opacity: 50%;
 		}
+	}
+	.button__loading {
+		width: 5rem;
+		height: inherit;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	@for $i from 1 through 10 {
+		.button__loading :nth-child(#{$i}n) {
+			animation-delay: #{$i * 0.25}s;
+		}
+	}
+	@keyframes flickerAnimation {
+		0% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+	.loading__dot {
+		width: 1rem;
+		height: 1rem;
+		background: white;
+		border-radius: 50%;
+		animation: flickerAnimation 1s ease infinite;
 	}
 </style>
