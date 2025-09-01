@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { BudgetsOverview } from '$lib/components';
-	import BudgetsManager from '$lib/components/budgets/BudgetsManager.svelte';
+	import { BudgetsOverview, BudgetsManager, CustomButton } from '$lib/components';
 	import type { BudgetError } from '$lib/types/index.js';
 	import { type PageData } from '../$types.js';
 	interface Props {
@@ -20,7 +19,7 @@
 <header class="page-header">
 	<h2 class="page-header__title">Budgets</h2>
 	<div class="page-header__buttons">
-		<button class="button" onclick={() => (showForm = true)}>+ Add new budget</button>
+		<CustomButton onclick={() => (showForm = true)}>+ Add new budget</CustomButton>
 	</div>
 </header>
 <div class="budgets-grid">
@@ -51,23 +50,6 @@
 		gap: 0.75rem;
 		align-items: center;
 		justify-content: flex-end;
-	}
-	.button {
-		border: 0;
-		color: var(--color-white);
-		background-color: var(--color-grey-900);
-		line-height: 1.5;
-		padding-inline: 1rem;
-		padding-block: 1rem;
-		border-radius: 0.5rem;
-		font-size: 0.875rem;
-		height: 3.5rem;
-		&:hover,
-		&:active,
-		&:focus {
-			cursor: pointer;
-			opacity: 50%;
-		}
 	}
 
 	.budgets-grid {

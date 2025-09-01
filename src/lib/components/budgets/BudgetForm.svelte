@@ -5,7 +5,7 @@
 	import type { User } from '@supabase/supabase-js';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
-	import { CustomSelect, CustomInput } from '$lib/components';
+	import { CustomSelect, CustomInput, CustomButton, LoadingDots } from '$lib/components';
 	import { getById } from '$lib/helpers/';
 	import { Close } from '$lib/assets/images';
 
@@ -192,15 +192,11 @@
 					</p>
 				{/snippet}</CustomSelect
 			>
-			<button type="submit" class="button" disabled={!isFormValid}>
-								{#if loading}
-					<div class="button__loading">
-						<div class="loading__dot"></div>
-						<div class="loading__dot"></div>
-						<div class="loading__dot"></div>
-					</div>
+			<CustomButton type="submit" disabled={!isFormValid}>
+				{#if loading}
+					<LoadingDots />
 				{:else}{editingBudget ? 'Update Budget' : 'Create Budget'}{/if}
-			</button>
+			</CustomButton>
 		</form>
 	</div>
 </div>
@@ -303,57 +299,5 @@
 	}
 	.title {
 		margin: 0;
-	}
-	.button {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: 0;
-		color: var(--color-white);
-		background-color: var(--color-grey-900);
-		line-height: 1.5;
-		padding-inline: 1rem;
-		padding-block: 1rem;
-		border-radius: 0.5rem;
-		font-size: 0.875rem;
-		height: 3.5em;
-		&:hover,
-		&:active,
-		&:focus,
-		&:disabled {
-			cursor: pointer;
-			opacity: 50%;
-		}
-	}
-	.button__loading {
-		width: 5rem;
-		height: inherit;
-		min-height: inherit;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	@for $i from 1 through 10 {
-		.button__loading :nth-child(#{$i}n) {
-			animation-delay: #{$i * 0.25}s;
-		}
-	}
-	@keyframes flickerAnimation {
-		0% {
-			opacity: 1;
-		}
-		50% {
-			opacity: 0;
-		}
-		100% {
-			opacity: 1;
-		}
-	}
-	.loading__dot {
-		width: 1rem;
-		height: 1rem;
-		background: white;
-		border-radius: 50%;
-		animation: flickerAnimation 1s ease infinite;
 	}
 </style>

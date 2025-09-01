@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PotsManager from '$lib/components/pots/PotsManager.svelte';
+	import { PotsManager, CustomButton } from '$lib/components';
 	import type { PotError } from '$lib/types';
 	import { type PageData } from '../$types';
 
@@ -20,10 +20,12 @@
 
 <header class="page-header">
 	<h2 class="page-header__title">Pots</h2>
-	<div class="page-header__buttons"><button class="button" onclick={() => showForm = true}>+ Add new pot</button></div>
+	<div class="page-header__buttons">
+		<CustomButton onclick={() => (showForm = true)}>+ Add new pot</CustomButton>
+	</div>
 </header>
 
-<PotsManager {form} bind:showForm/>
+<PotsManager {form} bind:showForm />
 
 <style lang="scss">
 	.page-header {
@@ -44,22 +46,5 @@
 		gap: 0.75rem;
 		align-items: center;
 		justify-content: flex-end;
-	}
-	.button {
-		border: 0;
-		color: var(--color-white);
-		background-color: var(--color-grey-900);
-		line-height: 1.5;
-		padding-inline: 1rem;
-		padding-block: 1rem;
-		border-radius: 0.5rem;
-		font-size: 0.875rem;
-		height: 3.5rem;
-		&:hover,
-		&:active,
-		&:focus {
-			cursor: pointer;
-			opacity: 50%;
-		}
 	}
 </style>

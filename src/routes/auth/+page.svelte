@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import { CustomInput } from '$lib/components';
-	import BlankButton from '$lib/components/utility/BlankButton.svelte';
+	import { CustomInput, CustomButton, LoadingDots, BlankButton } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
 
 	interface FormError {
@@ -229,15 +228,11 @@
 						validator={validateConfirmPassword}
 					/>
 
-					<button class="button" type="submit" disabled={!canSubmitSignup}>
+					<CustomButton type="submit" disabled={!canSubmitSignup}>
 						{#if isLoading}
-							<div class="button__loading">
-								<div class="loading__dot"></div>
-								<div class="loading__dot"></div>
-								<div class="loading__dot"></div>
-							</div>
+							<LoadingDots />
 						{:else}Sign Up{/if}
-					</button>
+					</CustomButton>
 				</form>
 				<h2 class="auth-switch">
 					Already have an account? <BlankButton onclick={() => switchTabs('login')}
@@ -277,15 +272,11 @@
 						validator={validatePassword}
 					/>
 
-					<button type="submit" class="button" disabled={!canSubmitLogin}>
+					<CustomButton type="submit" disabled={!canSubmitLogin}>
 						{#if isLoading}
-							<div class="button__loading">
-								<div class="loading__dot"></div>
-								<div class="loading__dot"></div>
-								<div class="loading__dot"></div>
-							</div>
+							<LoadingDots />
 						{:else}Login{/if}
-					</button>
+					</CustomButton>
 				</form>
 				<h2 class="auth-switch">
 					Don't have an account? <BlankButton onclick={() => switchTabs('signup')}
@@ -331,27 +322,6 @@
 		gap: 0.75rem;
 		justify-content: center;
 	}
-	.button {
-		border: 0;
-		color: var(--color-white);
-		background-color: var(--color-grey-900);
-		line-height: 1.5;
-		padding-inline: 1rem;
-		padding-block: 1rem;
-		border-radius: 0.5rem;
-		font-size: 0.875rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 3.5rem;
-		&:hover,
-		&:active,
-		&:focus,
-		&:disabled {
-			cursor: pointer;
-			opacity: 50%;
-		}
-	}
 	.auth-switch {
 		display: flex;
 		gap: 0.25rem;
@@ -362,35 +332,5 @@
 		font-weight: bolder;
 		text-decoration: underline;
 		cursor: pointer;
-	}
-	.button__loading {
-		width: 5rem;
-		height: inherit;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	@for $i from 1 through 10 {
-		.button__loading :nth-child(#{$i}n) {
-			animation-delay: #{$i * 0.25}s;
-		}
-	}
-	@keyframes flickerAnimation {
-		0% {
-			opacity: 1;
-		}
-		50% {
-			opacity: 0;
-		}
-		100% {
-			opacity: 1;
-		}
-	}
-	.loading__dot {
-		width: 1rem;
-		height: 1rem;
-		background: white;
-		border-radius: 50%;
-		animation: flickerAnimation 1s ease infinite;
 	}
 </style>

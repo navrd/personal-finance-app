@@ -1,14 +1,14 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
 	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '@sveltejs/kit';
 	import { invalidate } from '$app/navigation';
+	import { clickoutside } from '@svelte-put/clickoutside';
 	import { Dots } from '$lib/assets/images';
 	import type { ColorTheme, CreatePotData, Pot } from '$lib/types';
-	import { clickoutside } from '@svelte-put/clickoutside';
-	import { BlankButton } from '../utility';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import PotMoneyControls from './PotMoneyControls.svelte';
+	import { PotMoneyControls, LoadingDots, BlankButton } from '$lib/components';
 	import { getById } from '$lib/helpers';
-	import { getContext } from 'svelte';
+
 	import type { User } from '@supabase/supabase-js';
 
 	interface PotCardProps {
@@ -30,7 +30,6 @@
 	}: PotCardProps = $props();
 
 	let themes: ColorTheme[] = getContext('themes');
-	let user: () => User = getContext('user');
 	let showContextMenu = $state(false);
 	let showPotControls = $state(false);
 	let addMoney = $state(false);
@@ -104,7 +103,11 @@
 					<li class="action action_delete">
 						<form method="POST" action="?/deletePot" use:enhance={enhanceDeleteForm}>
 							<input type="hidden" name="id" value={pot.id} />
-							<BlankButton type="submit">Delete pot</BlankButton>
+							<BlankButton type="submit" fullWidth
+								>{#if loading}
+									<LoadingDots dotColor="var(--color-red)" />
+								{:else}Delete pot{/if}</BlankButton
+							>
 						</form>
 					</li>
 				</ul>

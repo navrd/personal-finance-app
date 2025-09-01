@@ -4,7 +4,7 @@
 	import { Close } from '$lib/assets/images';
 	import type { Balance, ColorTheme, Pot } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import CustomInput from '../CustomInput.svelte';
+	import { CustomInput, CustomButton, LoadingDots } from '$lib/components';
 	import { getContext } from 'svelte';
 	import { getById } from '$lib/helpers';
 
@@ -144,9 +144,11 @@
 				validator={validateAmount}
 			/>
 			<input type="hidden" name="total" value={newAmount} />
-			<button type="submit" class="button" disabled={!isFormValid}>
-				{loading ? 'Saving...' : addMoney ? 'Confirm Addition' : 'Confirm Withdraw'}
-			</button>
+			<CustomButton type="submit" disabled={!isFormValid}>
+				{#if loading}
+					<LoadingDots />
+				{:else}{addMoney ? 'Confirm Addition' : 'Confirm Withdraw'}{/if}
+			</CustomButton>
 		</form>
 	</div>
 </div>
@@ -213,24 +215,6 @@
 		font-size: 2rem;
 		line-height: 1.2;
 		font-weight: bolder;
-	}
-	.button {
-		border: 0;
-		color: var(--color-white);
-		background-color: var(--color-grey-900);
-		line-height: 1.5;
-		padding-inline: 1rem;
-		padding-block: 1rem;
-		border-radius: 0.5rem;
-		font-size: 0.875rem;
-		height: 3.5rem;
-		&:hover,
-		&:active,
-		&:focus,
-		&:disabled {
-			cursor: pointer;
-			opacity: 50%;
-		}
 	}
 	.title {
 		font-size: 1.25rem;

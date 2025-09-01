@@ -10,10 +10,9 @@
 	} from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
-	import BlankButton from '../utility/BlankButton.svelte';
 	import { ArrowRight, Dots } from '$lib/assets/images';
 	import { clickoutside } from '@svelte-put/clickoutside';
-	import { TransactionsList } from '$lib/components';
+	import { TransactionsList, LoadingDots, BlankButton } from '$lib/components';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import { getById } from '$lib/helpers';
 
@@ -117,8 +116,12 @@
 					</li>
 					<li class="action action_delete">
 						<form method="POST" action="?/deleteBudget" use:enhance={enhanceForm}>
-							<!-- <input type="hidden" name="id" value={budget.id} /> -->
-							<BlankButton type="submit">Delete budget</BlankButton>
+							<input type="hidden" name="id" value={budget.id} />
+							<BlankButton type="submit" fullWidth
+								>{#if loading}
+									<LoadingDots dotColor="var(--color-red)" />
+								{:else}Delete budget{/if}</BlankButton
+							>
 						</form>
 					</li>
 				</ul>

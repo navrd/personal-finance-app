@@ -11,3 +11,5 @@ export { default as SearchInput } from './SearchInput.svelte';
 export { default as DropdownFilter } from './DropdownFilter.svelte';
 export { default as CustomSelect } from './CustomSelect.svelte';
 export { default as CustomInput } from './CustomInput.svelte';
+export { default as CustomButton } from './CustomButton.svelte';
+export { default as LoadingDots } from './LoadingDots.svelte';
