@@ -71,6 +71,7 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
     }
 
     async function fetchUserBalance(): Promise<Balance> {
+        depends('app:balance')
         try {
             const { data, error } = await supabase
                 .from('balance')

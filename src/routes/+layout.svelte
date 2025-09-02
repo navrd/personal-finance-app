@@ -47,6 +47,9 @@
 			.on('postgres_changes', { event: '*', schema: 'public', table: 'pots' }, () =>
 				invalidate('app:pots')
 			)
+			.on('postgres_changes', { event: '*', schema: 'public', table: 'balance' }, () =>
+				invalidate('app:balance')
+			)
 			// etc...
 			.subscribe();
 	});

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { sortTransactions } from '$lib/helpers/transactions';
-	import type { Transaction, TransactionSortOption } from '$lib/types';
+	import type { Budget, Transaction, TransactionSortOption } from '$lib/types';
 	import { getContext } from 'svelte';
 	import TransactionsListItem from './TransactionsListItem.svelte';
 
@@ -8,17 +8,30 @@
 		transactions: Transaction[];
 		overview?: boolean;
 		reccuring?: boolean;
+		loading?: boolean;
+		editingBudget?: Budget | null;
 	}
 
 	let globalTransactions: () => Transaction[] = getContext('transactions');
 
-	let { transactions, overview = false, reccuring = false }: TransactionListProps = $props();
+	let {
+		transactions,
+		overview = false,
+		reccuring = false,
+		editingBudget = null,
+		loading = false
+	}: TransactionListProps = $props();
+	// $inspect('editingBudget: ', editingBudget)
 
 	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let currentDate = $state(
 		new Date(
-			sortTransactions(globalTransactions(), transactionSortOptions[2].id, transactionSortOptions)[0].date
+			sortTransactions(
+				globalTransactions(),
+				transactionSortOptions[2].id,
+				transactionSortOptions
+			)[0].date
 		)
 	);
 
@@ -60,13 +73,15 @@
 				{transaction}
 				{overview}
 				{reccuring}
+				{loading}
+				{editingBudget}
 				paid={transaction.paid}
 				dueSoon={transaction.dueSoon}
 			/>
 		{/each}
 	{:else}
 		{#each transactions as transaction}
-			<TransactionsListItem {transaction} {overview} {reccuring} />
+			<TransactionsListItem {transaction} {overview} {reccuring} {loading} {editingBudget} />
 		{/each}
 	{/if}
 </ul>

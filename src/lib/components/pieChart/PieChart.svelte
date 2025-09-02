@@ -7,16 +7,25 @@
 		label: string;
 		value: number;
 		color: string;
+		id: string;
 	}
 
-	interface Props {
+	interface PieChartProps {
 		radius?: number;
 		strokeWidth?: number;
 		animationDuration?: number;
+		loading: boolean;
+		editingBudget: Budget | null;
 	}
 
-	let { radius = 100, strokeWidth = 20, animationDuration = 2000 }: Props = $props();
-	let themes: ColorTheme[] = getContext('themes')
+	let {
+		radius = 100,
+		strokeWidth = 20,
+		animationDuration = 2000,
+		loading,
+		editingBudget
+	}: PieChartProps = $props();
+	let themes: ColorTheme[] = getContext('themes');
 	let budgets: () => Budget[] = getContext('budgets');
 	let transactions: () => Transaction[] = getContext('transactions');
 	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
@@ -27,17 +36,18 @@
 			return budgetCategoryIds.has(transaction.category_id) ? total + transaction.amount : total;
 		}, 0);
 
-		return Math.abs(total)
+		return Math.abs(total);
 	});
 
 	let totalLimit = $derived(budgets().reduce((acc, { maximum }) => acc + maximum, 0));
 	let preparedBudgets = $derived.by(() => {
 		let result: DataSegment[] = [];
 		budgets().forEach((budget) => {
-			let segment: DataSegment = { label: '', value: 0, color: '' };
+			let segment: DataSegment = { label: '', value: 0, color: '', id: '' };
 			segment.label = getById(categories, budget.category_id)!.category;
 			segment.value = Math.round((budget.maximum / totalLimit) * 100);
 			segment.color = getById(themes, budget.theme_id)!.theme;
+			segment.id = budget.id;
 			result.push(segment);
 		});
 		return result;
@@ -204,7 +214,9 @@
 					cy={conditionalCenter}
 					r={radius}
 					fill="none"
-					stroke={segment.color}
+					stroke={loading && editingBudget?.id === segment.id
+						? 'var(--color-grey-300)'
+						: segment.color}
 					stroke-width={strokeWidth}
 					stroke-dasharray={segment.dashArray}
 					stroke-dashoffset={segment.dashOffset}
@@ -219,7 +231,9 @@
 					cy={conditionalCenter}
 					fill="none"
 					r={radius - strokeWidth / 2}
-					stroke={`color-mix(in srgb, ${segment.color} 75%, white)`}
+					stroke={loading && editingBudget?.id === segment.id
+						? `color-mix(in srgb, var(--color-grey-300) 75%, white)`
+						: `color-mix(in srgb, ${segment.color} 75%, white)`}
 					stroke-width={strokeWidth / 2}
 					stroke-dasharray={segment.dashArray}
 					stroke-dashoffset={segment.dashOffset}

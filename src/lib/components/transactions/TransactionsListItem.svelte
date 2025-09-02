@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Category, Transaction } from '$lib/types';
+	import type { Budget, Category, Transaction } from '$lib/types';
 	import { OK, NotOK } from '$lib/assets/images';
 	import { getById } from '$lib/helpers/';
 	import { getContext } from 'svelte';
@@ -10,6 +10,8 @@
 		reccuring?: boolean;
 		dueSoon?: boolean;
 		paid?: boolean;
+		loading?: boolean;
+		editingBudget?: Budget | null;
 	}
 
 	let {
@@ -17,9 +19,17 @@
 		overview = false,
 		reccuring = false,
 		paid = false,
-		dueSoon = false
+		dueSoon = false,
+		loading = false,
+		editingBudget = null
 	}: TransactionsListItemProps = $props();
-	
+
+	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
+
+	let isLoading = $derived.by(() => {
+		return editingBudget?.category_id === transaction.category_id && loading;
+	});
+
 	const formatDate = (dateString: string): string => {
 		let date = new Date(dateString);
 		const months = [
@@ -43,26 +53,28 @@
 
 		return `${day} ${month} ${year}`;
 	};
-
-	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
 </script>
 
 <li class="transactions-list__item">
 	<div class="transactions-list__category">
 		<p class="transaction-creds">
 			{#await import(`../../${transaction.avatar}`) then { default: src }}
-				<img class="avatar" {src} alt={transaction.name} />
+				{#if isLoading}<span class="avatar-loading"></span>{:else}<img
+						class="avatar"
+						{src}
+						alt={transaction.name}
+					/>{/if}
 			{/await}
-			<span>{transaction.name}</span>
+			<span class="transaction-creds__text" class:loading={isLoading}>{transaction.name}</span>
 		</p>
 	</div>
 	{#if !overview}
 		{#if !reccuring}<div class="transactions-list__category">
-				<p>{getById(categories, transaction.category_id)?.category}</p>
+				<p class:loading={isLoading}>{getById(categories, transaction.category_id)?.category}</p>
 			</div>{/if}
 
 		<div class="transactions-list__category" class:paid class:due-soon={dueSoon}>
-			<span
+			<span class:loading={isLoading}
 				>{reccuring
 					? `Monthly — ${new Date(transaction.date).getDate()}`
 					: formatDate(transaction.date)}</span
@@ -77,13 +89,14 @@
 			class:amount_plus={transaction.amount > 0}
 			class:paid
 			class:due-soon={dueSoon}
+			class:loading={isLoading}
 		>
 			{transaction.amount > 0
 				? `+$${transaction.amount.toFixed(2)}`
 				: transaction.amount.toFixed(2).replace('-', '-$')}
 		</p>
 		{#if overview}
-			<p>{formatDate(transaction.date)}</p>
+			<p class:loading={isLoading}>{formatDate(transaction.date)}</p>
 		{/if}
 	</div>
 </li>
@@ -122,17 +135,25 @@
 		max-height: 2rem;
 		border-radius: 50%;
 	}
+	.avatar-loading {
+		min-width: 2rem;
+		max-width: 2rem;
+		min-height: 2rem;
+		max-height: 2rem;
+		border-radius: 50%;
+		background: var(--color-grey-300);
+	}
 	.transaction-creds {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
 		gap: 0.75rem;
-		span {
-			color: var(--color-grey-900);
-			font-size: 0.875rem;
-			line-height: 1.5;
-			font-weight: 600;
-		}
+	}
+	.transaction-creds__text {
+		color: var(--color-grey-900);
+		font-size: 0.875rem;
+		line-height: 1.5;
+		font-weight: 600;
 	}
 	.amount {
 		color: var(--color-grey-900);
@@ -148,5 +169,10 @@
 	}
 	.due-soon {
 		color: var(--color-red);
+	}
+	.loading {
+		background: var(--color-grey-300);
+		color: var(--color-grey-300);
+		border-radius: 0.25rem;
 	}
 </style>

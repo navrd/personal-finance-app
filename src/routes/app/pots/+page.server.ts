@@ -214,6 +214,120 @@ export const actions: Actions = {
             return fail(500, { message: 'An unexpected error occurred' } satisfies PotError);
         }
     },
+    addToPot: async ({ request, locals: { supabase, safeGetSession } }) => {
+        const { session } = await safeGetSession();
+        if (!session) {
+            throw redirect(303, '/auth');
+        }
+
+        try {
+            const formData = await request.formData();
+            const pot_id = formData.get('id')?.toString();
+            const amountStr = formData.get('amount')?.toString();
+
+            // Validation
+            if (!pot_id) {
+                return fail(400, { message: 'Pot ID is required' });
+            }
+
+            const amount = parseFloat(amountStr || '0');
+            if (isNaN(amount) || amount <= 0) {
+                return fail(400, {
+                    message: 'Amount must be a positive number',
+                    pot_id, amount: amountStr
+                });
+            }
+
+            // Optional: Set a reasonable maximum
+            if (amount > 100000) {
+                return fail(400, {
+                    message: 'Amount cannot exceed $100,000',
+                    pot_id, amount: amountStr
+                });
+            }
+
+            const { data, error } = await supabase
+                .rpc('add_money_to_pot', {
+                    p_user_id: session.user.id,
+                    p_pot_id: pot_id,
+                    p_amount: amount
+                });
+
+            if (error) {
+                console.error('Error adding money to pot:', error);
+                return fail(500, {
+                    message: 'Failed to add money. Please try again.',
+                    pot_id, amount: amountStr
+                });
+            }
+
+            if (!data.success) {
+                return fail(400, {
+                    message: data.error,
+                    pot_id, amount: amountStr
+                });
+            }
+
+            return { success: true, message: data.message };
+
+        } catch (err) {
+            console.error('Unexpected error adding money to pot:', err);
+            return fail(500, { message: 'An unexpected error occurred' });
+        }
+    },
+    withdrawFromPot: async ({ request, locals: { supabase, safeGetSession } }) => {
+        const { session } = await safeGetSession();
+        if (!session) {
+            throw redirect(303, '/auth');
+        }
+
+        try {
+            const formData = await request.formData();
+            const pot_id = formData.get('id')?.toString();
+            const amountStr = formData.get('amount')?.toString();
+
+            // Validation
+            if (!pot_id) {
+                return fail(400, { message: 'Pot ID is required' });
+            }
+
+            const amount = parseFloat(amountStr || '0');
+            if (isNaN(amount) || amount <= 0) {
+                return fail(400, {
+                    message: 'Amount must be a positive number',
+                    pot_id, amount: amountStr
+                });
+            }
+
+            const { data, error } = await supabase
+                .rpc('withdraw_from_pot', {
+                    p_user_id: session.user.id,
+                    p_pot_id: pot_id,
+                    p_amount: amount
+                });
+
+            if (error) {
+                console.error('Error withdrawing from pot:', error);
+                return fail(500, {
+                    message: 'Failed to withdraw money. Please try again.',
+                    pot_id, amount: amountStr
+                });
+            }
+
+            if (!data.success) {
+                return fail(400, {
+                    message: data.error,
+                    pot_id, amount: amountStr
+                });
+            }
+
+            return { success: true, message: data.message };
+
+        } catch (err) {
+            console.error('Unexpected error withdrawing from pot:', err);
+            return fail(500, { message: 'An unexpected error occurred' });
+        }
+    },
 
     deletePot: async ({ request, locals: { supabase, safeGetSession } }) => {
         const { session } = await safeGetSession();
@@ -236,7 +350,7 @@ export const actions: Actions = {
                 .eq('id', id)
                 .eq('user_id', session.user.id)
                 .single();
-                
+
 
             if (!existingPot) {
                 return fail(404, { message: 'Pot not found' } satisfies PotError);

@@ -10,6 +10,7 @@
 
 	interface PotMoneyControlsProps {
 		pot: Pot;
+		editingPot: Pot | null;
 		loading: boolean;
 		showPotControls: boolean;
 		addMoney: boolean;
@@ -17,6 +18,7 @@
 
 	let {
 		pot,
+		editingPot = $bindable(),
 		loading = $bindable(),
 		showPotControls = $bindable(),
 		addMoney = $bindable()
@@ -32,6 +34,13 @@
 			return pot.total - amount < 0 ? 0 : pot.total - amount;
 		}
 	});
+	let amountToAdd = $derived.by(() => {
+		if (addMoney) {
+			return pot.target >= pot.total + amount ? amount : pot.target - pot.total;
+		} else {
+			return pot.total - amount < 0 ? pot.total : amount;
+		}
+	});
 	let newPercentage = $derived(pot.target > 0 ? Math.min((newAmount / pot.target) * 100, 100) : 0);
 
 	const enhanceControlsForm: SubmitFunction = async ({ formData, cancel }) => {
@@ -39,10 +48,12 @@
 
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
+				await invalidate('app:balance');
 				await invalidate('app:pots');
 				loading = false;
 				showPotControls = false;
 				addMoney = false;
+				editingPot = null;
 			} else {
 				await update();
 				loading = false;
@@ -52,6 +63,7 @@
 	function closeControls() {
 		showPotControls = false;
 		addMoney = false;
+		editingPot = null;
 	}
 	function getProgressPercentage(total: number): number {
 		return pot.target > 0 ? Math.min((total / pot.target) * 100, 100) : 0;
@@ -82,7 +94,12 @@
 
 <div class="pot-controls-wrapper">
 	<div class="form-container">
-		<form class="pot-form" method="POST" action="?/updatePot" use:enhance={enhanceControlsForm}>
+		<form
+			class="pot-form"
+			method="POST"
+			action={addMoney ? '?/addToPot' : '?/withdrawFromPot'}
+			use:enhance={enhanceControlsForm}
+		>
 			<header class="form-header">
 				<h2 class="title">
 					{addMoney ? `Add to '${pot.name}'` : `Withdraw from '${pot.name}'`}
@@ -121,7 +138,7 @@
 				{#if addMoney}
 					<div
 						class="progress-new-amount"
-						style:width={newAmount > pot.target
+						style:width={newAmount >= pot.target
 							? `${getRequiredToFillPercentage()}%`
 							: `${getProgressPercentage(amount)}%`}
 						style:background-color={getById(themes, pot.theme_id)?.theme}
@@ -143,7 +160,7 @@
 				placeholder="e.g. 300"
 				validator={validateAmount}
 			/>
-			<input type="hidden" name="total" value={newAmount} />
+			<input type="hidden" name="amount" value={amountToAdd} />
 			<CustomButton type="submit" disabled={!isFormValid}>
 				{#if loading}
 					<LoadingDots />

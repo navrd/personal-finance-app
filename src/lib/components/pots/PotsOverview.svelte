@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { PotsOutline } from '$lib/assets/images';
-	import type { Pot } from '$lib/types';
+	import { getById } from '$lib/helpers';
+	import type { ColorTheme, Pot } from '$lib/types';
+	import { getContext } from 'svelte';
 
 	interface PotsOverviewProps {
 		totalSavings: number;
@@ -8,6 +10,8 @@
 	}
 
 	let { totalSavings, pots }: PotsOverviewProps = $props();
+
+	let themes: ColorTheme[] = getContext('themes');
 </script>
 
 <div class="segment__data">
@@ -21,7 +25,7 @@
 
 	<div class="segment__summary">
 		{#each pots as pot}
-			<div class="pot" style:--data-color={pot.theme_id}>
+			<div class="pot" style:--data-color={getById(themes, pot.theme_id)?.theme}>
 				<h3 class="pot__label">{pot.name}</h3>
 				<p class="pot__sum">${pot.total}</p>
 			</div>
@@ -73,6 +77,7 @@
 		padding: 0 1.5rem;
 		position: relative;
 		flex-basis: calc(50% - 0.75rem);
+
 		&:before {
 			position: absolute;
 			left: 0;

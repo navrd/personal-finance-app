@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { BudgetsOverview, BudgetsManager, CustomButton } from '$lib/components';
-	import type { BudgetError } from '$lib/types/index.js';
+	import type { Budget, BudgetError } from '$lib/types';
 	import { type PageData } from '../$types.js';
 	interface Props {
 		data: PageData;
@@ -9,6 +9,8 @@
 
 	let { form }: Props = $props();
 	let showForm = $state(false);
+	let loading = $state(false);
+	let editingBudget: Budget | null = $state(null);
 </script>
 
 <svelte:head>
@@ -24,10 +26,10 @@
 </header>
 <div class="budgets-grid">
 	<div class="budgets-grid__segment budgets-grid__segment_overview">
-		<BudgetsOverview />
+		<BudgetsOverview {loading} {editingBudget} />
 	</div>
 	<div class="budgets-grid__segment budgets-grid__segment_budgets">
-		<BudgetsManager {form} bind:showForm />
+		<BudgetsManager bind:editingBudget bind:loading {form} bind:showForm />
 	</div>
 </div>
 

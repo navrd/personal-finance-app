@@ -9,8 +9,6 @@
 	import { PotMoneyControls, LoadingDots, BlankButton } from '$lib/components';
 	import { getById } from '$lib/helpers';
 
-	import type { User } from '@supabase/supabase-js';
-
 	interface PotCardProps {
 		pot: Pot;
 		editingPot: Pot | null;
@@ -33,6 +31,9 @@
 	let showContextMenu = $state(false);
 	let showPotControls = $state(false);
 	let addMoney = $state(false);
+
+	let isLoading = $derived(loading && editingPot?.id === pot.id);
+
 	function getProgressPercentage(pot: Pot): number {
 		return pot.target > 0 ? Math.min((pot.total / pot.target) * 100, 100) : 0;
 	}
@@ -74,10 +75,12 @@
 		};
 	};
 	function add() {
+		editingPot = pot;
 		showPotControls = true;
 		addMoney = true;
 	}
 	function withdraw() {
+		editingPot = pot;
 		showPotControls = true;
 		addMoney = false;
 	}
@@ -85,7 +88,13 @@
 
 <div class="pot-card">
 	<div class="pot-card__header">
-		<h3 class="header-title" style:--data-color={getById(themes, pot.theme_id)?.theme}>
+		<h3
+			class="header-title"
+			class:loading={isLoading}
+			style:--data-color={isLoading
+				? 'var(--color-grey-300)'
+				: getById(themes, pot.theme_id)?.theme}
+		>
 			{pot.name}
 		</h3>
 		<div class="context-menu">
@@ -116,34 +125,38 @@
 	</div>
 
 	<div class="pot-amount">
-		<span class="label">Total</span>
-		<span class="value">${pot.total.toFixed(2)}</span>
+		<span class="label" class:loading={isLoading}>Total</span>
+		<span class="value" class:loading={isLoading}>${pot.total.toFixed(2)}</span>
 	</div>
 
 	<div class="progress-container">
-		<div class="progress-bar">
+		<div class="progress-bar" class:loading={isLoading}>
 			<div
 				class="progress-fill"
-				style="width: {getProgressPercentage(pot)}%; background-color: {getById(
-					themes,
-					pot.theme_id
-				)?.theme}"
+				style="width: {getProgressPercentage(pot)}%; background-color: {isLoading
+					? 'var(--color-grey-300)'
+					: getById(themes, pot.theme_id)?.theme}"
+				class:loading={isLoading}
 			></div>
 		</div>
 		<div class="progress-data">
-			<span class="progress-amount">
+			<span class="progress-amount" class:loading={isLoading}>
 				{getProgressPercentage(pot).toFixed(1)}%
 			</span>
-			<span class="progress-target">Target of ${pot.target}</span>
+			<span class="progress-target" class:loading={isLoading}>Target of ${pot.target}</span>
 		</div>
 		<div class="actions">
-			<button class="action-button" onclick={add}>+ Add Money</button>
-			<button class="action-button" onclick={withdraw}>Withdraw</button>
+			<button class="action-button" disabled={isLoading} onclick={add}
+				>{#if isLoading}<LoadingDots dotColor="var(--color-grey-300)" />{:else}+ Add Money{/if}</button
+			>
+			<button class="action-button" disabled={isLoading} onclick={withdraw}
+				>{#if isLoading}<LoadingDots dotColor="var(--color-grey-300)" />{:else}Withdraw{/if}</button
+			>
 		</div>
 	</div>
 </div>
 {#if showPotControls}
-	<PotMoneyControls {pot} bind:loading bind:showPotControls bind:addMoney />
+	<PotMoneyControls {pot} bind:editingPot bind:loading bind:showPotControls bind:addMoney />
 {/if}
 
 <style lang="scss">
@@ -288,9 +301,18 @@
 		background: var(--color-beige-100);
 		color: var(--color-grey-900);
 		font-weight: bolder;
+		min-height: 3.5rem;
 		&:hover {
 			border: 1px solid var(--color-grey-900);
 			background: white;
 		}
+		&:disabled {
+			opacity: 0.5;
+		}
+	}
+	.loading {
+		background: var(--color-grey-300);
+		color: var(--color-grey-300);
+		border-radius: 0.25rem;
 	}
 </style>

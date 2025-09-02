@@ -14,25 +14,31 @@
 	interface BudgetsManagerProps {
 		form?: BudgetError | null;
 		showForm: boolean;
+		loading: boolean;
+		editingBudget: Budget | null;
 	}
 
-	let { form, showForm = $bindable() }: BudgetsManagerProps = $props();
+	let {
+		form,
+		showForm = $bindable(),
+		loading = $bindable(),
+		editingBudget = $bindable()
+	}: BudgetsManagerProps = $props();
 
 	let user: () => User = getContext('user');
 
 	// Reactive state
 	let budgets: () => Budget[] = getContext('budgets');
-	let loading = $state(false);
+
 	let error: string | null | unknown = $state(null);
 
 	// Form state
-	let editingBudget: Budget | null = $state(null);
+
 	let formData: BudgetFormData & { id?: string } = $state({
 		category_id: '',
 		maximum: '',
 		theme_id: ''
 	});
-
 
 	function resetFormData() {
 		formData = {

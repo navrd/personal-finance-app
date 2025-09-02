@@ -46,6 +46,7 @@
 	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let showContextMenu = $state(false);
+let isLoading = $derived(loading && editingBudget?.id === budget.id);
 
 	function editBudget(budget: Budget) {
 		editingBudget = budget;
@@ -99,7 +100,13 @@
 
 <div class="budget-card">
 	<div class="budget-card__header">
-		<h3 class="header-title" style:--data-color={getById(themes, budget.theme_id)?.theme}>
+		<h3
+			class="header-title"
+			style:--data-color={isLoading
+				? 'var(--color-grey-300)'
+				: getById(themes, budget.theme_id)?.theme}
+			class:loading={isLoading}
+		>
 			{getById(categories, budget.category_id)?.category}
 		</h3>
 		<div class="context-menu">
@@ -129,36 +136,42 @@
 		</div>
 	</div>
 
-	<p class="budget-amount">Maximum of ${budget.maximum}</p>
+	<p class="budget-amount" class:loading={isLoading}>Maximum of ${budget.maximum}</p>
 
 	<div class="amount-progress">
 		<div
 			class="amount-progress__value"
 			style:--data-color={getById(themes, budget.theme_id)?.theme}
 			style:--data-width={`${(spent * -100) / budget.maximum}%`}
+			class:loading={isLoading}
 		></div>
 	</div>
 
 	<div class="budget-data">
-		<div class="spent" style:--data-color={getById(themes, formData.theme_id)?.theme}>
+		<div
+			class="spent"
+			style:--data-color={isLoading
+				? 'var(--color-grey-300)'
+				: getById(themes, budget.theme_id)?.theme}
+		>
 			<div class="data">
-				<p class="label">Spent</p>
-				<p class="sum">${(spent * -1).toFixed(0)}</p>
+				<p class="label" class:loading={isLoading}>Spent</p>
+				<p class="sum" class:loading={isLoading}>${(spent * -1).toFixed(0)}</p>
 			</div>
 		</div>
 		<div class="remaining">
 			<div class="data">
-				<p class="label">Remaining</p>
-				<p class="sum">${(budget.maximum - spent * -1).toFixed(0)}</p>
+				<p class="label" class:loading={isLoading}>Remaining</p>
+				<p class="sum" class:loading={isLoading}>${(budget.maximum - spent * -1).toFixed(0)}</p>
 			</div>
 		</div>
 	</div>
 	<div class="latest-transactions">
 		<div class="segment__header">
-			<h2 class="segment_title">Latest transactions</h2>
+			<h2 class="segment_title" class:loading={isLoading}>Latest transactions</h2>
 			<a class="details" href="/app/transactions"><span>See Details</span> {@html ArrowRight}</a>
 		</div>
-		<TransactionsList transactions={latestTransactions} overview />
+		<TransactionsList transactions={latestTransactions} overview {loading} {editingBudget} />
 	</div>
 </div>
 
@@ -223,6 +236,7 @@
 	.data {
 		display: flex;
 		flex-direction: column;
+		gap: 0.25rem;
 	}
 	.budget-data {
 		display: flex;
@@ -333,5 +347,10 @@
 		font-size: 0.875rem;
 		line-height: 1.5;
 		color: var(--color-grey-500);
+	}
+	.loading {
+		background: var(--color-grey-300);
+		color: var(--color-grey-300);
+		border-radius: 0.25rem;
 	}
 </style>
