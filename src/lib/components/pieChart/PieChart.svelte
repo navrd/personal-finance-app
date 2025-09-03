@@ -214,9 +214,8 @@
 					cy={conditionalCenter}
 					r={radius}
 					fill="none"
-					stroke={loading && editingBudget?.id === segment.id
-						? 'var(--color-grey-300)'
-						: segment.color}
+					stroke={segment.color}
+					class:loading-circle={loading && editingBudget?.id === segment.id}
 					stroke-width={strokeWidth}
 					stroke-dasharray={segment.dashArray}
 					stroke-dashoffset={segment.dashOffset}
@@ -231,9 +230,8 @@
 					cy={conditionalCenter}
 					fill="none"
 					r={radius - strokeWidth / 2}
-					stroke={loading && editingBudget?.id === segment.id
-						? `color-mix(in srgb, var(--color-grey-300) 75%, white)`
-						: `color-mix(in srgb, ${segment.color} 75%, white)`}
+					stroke={`color-mix(in srgb, ${segment.color} 75%, white)`}
+					class:loading-circle-reverse={loading && editingBudget?.id === segment.id}
 					stroke-width={strokeWidth / 2}
 					stroke-dasharray={segment.dashArray}
 					stroke-dashoffset={segment.dashOffset}

@@ -141,7 +141,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	<div class="amount-progress">
 		<div
 			class="amount-progress__value"
-			style:--data-color={getById(themes, budget.theme_id)?.theme}
+			style:--data-color={isLoading ? 'var(--color-grey-300)' :getById(themes, budget.theme_id)?.theme}
 			style:--data-width={`${(spent * -100) / budget.maximum}%`}
 			class:loading={isLoading}
 		></div>
@@ -347,10 +347,5 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		font-size: 0.875rem;
 		line-height: 1.5;
 		color: var(--color-grey-500);
-	}
-	.loading {
-		background: var(--color-grey-300);
-		color: var(--color-grey-300);
-		border-radius: 0.25rem;
 	}
 </style>

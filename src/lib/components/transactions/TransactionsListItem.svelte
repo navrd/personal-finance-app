@@ -170,9 +170,4 @@
 	.due-soon {
 		color: var(--color-red);
 	}
-	.loading {
-		background: var(--color-grey-300);
-		color: var(--color-grey-300);
-		border-radius: 0.25rem;
-	}
 </style>
