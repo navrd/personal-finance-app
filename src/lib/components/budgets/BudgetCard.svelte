@@ -203,29 +203,6 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		font-size: 1rem;
 		font-weight: 600;
 	}
-	.details {
-		text-decoration: none;
-		display: flex;
-		gap: 0.75rem;
-		font-size: 0.875rem;
-		line-height: 1.5;
-		color: var(--color-grey-500);
-		align-items: center;
-		justify-content: center;
-		font-weight: 350;
-		font-style: normal;
-		* {
-			color: currentColor;
-			fill: currentColor;
-		}
-		&:hover {
-			color: var(--color-grey-900);
-			* {
-				color: currentColor;
-				fill: currentColor;
-			}
-		}
-	}
 	.latest-transactions {
 		display: flex;
 		flex-direction: column;

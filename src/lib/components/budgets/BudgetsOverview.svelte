@@ -6,10 +6,10 @@
 	import { page } from '$app/state';
 
 	interface BudgetsOverviewProps {
-		loading: boolean;
-		editingBudget: Budget | null;
+		loading?: boolean;
+		editingBudget?: Budget | null;
 	}
-	let { loading, editingBudget }: BudgetsOverviewProps = $props();
+	let { loading = false, editingBudget = null }: BudgetsOverviewProps = $props();
 
 	let themes: ColorTheme[] = getContext('themes');
 	let budgets: () => Budget[] = getContext('budgets');
