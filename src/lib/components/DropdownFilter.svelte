@@ -36,7 +36,7 @@
 
 	function onMobileOptionClick(event: Event, option: string) {
 		event.stopPropagation();
-		document.documentElement.classList.remove('overflow-hidden');
+		// document.documentElement.classList.remove('overflow-hidden');
 		selected = option;
 		optionsVisible = false;
 	}
@@ -48,12 +48,12 @@
 
 	function onIconClick(e: Event) {
 		e.stopPropagation();
-		document.documentElement.classList.add('overflow-hidden');
+		// document.documentElement.classList.add('overflow-hidden');
 		optionsVisible = true;
 		mobileVisible = true;
 	}
 	function onMobileOverlayClick() {
-		document.documentElement.classList.remove('overflow-hidden');
+		// document.documentElement.classList.remove('overflow-hidden');
 		optionsVisible = false;
 	}
 
@@ -292,7 +292,7 @@
 		transform: rotate(270deg);
 	}
 	.mobile-options-wrapper {
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		display: flex;

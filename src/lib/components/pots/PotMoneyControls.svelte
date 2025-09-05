@@ -252,7 +252,7 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 2;
-		width: 100dvw;
+		width: 100%;
 		height: 100dvh;
 		background: rgba(0, 0, 0, 0.25);
 	}
@@ -263,8 +263,14 @@
 		padding: 30px;
 		margin-bottom: 30px;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		max-width: 45vw;
-		min-width: 45vw;
+
+		@media screen and (max-width: 1023px) {
+			max-width: calc(100% - 2rem);
+		}
+		@media screen and (min-width: 1024px) {
+			max-width: 45vw;
+			min-width: 45vw;
+		}
 	}
 	.pot-form {
 		display: flex;

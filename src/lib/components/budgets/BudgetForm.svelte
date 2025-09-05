@@ -210,7 +210,7 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 2;
-		width: 100dvw;
+		width: 100%;
 		height: 100dvh;
 		background: rgba(0, 0, 0, 0.25);
 	}
@@ -223,9 +223,11 @@
 		background: white;
 		border: 1px solid #e5e7eb;
 		border-radius: 12px;
-		padding: 30px;
-		margin-bottom: 30px;
+		padding: 1rem;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		@media screen and (max-width: 1023px) {
+			max-width: calc(100% - 2rem);
+		}
 	}
 	.description {
 		font-size: 0.875rem;

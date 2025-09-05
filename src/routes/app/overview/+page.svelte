@@ -119,6 +119,8 @@
 	}
 	.overview-grid__segment_balance {
 		grid-area: balance;
+		background: transparent;
+		padding: 0;
 	}
 	.overview-grid__segment_pots {
 		grid-area: pots;
