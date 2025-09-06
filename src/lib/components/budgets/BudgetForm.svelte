@@ -31,10 +31,10 @@
 		loading = $bindable()
 	}: BudgetFormProps = $props();
 
-	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
+	let categories: () => Pick<Category, 'id' | 'category'>[] = getContext('categories');
 	let user: () => User = getContext('user');
 	let budgets: () => Budget[] = getContext('budgets');
-	let themes: ColorTheme[] = getContext('themes');
+	let themes:() => ColorTheme[] = getContext('themes');
 
 	let usedCategoriesIds = $derived.by(() => {
 		let usedCategories = budgets().map((budget) => budget.category_id);
@@ -46,7 +46,7 @@
 	});
 
 	let preparedCategories: Pick<PreparedCategory, 'id' | 'category' | 'isUsed'>[] = $derived(
-		categories
+		categories()
 			.map((category) => ({
 				...category,
 				isUsed: usedCategoriesIds.has(category.id)
@@ -64,7 +64,7 @@
 	});
 
 	let preparedThemes: PreparedTheme[] = $derived(
-		themes
+		themes()
 			.map((theme) => ({
 				...theme,
 				isUsed: usedThemesIds.has(theme.id)

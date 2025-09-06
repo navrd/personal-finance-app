@@ -12,7 +12,7 @@
 		component: Component<any>;
 	}
 
-	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let balance: () => BalanceType = getContext('balance');
 	let balanceData = $derived.by<Pick<BalanceType, 'current' | 'expenses' | 'income'>>(() => {
@@ -27,7 +27,7 @@
 
 	let transactions: () => Transaction[] = getContext('transactions');
 	let transactionsSortedByDate = $derived.by(() => {
-		return sortTransactions(transactions(), transactionSortOptions[2].id, transactionSortOptions);
+		return sortTransactions(transactions(), transactionSortOptions()[2].id, transactionSortOptions());
 	});
 
 	let overviews: Overview[] = [{ title: 'balance', component: Balance }];

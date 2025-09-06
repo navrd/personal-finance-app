@@ -20,10 +20,10 @@
 
 	let { transactions }: ReccuringBillSummaryProps = $props();
 
-	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let transactionsSortedByDate = $derived.by(() => {
-		return sortTransactions(transactions, transactionSortOptions[2].id, transactionSortOptions);
+		return sortTransactions(transactions, transactionSortOptions()[2].id, transactionSortOptions());
 	});
 
 	let reccuringTransactions = $derived(

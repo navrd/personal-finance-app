@@ -21,16 +21,15 @@
 		editingBudget = null,
 		loading = false
 	}: TransactionListProps = $props();
-	// $inspect('editingBudget: ', editingBudget)
 
-	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions: () => TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let currentDate = $state(
 		new Date(
 			sortTransactions(
 				globalTransactions(),
-				transactionSortOptions[2].id,
-				transactionSortOptions
+				transactionSortOptions()[2].id,
+				transactionSortOptions()
 			)[0].date
 		)
 	);

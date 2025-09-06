@@ -24,7 +24,7 @@
 		addMoney = $bindable()
 	}: PotMoneyControlsProps = $props();
 	let amount = $state(0);
-	let themes: ColorTheme[] = getContext('themes');
+	let themes:() => ColorTheme[] = getContext('themes');
 	let balance: () => Balance = getContext('balance');
 
 	let newAmount = $derived.by(() => {
@@ -141,7 +141,7 @@
 						style:width={newAmount >= pot.target
 							? `${getRequiredToFillPercentage()}%`
 							: `${getProgressPercentage(amount)}%`}
-						style:background-color={getById(themes, pot.theme_id)?.theme}
+						style:background-color={getById(themes(), pot.theme_id)?.theme}
 					></div>
 				{/if}
 			</div>

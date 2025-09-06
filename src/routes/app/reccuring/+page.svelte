@@ -16,14 +16,14 @@
 	import { getContext } from 'svelte';
 
 	let transactions: () => Transaction[] = getContext('transactions');
-	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
 
 	let filters: Omit<TransactionFilters, 'category'> = $state({
 		search: '',
 		debouncedSearch: '',
-		sort: transactionSortOptions[2].id
+		sort: transactionSortOptions()[2].id
 	});
 
 	let debounceTimeout: ReturnType<typeof setTimeout>;
@@ -57,8 +57,8 @@
 
 	let sortedTransactions = $derived.by(() => {
 		let sorted = [...filteredTransactions];
-		if (filters.sort && transactionSortOptions.length > 0) {
-			return sortTransactions(sorted, filters.sort, transactionSortOptions);
+		if (filters.sort && transactionSortOptions().length > 0) {
+			return sortTransactions(sorted, filters.sort, transactionSortOptions());
 		} else return sorted;
 	});
 	const paginationData: PaginationData<Transaction> = $derived.by(() => {
@@ -115,7 +115,7 @@
 			<Spacer />
 			<div class="transactions-list__filter">
 				<DropdownFilter
-					options={transactionSortOptions}
+					options={transactionSortOptions()}
 					valueKey="id"
 					labelKey="label"
 					label="Sort By"

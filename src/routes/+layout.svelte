@@ -13,19 +13,16 @@
 
 	let supabase: StateWrapper<SupabaseClient> = $state({ value: data.supabase });
 	let minimize: StateWrapper<boolean> = $state({ value: false });
-
-	//non-reactive data contexts
-	setContext('categories', data.categories);
-	setContext('transactionSortOptions', data.transactionSortOptions);
-	setContext('themes', data.themes);
-
 	//reactive data contexts
+	setContext('categories', () => data.categories);
+	setContext('transactionSortOptions', () => data.transactionSortOptions);
 	setContext('user', () => data.user);
 	setContext('supabase', () => data.supabase);
 	setContext('balance', () => data.balance);
 	setContext('budgets', () => data.budgets);
 	setContext('pots', () => data.pots);
 	setContext('transactions', () => data.transactions);
+	setContext('themes', () => data.themes);
 
 	//reactive app contexts
 	setContext('minimize', minimize);

@@ -11,7 +11,7 @@
 
 	let { totalSavings, pots }: PotsOverviewProps = $props();
 
-	let themes: ColorTheme[] = getContext('themes');
+	let themes:() => ColorTheme[] = getContext('themes');
 </script>
 
 <div class="segment__data">
@@ -25,7 +25,7 @@
 
 	<div class="segment__summary">
 		{#each pots as pot}
-			<div class="pot" style:--data-color={getById(themes, pot.theme_id)?.theme}>
+			<div class="pot" style:--data-color={getById(themes(), pot.theme_id)?.theme}>
 				<h3 class="pot__label">{pot.name}</h3>
 				<p class="pot__sum">${pot.total}</p>
 			</div>

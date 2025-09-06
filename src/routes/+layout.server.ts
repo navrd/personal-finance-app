@@ -123,16 +123,42 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
     }
 
 
+
+
+    // return {
+    //     session,
+    //     cookies: cookies.getAll(),
+    //     categories: await fetchCategoriesMinimal(),
+    //     themes: await fetchColorThemes(),
+    //     transactionSortOptions: await fetchTransactionSortOptions(),
+    //     transactions: await fetchUserTransactions(),
+    //     balance: await fetchUserBalance(),
+    //     pots: await fetchPots(),
+    //     budgets: await fetchBudgets(),
+
+    // };
+
+    const [categories, themes, transactionSortOptions, transactions, balance, pots, budgets] =
+        await Promise.all([
+            fetchCategoriesMinimal(),
+            fetchColorThemes(),
+            fetchTransactionSortOptions(),
+            fetchUserTransactions(),
+            fetchUserBalance(),
+            fetchPots(),
+            fetchBudgets(),
+        ]);
+
     return {
         session,
         cookies: cookies.getAll(),
-        categories: await fetchCategoriesMinimal(),
-        transactionSortOptions: await fetchTransactionSortOptions(),
-        transactions: await fetchUserTransactions(),
-        balance: await fetchUserBalance(),
-        pots: await fetchPots(),
-        budgets: await fetchBudgets(), 
-        themes: await fetchColorThemes(),
+        categories,
+        themes,
+        transactionSortOptions,
+        transactions,
+        balance,
+        pots,
+        budgets,
     };
 };
 

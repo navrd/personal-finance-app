@@ -6,7 +6,7 @@
 	interface DataSegment {
 		label: string;
 		value: number;
-		color: string;
+		color?: string;
 		id: string;
 	}
 
@@ -25,10 +25,10 @@
 		loading,
 		editingBudget
 	}: PieChartProps = $props();
-	let themes: ColorTheme[] = getContext('themes');
+	let themes:() => ColorTheme[] = getContext('themes');
 	let budgets: () => Budget[] = getContext('budgets');
 	let transactions: () => Transaction[] = getContext('transactions');
-	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
+	let categories: () => Pick<Category, 'id' | 'category'>[] = getContext('categories');
 
 	let getTotalSpentOnBudgetedCategories = $derived.by(() => {
 		const budgetCategoryIds = new Set(budgets().map((budget) => budget.category_id));
@@ -44,9 +44,9 @@
 		let result: DataSegment[] = [];
 		budgets().forEach((budget) => {
 			let segment: DataSegment = { label: '', value: 0, color: '', id: '' };
-			segment.label = getById(categories, budget.category_id)!.category;
+			segment.label = getById(categories(), budget.category_id)!.category;
 			segment.value = Math.round((budget.maximum / totalLimit) * 100);
-			segment.color = getById(themes, budget.theme_id)!.theme;
+			segment.color = getById(themes(), budget.theme_id)?.theme;
 			segment.id = budget.id;
 			result.push(segment);
 		});

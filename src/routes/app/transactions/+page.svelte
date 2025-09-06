@@ -15,8 +15,8 @@
 	import { getContext } from 'svelte';
 
 	let transactions: () => Transaction[] = getContext('transactions');
-	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
-	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
+	let categories: () => Pick<Category, 'id' | 'category'>[] = getContext('categories');
+	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
 	let innerWidth = $state(0);
@@ -24,10 +24,9 @@
 	let filters: TransactionFilters = $state({
 		search: '',
 		debouncedSearch: '',
-		sort: transactionSortOptions[4].id,
+		sort: transactionSortOptions()[4].id,
 		category: 'All'
 	});
-
 	let debounceTimeout: ReturnType<typeof setTimeout>;
 
 	$effect(() => {
@@ -55,8 +54,8 @@
 
 	let sortedTransactions = $derived.by(() => {
 		let sorted = [...filteredTransactions];
-		if (filters.sort && transactionSortOptions.length > 0) {
-			return sortTransactions(sorted, filters.sort, transactionSortOptions);
+		if (filters.sort && transactionSortOptions().length > 0) {
+			return sortTransactions(sorted, filters.sort, transactionSortOptions());
 		} else return sorted;
 	});
 	const paginationData: PaginationData<Transaction> = $derived.by(() => {
@@ -110,7 +109,7 @@
 		<Spacer />
 		<div class="transactions-list__filter">
 			<DropdownFilter
-				options={transactionSortOptions}
+				options={transactionSortOptions()}
 				valueKey="id"
 				labelKey="label"
 				label="Sort By"
@@ -120,7 +119,7 @@
 		</div>
 		<div class="transactions-list__filter">
 			<DropdownFilter
-				options={categories}
+				options={categories()}
 				valueKey="id"
 				labelKey="category"
 				bind:selected={filters.category}

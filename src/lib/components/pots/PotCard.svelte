@@ -27,7 +27,7 @@
 		resetFormData
 	}: PotCardProps = $props();
 
-	let themes: ColorTheme[] = getContext('themes');
+	let themes:() => ColorTheme[] = getContext('themes');
 	let showContextMenu = $state(false);
 	let showPotControls = $state(false);
 	let addMoney = $state(false);
@@ -93,7 +93,7 @@
 			class:loading={isLoading}
 			style:--data-color={isLoading
 				? 'var(--color-grey-300)'
-				: getById(themes, pot.theme_id)?.theme}
+				: getById(themes(), pot.theme_id)?.theme}
 		>
 			{pot.name}
 		</h3>
@@ -135,7 +135,7 @@
 				class="progress-fill"
 				style="width: {getProgressPercentage(pot)}%; background-color: {isLoading
 					? 'var(--color-grey-300)'
-					: getById(themes, pot.theme_id)?.theme}"
+					: getById(themes(), pot.theme_id)?.theme}"
 				class:loading={isLoading}
 			></div>
 		</div>

@@ -24,7 +24,7 @@
 		editingBudget = null
 	}: TransactionsListItemProps = $props();
 
-	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
+	let categories: () => Pick<Category, 'id' | 'category'>[] = getContext('categories');
 
 	let isLoading = $derived.by(() => {
 		return editingBudget?.category_id === transaction.category_id && loading;
@@ -70,7 +70,7 @@
 	</div>
 	{#if !overview}
 		{#if !reccuring}<div class="transactions-list__category">
-				<p class:loading={isLoading}>{getById(categories, transaction.category_id)?.category}</p>
+				<p class:loading={isLoading}>{getById(categories(), transaction.category_id)?.category}</p>
 			</div>{/if}
 
 		<div class="transactions-list__category" class:paid class:due-soon={dueSoon}>

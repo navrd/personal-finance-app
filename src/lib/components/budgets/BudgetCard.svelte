@@ -40,10 +40,10 @@
 		resetFormData
 	}: BudgetCardProps = $props();
 
-	let themes: ColorTheme[] = getContext('themes');
-	let categories: Pick<Category, 'id' | 'category'>[] = getContext('categories');
+	let themes:() => ColorTheme[] = getContext('themes');
+	let categories: () => Pick<Category, 'id' | 'category'>[] = getContext('categories');
 	let transactions: () => Transaction[] = getContext('transactions');
-	let transactionSortOptions: TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions: () => TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let showContextMenu = $state(false);
 let isLoading = $derived(loading && editingBudget?.id === budget.id);
@@ -92,7 +92,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	);
 
 	let latestTransactions = $derived(
-		sortTransactions(transactions(), transactionSortOptions[2].id, transactionSortOptions)
+		sortTransactions(transactions(), transactionSortOptions()[2].id, transactionSortOptions())
 			.filter((transaction) => transaction.category_id === budget.category_id)
 			.slice(0, 3)
 	);
@@ -104,10 +104,10 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 			class="header-title"
 			style:--data-color={isLoading
 				? 'var(--color-grey-300)'
-				: getById(themes, budget.theme_id)?.theme}
+				: getById(themes(), budget.theme_id)?.theme}
 			class:loading={isLoading}
 		>
-			{getById(categories, budget.category_id)?.category}
+			{getById(categories(), budget.category_id)?.category}
 		</h3>
 		<div class="context-menu">
 			<BlankButton
@@ -141,7 +141,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	<div class="amount-progress">
 		<div
 			class="amount-progress__value"
-			style:--data-color={isLoading ? 'var(--color-grey-300)' :getById(themes, budget.theme_id)?.theme}
+			style:--data-color={isLoading ? 'var(--color-grey-300)' :getById(themes(), budget.theme_id)?.theme}
 			style:--data-width={`${(spent * -100) / budget.maximum}%`}
 			class:loading={isLoading}
 		></div>
@@ -152,7 +152,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 			class="spent"
 			style:--data-color={isLoading
 				? 'var(--color-grey-300)'
-				: getById(themes, budget.theme_id)?.theme}
+				: getById(themes(), budget.theme_id)?.theme}
 		>
 			<div class="data">
 				<p class="label" class:loading={isLoading}>Spent</p>

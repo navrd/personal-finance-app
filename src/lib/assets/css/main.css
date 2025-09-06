@@ -53,6 +53,44 @@ li {
 	list-style: none;
 }
 
+.sidebar-action {
+	padding: 1rem;
+	display: flex;
+	justify-content: flex-start;
+	color: var(--color-grey-300);
+	align-items: center;
+	gap: 0.5rem;
+	&:hover,
+	&:focus,
+	&:active {
+		color: white;
+	}
+	@media (min-width: 0px) and (max-width: 1023px) {
+		height: 100%;
+	}
+	@media screen and (min-width: 1024px) {
+		width: 10rem;
+		height: 3rem;
+	}
+	* {
+		color: currentColor;
+		fill: currentColor;
+	}
+}
+.sidebar-action__icon {
+	transition: transform 0.3s ease;
+}
+.sidebar-action__icon_rotated {
+	transform: rotate(180deg);
+}
+.sidebar-action__minimized {
+	width: 5rem;
+	justify-content: center;
+	span {
+		display: none;
+	}
+}
+
 .details {
 	text-decoration: none;
 	display: flex;
