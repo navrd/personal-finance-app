@@ -22,7 +22,7 @@
 		showForm = $bindable()
 	}: PotFormProps = $props();
 
-	let themes: ColorTheme[] = getContext('themes');
+	let themes:() => ColorTheme[] = getContext('themes');
 	let pots: () => Pot[] = getContext('pots');
 
 	function resetFormData() {
@@ -87,7 +87,7 @@
 	});
 
 	let preparedThemes: PreparedTheme[] = $derived(
-		themes
+		themes()
 			.map((theme) => ({
 				...theme,
 				isUsed: usedThemesIds.has(theme.id)
