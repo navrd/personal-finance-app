@@ -1,0 +1,178 @@
+@import './base.css';
+
+@font-face {
+	font-family: 'PublicSans';
+	font-style: normal;
+	src:
+		local('RedditSans'),
+		url('../fonts/PublicSans-VariableFont_wght.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'PublicSans';
+	font-style: italic;
+	src:
+		local('RedditSans'),
+		url('../fonts/PublicSans-Italic-VariableFont_wght.ttf') format('truetype');
+}
+
+*,
+*::before,
+*::after {
+	font-family: 'PublicSans', sans, sans-serif;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+	font-synthesis: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+	max-width: 100vw;
+	overflow-x: hidden;
+}
+a,
+button,
+input {
+	font-family: inherit;
+	cursor: pointer;
+}
+
+.overflow-hidden {
+	overflow: hidden;
+}
+.section {
+	background: white;
+	border-radius: 0.75rem;
+}
+ul,
+ol,
+li {
+	list-style: none;
+}
+
+.sidebar-action {
+	padding: 1rem;
+	display: flex;
+	justify-content: flex-start;
+	color: var(--color-grey-300);
+	align-items: center;
+	gap: 0.5rem;
+	&:hover,
+	&:focus,
+	&:active {
+		color: white;
+	}
+	@media (min-width: 0px) and (max-width: 1023px) {
+		height: 100%;
+	}
+	@media screen and (min-width: 1024px) {
+		width: 10rem;
+		height: 3rem;
+	}
+	* {
+		color: currentColor;
+		fill: currentColor;
+	}
+}
+.sidebar-action__icon {
+	transition: transform 0.3s ease;
+}
+.sidebar-action__icon_rotated {
+	transform: rotate(180deg);
+}
+.sidebar-action__minimized {
+	width: 5rem;
+	justify-content: center;
+	span {
+		display: none;
+	}
+}
+
+.details {
+	text-decoration: none;
+	display: flex;
+	gap: 0.75rem;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	color: var(--color-grey-500);
+	align-items: center;
+	justify-content: center;
+	font-weight: 350;
+	font-style: normal;
+	* {
+		color: currentColor;
+		fill: currentColor;
+	}
+	&:hover {
+		color: var(--color-grey-900);
+		* {
+			color: currentColor;
+			fill: currentColor;
+		}
+	}
+}
+
+.loading {
+	background: var(--color-grey-300);
+	color: var(--color-grey-300) !important;
+	border-radius: 0.25rem;
+	position: relative;
+	overflow: hidden;
+}
+
+.loading::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(90deg, transparent 0%, var(--color-grey-100) 50%, transparent 100%);
+	transform: translateX(-100%);
+	animation: shimmer-transform 2s ease-in-out infinite;
+}
+@keyframes shimmer-transform {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+/* Alternative circle animation (if you want it to sync with the shimmer) */
+.loading-circle {
+	stroke: color-mix(in srgb, var(--color-grey-300) 75%, white);
+	animation: stroke-fade 2s ease-in-out infinite;
+}
+
+@keyframes stroke-fade {
+	0% {
+		stroke: color-mix(in srgb, var(--color-grey-300) 75%, white);
+	}
+	50% {
+		stroke: var(--color-grey-300);
+	}
+	100% {
+		stroke: color-mix(in srgb, var(--color-grey-300) 75%, white);
+	}
+}
+.loading-circle-reverse {
+	stroke: var(--color-grey-300);
+	animation: stroke-fade-reverse 2s ease-in-out infinite;
+}
+
+@keyframes stroke-fade-reverse {
+	0% {
+		stroke: var(--color-grey-300);
+	}
+	50% {
+		stroke: color-mix(in srgb, var(--color-grey-300) 75%, white);
+	}
+	100% {
+		stroke: var(--color-grey-300);
+	}
+}

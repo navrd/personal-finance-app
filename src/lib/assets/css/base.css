@@ -1,0 +1,62 @@
+:root {
+	--color-army-green: hsl(83, 20%, 47%);
+	--color-beige-100: hsl(30, 36%, 96%);
+	--color-beige-500: hsl(23, 6%, 57%);
+	--color-blue: hsl(205, 48%, 47%);
+	--color-brown: hsl(21, 30%, 44%);
+	--color-cyan: hsl(190, 52%, 68%);
+	--color-gold: hsl(47, 50%, 59%);
+	--color-green: hsl(177, 52%, 32%);
+	--color-grey-100: hsl(0, 0%, 95%);
+	--color-grey-300: hsl(0, 0%, 70%);
+	--color-grey-500: hsl(0, 0%, 41%);
+	--color-grey-900: hsl(252, 7%, 13%);
+	--color-magenta: hsl(332, 30%, 44%);
+	--color-navy: hsl(248, 8%, 41%);
+	--color-navy-grey: hsl(214, 11%, 63%);
+	--color-orange: hsl(18, 47%, 52%);
+	--color-purple: hsl(259, 30%, 56%);
+	--color-purple-alt: hsl(288, 29%, 62%);
+	--color-red: hsl(7, 58%, 50%);
+	--color-slate-600: hsl(234, 25%, 52%);
+	--color-turquoise: hsl(180, 16%, 42%);
+	--color-white: hsl(0, 0%, 100%);
+	--color-yellow: hsl(28, 73%, 81%);
+	--font-size-preset-1: 2rem;
+	--font-size-preset-2: 1.5rem;
+	--font-size-preset-3: 1.25rem;
+	--font-size-preset-4: 1.125rem;
+	--font-size-preset-5: 1rem;
+	--line-height-preset-1: 120%;
+	--line-height-preset-2: 120%;
+	--line-height-preset-3: 150%;
+	--line-height-preset-4: 150%;
+	--line-height-preset-5: 150%;
+	--spacing-50: 1rem;
+	--spacing-100: 2rem;
+	--spacing-150: 3rem;
+	--spacing-200: 4rem;
+	--spacing-250: 5rem;
+	--spacing-300: 6rem;
+	--spacing-400: 7rem;
+	--spacing-500: 8rem;
+	--letter-spacing: -0.05em;
+	--sidebar-width: 12.5rem;
+	--sidebar-height: 100dvh;
+	--sidebar-flex-direction: column;
+	--sidebar-padding: 1rem;
+}
+
+@media (min-width: 0px) and (max-width: 1023px) {
+	:root {
+		--sidebar-width: 100%;
+		--sidebar-height: 5rem;
+		--sidebar-flex-direction: row;
+	}
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+
+}
+@media screen and (min-width: 1200px) {
+
+}
