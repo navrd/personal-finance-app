@@ -53,18 +53,19 @@
 
 		return `${day} ${month} ${year}`;
 	};
+	function getImageUrl(url: string): string {
+		return url.replace('/assets', '');
+	}
 </script>
 
 <li class="transactions-list__item">
 	<div class="transactions-list__category">
 		<p class="transaction-creds">
-			{#await import(`../../${transaction.avatar}`) then { default: src }}
-				{#if isLoading}<span class="avatar-loading"></span>{:else}<img
-						class="avatar"
-						{src}
-						alt={transaction.name}
-					/>{/if}
-			{/await}
+			{#if isLoading}<span class="avatar-loading"></span>{:else}<img
+					class="avatar"
+					src={getImageUrl(transaction.avatar)}
+					alt={transaction.name}
+				/>{/if}
 			<span class="transaction-creds__text" class:loading={isLoading}>{transaction.name}</span>
 		</p>
 	</div>
