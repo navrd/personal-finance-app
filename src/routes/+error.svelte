@@ -16,7 +16,6 @@
 	.error-page {
 		width: 100dvw;
 		height: 100dvh;
-		min-width: 100dvw;
 		min-height: 100dvh;
 		max-width: 100dvw;
 		max-height: 100dvh;
