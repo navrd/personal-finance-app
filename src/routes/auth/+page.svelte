@@ -166,7 +166,7 @@
 		<div class="message message_success">
 			<strong>Success:</strong>
 			{displaySuccess}
-			<button class="button" onclick={clearMessages}>×</button>
+			<CustomButton onclick={clearMessages}>×</CustomButton>
 		</div>
 	{/if}
 
@@ -175,7 +175,7 @@
 		<div class="message message_error">
 			<strong>Error:</strong>
 			{displayError}
-			<button class="button" onclick={clearMessages}>×</button>
+			<CustomButton onclick={clearMessages}>×</CustomButton>
 		</div>
 	{/if}
 	<!-- Signup Form -->
@@ -292,6 +292,7 @@
 	.login-wrapper {
 		min-width: 100dvw;
 		max-width: 100dvw;
+		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
