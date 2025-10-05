@@ -5,6 +5,10 @@
 	const message = $derived(page.error?.message || 'An error occurred');
 </script>
 
+<svelte:head>
+	<title>{status} — {message}</title>
+</svelte:head>
+
 <div class="error-page">
 	<div class="error-content">
 		<h1>{status}</h1>
@@ -22,7 +26,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-        background: var(--color-beige-100);
+		background: var(--color-beige-100);
 		font-size: 1.125rem;
 		overflow: hidden;
 	}
