@@ -100,7 +100,7 @@
 			validatePotName(formData.name) === null &&
 			validatePotTarget(formData.target) === null &&
 			validatePotTheme(formData.theme_id) === null &&
-			!loading
+			!loading	
 		);
 	});
 </script>

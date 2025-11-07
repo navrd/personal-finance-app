@@ -283,6 +283,7 @@
 						><span class="switch-tabs">Sign Up</span></BlankButton
 					>
 				</h2>
+				<a href="auth/reset-password">Reset password</a>
 			</div>
 		{/if}
 	{/if}
