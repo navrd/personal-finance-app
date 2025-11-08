@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { CustomInput, CustomButton, LoadingDots, BlankButton } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -160,7 +161,7 @@
 	);
 </script>
 
-<div class="login-wrapper">
+<div class="auth-wrapper">
 	<!-- Success Message -->
 	{#if displaySuccess}
 		<div class="message message_success">
@@ -181,7 +182,7 @@
 	<!-- Signup Form -->
 	{#if !displayError && !displaySuccess}
 		{#if currentTab === 'signup'}
-			<div class="login-wrapper__form">
+			<div class="auth-wrapper__form">
 				<h2 class="form-title">Sign Up</h2>
 				<form
 					method="POST"
@@ -213,7 +214,7 @@
 						type="password"
 						name="password"
 						disabled={isLoading}
-						id="signup-password"
+						id="signup-password-one"
 						label="Password"
 						bind:value={signupPasswordOne}
 						validator={validateSignupPassword}
@@ -222,7 +223,7 @@
 						type="password"
 						name="password"
 						disabled={isLoading}
-						id="signup-password"
+						id="signup-password-two"
 						label="Password"
 						bind:value={signupPasswordTwo}
 						validator={validateConfirmPassword}
@@ -244,7 +245,7 @@
 
 		<!-- Login Form -->
 		{#if currentTab === 'login'}
-			<div class="login-wrapper__form">
+			<div class="auth-wrapper__form">
 				<h2 class="form-title">Login</h2>
 				<form
 					method="POST"
@@ -283,14 +284,18 @@
 						><span class="switch-tabs">Sign Up</span></BlankButton
 					>
 				</h2>
-				<a href="auth/reset-password">Reset password</a>
+				<h2 class="auth-switch">
+					Forgot password? <BlankButton onclick={() => goto('auth/reset-password')}
+						><span class="switch-tabs">Reset it</span></BlankButton
+					>
+				</h2>
 			</div>
 		{/if}
 	{/if}
 </div>
 
 <style lang="scss">
-	.login-wrapper {
+	.auth-wrapper {
 		min-width: 100dvw;
 		max-width: 100dvw;
 		min-height: 100dvh;
@@ -303,7 +308,7 @@
 		font-size: 1.125rem;
 		overflow: hidden;
 	}
-	.login-wrapper__form,
+	.auth-wrapper__form,
 	.message {
 		min-width: 30dvw;
 		display: flex;
