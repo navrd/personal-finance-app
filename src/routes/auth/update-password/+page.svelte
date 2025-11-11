@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { CustomButton, CustomInput, LoadingDots } from '$lib/components';
+	import { goto } from '$app/navigation';
+	import { CustomButton, CustomInput, LoadingDots, SuccesfulSubmit } from '$lib/components';
 
 	let { form } = $props();
 	let isLoading = $state(false);
 	let passwordOne = $state('');
 	let passwordTwo = $state('');
+	let timeToRedirect = $state(3);
 
 	function validatePassword(value: string | number): string | null {
 		const password = String(value);
@@ -36,52 +38,71 @@
 	const canSubmitUpdatePassword = $derived.by(() =>
 		Boolean(isUpdatePasswordFormValid && !isLoading)
 	);
+
+	$effect(() => {
+		if (form?.success) {
+			const interval = setInterval(() => {
+				timeToRedirect--;
+
+				if (timeToRedirect <= 0) {
+					clearInterval(interval);
+					goto('/app/overview');
+				}
+			}, 1000);
+
+			return () => clearInterval(interval);
+		}
+	});
 </script>
 
 <div class="auth-wrapper">
-
 	<div class="auth-wrapper__form">
-		<form
-			class="form"
-			method="POST"
-			use:enhance={() => {
-				isLoading = true;
-				return async ({ update }) => {
-					await update();
-					isLoading = false;
-				};
-			}}
-		>
-        	<h1 class="form-title">Update Password</h1>
-			<CustomInput
-				type="password"
-				name="password"
-				disabled={isLoading}
-				id="password"
-				label="Password"
-				bind:value={passwordOne}
-				validator={validatePassword}
-			/>
-			<CustomInput
-				type="password"
-				name="passwordConfirm"
-				disabled={isLoading}
-				id="password-confirm"
-				label="confirm password"
-				bind:value={passwordTwo}
-				validator={validateConfirmPassword}
-			/>
+		{#if form?.success}
+			<SuccesfulSubmit
+				message="Password has been succesfully updated! Redirecting in {timeToRedirect}s..."
+			/>{:else}
+			<form
+				class="form"
+				method="POST"
+				use:enhance={() => {
+					isLoading = true;
+					return async ({ update }) => {
+						await update({ reset: false });
+						isLoading = false;
+					};
+				}}
+			>
+				<h1 class="form-title">Update Password</h1>
+				<CustomInput
+					type="password"
+					name="password"
+					disabled={isLoading}
+					id="password"
+					label="Password"
+					bind:value={passwordOne}
+					validator={validatePassword}
+				/>
+				<CustomInput
+					type="password"
+					name="passwordConfirm"
+					disabled={isLoading}
+					id="password-confirm"
+					label="confirm password"
+					bind:value={passwordTwo}
+					validator={validateConfirmPassword}
+				/>
 
-			{#if form?.error}
-				<p class="message error">{form.error}</p>
-			{/if}
+				{#if form?.error}
+					<p class="message error">{form.error}</p>
+				{/if}
 
-			<CustomButton type="submit" disabled={!canSubmitUpdatePassword}>
-				{#if isLoading}
-					<LoadingDots />
-				{:else}Update password{/if}
-			</CustomButton>
-		</form>
+				<CustomButton type="submit" disabled={!canSubmitUpdatePassword}>
+					{#if isLoading}
+						<LoadingDots />
+					{:else}Update password{/if}
+				</CustomButton>
+			</form>
+		{/if}
 	</div>
 </div>
 

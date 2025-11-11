@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from '../$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.safeGetSession();
-  
+
   // User must have a valid session from the email link
   if (!session) {
     console.log('No active session redirecting to reset')
@@ -37,6 +37,6 @@ export const actions = {
       return fail(500, { error: error.message });
     }
 
-    throw redirect(303, '/'); // Redirect to home or dashboard
+    return { success: true }
   },
 } satisfies Actions;

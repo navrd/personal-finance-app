@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import { BlankButton, CustomButton, CustomInput, LoadingDots } from '$lib/components';
+	import { BlankButton, CustomButton, CustomInput, LoadingDots, SuccesfulSubmit } from '$lib/components';
 
 	let { form } = $props();
 	let isLoading = $state(false);
@@ -23,17 +23,16 @@
 </script>
 
 <div class="auth-wrapper">
-	{#if form?.success}
-		<p class="message success">Check your email for a password reset link!</p>
-	{:else}
-		<div class="auth-wrapper__form">
+	<div class="auth-wrapper__form">
+		{#if form?.success}
+			<SuccesfulSubmit message="Check {loginMail} for a password reset link!" />{:else}
 			<form
 				class="form"
 				method="POST"
 				use:enhance={() => {
 					isLoading = true;
 					return async ({ update }) => {
-						await update();
+						await update({reset: false});
 						isLoading = false;
 					};
 				}}
@@ -65,8 +64,8 @@
 					>
 				</h2>
 			</form>
-		</div>
-	{/if}
+		{/if}
+	</div>
 </div>
 
 <style lang="scss">
@@ -83,8 +82,7 @@
 		font-size: 1.125rem;
 		overflow: hidden;
 	}
-	.auth-wrapper__form,
-	.message {
+	.auth-wrapper__form {
 		min-width: 30dvw;
 		display: flex;
 		flex-direction: column;
