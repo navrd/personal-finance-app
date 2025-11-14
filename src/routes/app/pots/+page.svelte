@@ -36,14 +36,14 @@
 	}
 	.page-header__title {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
-		font-weight: 550;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
+		font-weight: var(--font-weight-550);
 		font-weight: bolder;
 	}
 	.page-header__buttons {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		align-items: center;
 		justify-content: flex-end;
 	}

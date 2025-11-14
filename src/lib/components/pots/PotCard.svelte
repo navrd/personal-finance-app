@@ -179,13 +179,13 @@
 		background: white;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		position: absolute;
 		top: calc(100% + 0.5rem);
 		right: 0;
 		min-width: 130px;
 		z-index: 3;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-m);
 		box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
 	}
 
@@ -193,24 +193,24 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		font-weight: bolder;
 		color: var(--color-grey-900);
 		&:before {
 			content: ' ';
 			width: 0.75rem;
 			height: 0.75rem;
-			border-radius: 50%;
+			border-radius: var(--radius-round);
 			background: var(--data-color);
 		}
 	}
 	.pot-card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius-m);
+		padding: var(--padding-xxl);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		transition:
 			transform 0.2s ease,
@@ -223,10 +223,10 @@
 	.progress-container {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 	}
 	.progress-bar {
-		width: 100%;
+		width: var(--full-container-width);
 		height: 8px;
 		background-color: var(--color-beige-100);
 		border-radius: 4px;
@@ -244,12 +244,12 @@
 		justify-content: space-between;
 	}
 	.progress-amount {
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 		color: var(--color-grey-500);
 		font-weight: bolder;
 	}
 	.progress-target {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		color: var(--color-grey-500);
 	}
 
@@ -257,25 +257,25 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		width: 100%;
+		width: var(--full-container-width);
 	}
 	.label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 
 	.value {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: bolder;
 	}
 	.action {
-		padding: 0.75rem 0.5rem;
+		padding:  var(--padding-m)  var(--padding-s);
 		border-bottom: 1px solid var(--color-grey-100);
 		color: var(--color-grey-900);
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 		&:last-child {
 			border-bottom: none;
 		}
@@ -291,13 +291,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 	}
 	.action-button {
 		flex: 1;
-		border-radius: 0.75rem;
-		padding: 1rem;
-		border: 1px solid var(--color-beige-100);
+		border-radius: var(--radius-m);
+		padding: var(--padding-l);
+		border: var(--thin-border-beige-100);
 		background: var(--color-beige-100);
 		color: var(--color-grey-900);
 		font-weight: bolder;

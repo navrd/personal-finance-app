@@ -142,28 +142,28 @@
 	}
 	.page-header__title {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
-		font-weight: 550;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
+		font-weight: var(--font-weight-550);
 		font-weight: bolder;
 	}
 	.section {
-		padding: 1.25rem;
+		padding: var(--padding-xl);
 	}
 	.transactions-list {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 	}
 	.transactions-list__filters {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 	}
 	.transactions-list__filter {
 		display: flex;
 		align-items: center;
-		font-size: 0.875rem;
-		line-height: 1.5;
-		gap: 0.75rem;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		gap: var(--gap-m);
 	}
 </style>

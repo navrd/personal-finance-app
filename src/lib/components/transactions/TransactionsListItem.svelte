@@ -114,11 +114,11 @@
 	.transactions-list__category {
 		display: flex;
 		align-items: center;
-		gap: 0.25rem;
+		gap: var(--gap-xs);
 		padding-block: 0.75rem;
 		color: var(--color-grey-500);
-		font-size: 0.75rem;
-		line-height: 1.5;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
 		flex: 1;
 		&:first-child {
 			flex: 4;
@@ -134,33 +134,33 @@
 		max-width: 2rem;
 		min-height: 2rem;
 		max-height: 2rem;
-		border-radius: 50%;
+		border-radius: var(--radius-round);
 	}
 	.avatar-loading {
 		min-width: 2rem;
 		max-width: 2rem;
 		min-height: 2rem;
 		max-height: 2rem;
-		border-radius: 50%;
+		border-radius: var(--radius-round);
 		background: var(--color-grey-300);
 	}
 	.transaction-creds {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 	}
 	.transaction-creds__text {
 		color: var(--color-grey-900);
-		font-size: 0.875rem;
-		line-height: 1.5;
-		font-weight: 600;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		font-weight: var(--font-weight-600);
 	}
 	.amount {
 		color: var(--color-grey-900);
-		font-size: 0.875rem;
-		line-height: 1.5;
-		font-weight: 700;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		font-weight: var(--font-weight-700);
 	}
 	.amount_plus {
 		color: var(--color-green);

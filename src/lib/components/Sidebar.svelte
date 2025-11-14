@@ -39,9 +39,9 @@
 		align-items: flex-start;
 		position: fixed;
 		transition: width 0.3s ease;
-		z-index: 1000;
+		z-index: var(--sidebar-z-index);
 		@media (min-width: 0px) and (max-width: 1023px) {
-			padding: 0 1rem;
+			padding: 0 var(--padding-l);
 			bottom: 0;
 			border-top-right-radius: 1rem;
 			border-top-left-radius: 1rem;
@@ -69,7 +69,7 @@
 	.sidebar__buttons {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--gap-l);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			display: none;
 		}

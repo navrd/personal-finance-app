@@ -173,7 +173,7 @@
 <style lang="scss">
 	.progress-bar {
 		display: flex;
-		width: 100%;
+		width: var(--full-container-width);
 		height: 8px;
 		background-color: var(--color-beige-100);
 		border-radius: 4px;
@@ -206,12 +206,12 @@
 		justify-content: space-between;
 	}
 	.progress-amount {
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 		color: var(--color-grey-500);
 		font-weight: bolder;
 	}
 	.progress-target {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		color: var(--color-grey-500);
 	}
 
@@ -219,29 +219,29 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		width: 100%;
+		width: var(--full-container-width);
 	}
 	.label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 
 	.value {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: bolder;
 	}
 	.title {
-		font-size: 1.25rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xl);
+		line-height: var(--line-height-s);
 		color: var(--color-grey-900);
 		font-weight: bolder;
 	}
 	.description {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 	.pot-controls-wrapper {
@@ -252,7 +252,7 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 2;
-		width: 100%;
+		width: var(--full-container-width);
 		height: 100dvh;
 		background: rgba(0, 0, 0, 0.25);
 	}
@@ -275,15 +275,15 @@
 	.pot-form {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 	}
 	.pot-form {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 	}
 	.form-header {
-		width: 100%;
+		width: var(--full-container-width);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -291,9 +291,9 @@
 	.close {
 		width: 1.5rem;
 		height: 1.5rem;
-		border-radius: 50%;
-		border: 0;
-		outline: 0;
+		border-radius: var(--radius-round);
+		border: var(--no-border);
+		outline: var(--no-outline);
 		display: flex;
 		align-items: center;
 		justify-content: center;

@@ -15,7 +15,7 @@
 
 <style lang="scss">
 	.loading-dots {
-		width: 100%;
+		width: var(--full-container-width);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -48,7 +48,7 @@
 		width: 1rem;
 		height: 1rem;
 		background: white;
-		border-radius: 50%;
+		border-radius: var(--radius-round);
 		animation: flickerAnimation 1s ease infinite;
 	}
 </style>

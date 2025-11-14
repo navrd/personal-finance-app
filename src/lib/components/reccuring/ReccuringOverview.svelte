@@ -68,52 +68,51 @@
 	});
 </script>
 
-	<div class="segment__data">
-		{#each Object.entries(totals) as [key, total]}
-			<div
-				class="segment__particle"
-				class:segment__particle_paid={key === 'paid'}
-				class:segment__particle_due-soon={key === 'dueSoon'}
-				class:segment__particle_upcoming={key === 'upcoming'}
+<div class="segment__data">
+	{#each Object.entries(totals) as [key, total]}
+		<div
+			class="segment__particle"
+			class:segment__particle_paid={key === 'paid'}
+			class:segment__particle_due-soon={key === 'dueSoon'}
+			class:segment__particle_upcoming={key === 'upcoming'}
+		>
+			<span class="segment__title">{total.title}</span><span class="segment__value"
+				>{total.value.toFixed(2).toString().replace('-', '$')}</span
 			>
-				<span class="segment__title">{total.title}</span><span class="segment__value"
-					>{total.value.toFixed(2).toString().replace('-', '$')}</span
-				>
-			</div>
-		{/each}
-	</div>
+		</div>
+	{/each}
+</div>
 
 <style lang="scss">
 	.segment__data {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 	}
 	.segment__particle {
 		background: var(--color-beige-100);
-		padding: 1rem 0.75rem;
+		padding: var(--padding-l) var(--padding-m);
 		display: flex;
 		flex: 1;
 		justify-content: space-between;
-		border-left: 0.25rem solid chocolate;
+		border-left: var(--regular-border-chocolate);
 		border-radius: 8px;
 	}
 	.segment__particle_paid {
-		border-left: 0.25rem solid var(--color-green);
+		border-left: var(--regular-border-green);
 	}
 	.segment__particle_due-soon {
-		border-left: 0.25rem solid var(--color-yellow);
+		border-left: var(--regular-border-yellow);
 	}
 	.segment__particle_upcoming {
-		border-left: 0.25rem solid var(--color-cyan);
+		border-left: var(--regular-border-cyan);
 	}
 	.segment__title {
 		color: var(--color-grey-500);
 	}
 	.segment__value {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		font-weight: bolder;
 	}
-
 </style>

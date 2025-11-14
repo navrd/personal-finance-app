@@ -21,15 +21,15 @@
         @media screen and (max-width: 670px){
             flex-direction: column;
         }
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 	}
 	.balance-entry {
 		flex: 1 1 auto;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius-m);
+		padding: var(--padding-xxl);
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--gap-s);
 		background: white;
 		color: var(--color-grey-900);
 	}
@@ -38,13 +38,13 @@
 		color: white;
 	}
 	.balance-entry__title {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
         text-transform: capitalize;
 	}
 	.balance-entry__value {
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: normal;
 		font-weight: bolder;
 	}

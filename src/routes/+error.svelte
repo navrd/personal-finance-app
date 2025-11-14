@@ -27,30 +27,30 @@
 		justify-content: center;
 		align-items: center;
 		background: var(--color-beige-100);
-		font-size: 1.125rem;
+		font-size: var(--font-size-l);
 		overflow: hidden;
 	}
 	.error-content {
-		padding: 2rem;
+		padding: var(--padding-xxxl);
 		min-width: fit-content;
 		max-width: fit-content;
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 1rem;
+		gap: var(--gap-l);
 		background: var(--color-yellow);
 		color: var(--color-grey-900);
 		overflow: hidden;
-		border-radius: 0.5rem;
-		border: 1px solid var(--color-beige-500);
+		border-radius: var(--radius-s);
+		border: var(--thin-border-beige-500);
 		h1 {
-			font-size: 2rem;
+			font-size: var(--font-size-xxxl);
 			font-weight: bolder;
 		}
 		p {
-			font-weight: 500;
+			font-weight: var(--font-weight-500);
 			color: var(--color-grey-500);
-			font-size: 1.5rem;
+			font-size: var(--font-size-xxl)
 		}
 	}
 </style>

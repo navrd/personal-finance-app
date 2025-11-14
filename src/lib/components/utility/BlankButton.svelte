@@ -39,14 +39,14 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 100%;
+		width: var(--full-container-width);
 		height: 100%;
 		border: none;
 		background: transparent;
 		cursor: pointer;
 	}
 	.blank-button_full-width {
-		width: 100%;
+		width: var(--full-container-width);
 		flex: 1;
 		justify-content: space-between;
 	}

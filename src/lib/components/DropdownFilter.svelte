@@ -178,13 +178,13 @@
 		border-radius: 4px;
 		background: white;
 		z-index: 1;
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 	.filter-wrapper {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		align-items: center;
 		min-width: inherit;
 		max-width: inherit;
@@ -194,8 +194,8 @@
 		}
 	}
 	.filter-label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 
@@ -213,25 +213,25 @@
 	}
 	.filter__active-option {
 		cursor: pointer;
-		width: 100%;
+		width: var(--full-container-width);
 		min-width: inherit;
 		min-height: inherit;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 1.25rem 0.75rem;
+		padding: var(--padding-xl) var(--padding-m);
 		height: max-content;
-		border: 1px solid var(--color-beige-500);
-		border-radius: 0.5rem;
+		border: var(--thin-border-beige-500);
+		border-radius: var(--radius-s);
 		outline: none;
 		background: transparent;
 		span {
-			font-size: 0.875rem;
-			line-height: 1.5;
+			font-size: var(--font-size-s);
+			line-height: var(--line-height);
 		}
 	}
 	.filter__options {
-		width: 100%;
+		width: var(--full-container-width);
 		padding-top: 10px;
 		padding-bottom: 10px;
 		display: flex;
@@ -243,9 +243,9 @@
 		scrollbar-width: none;
 	}
 	.filter__option {
-		width: 100%;
+		width: var(--full-container-width);
 		cursor: pointer;
-		padding: 1.25rem 0.75rem;
+		padding: var(--padding-xl) var(--padding-m);
 		display: flex;
 		border-bottom: 1px solid var(--color-grey-100);
 		&:hover {
@@ -257,7 +257,7 @@
 	}
 	.filter__option-wrapper {
 		max-width: 150px;
-		width: 100%;
+		width: var(--full-container-width);
 		cursor: pointer;
 		min-width: inherit;
 		min-height: inherit;
@@ -266,18 +266,18 @@
 		justify-content: flex-start;
 		padding: 0;
 		margin: 0;
-		border: none;
-		outline: none;
+		border: var(--no-border);
+		outline: var(--no-outline);
 		background: transparent;
 		@media screen and (max-width: 632px) {
-			max-width: 100%;
+			max-width: var(--full-container-width);
 		}
 	}
 	.filter-options-wrapper {
-		width: 100%;
+		width: var(--full-container-width);
 		padding-top: 10px;
 		position: absolute;
-		width: 100%;
+		width: var(--full-container-width);
 		z-index: 2;
 		top: calc(100% + 4px);
 		border-radius: 4px;
@@ -307,7 +307,7 @@
 		width: 80dvw;
 		max-height: 40dvh;
 		overflow: auto;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-m);
 		background: white;
 	}
 </style>

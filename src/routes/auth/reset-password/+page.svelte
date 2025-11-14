@@ -79,7 +79,7 @@
 		justify-content: center;
 		background: var(--color-beige-100);
 		color: var(--color-grey-900);
-		font-size: 1.125rem;
+		font-size: var(--font-size-l);
 		overflow: hidden;
 	}
 	.auth-wrapper__form {
@@ -88,24 +88,24 @@
 		flex-direction: column;
 		justify-content: center;
 		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
-		gap: 0.75rem;
+		border-radius: var(--radius-m);
+		padding: var(--padding-xxl);
+		gap: var(--gap-m);
 	}
 	.form-title {
-		font-size: 2rem;
+		font-size: var(--font-size-xxxl);
 		font-weight: bolder;
 	}
 	.form {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		justify-content: center;
 	}
 	.auth-switch {
 		display: flex;
-		gap: 0.25rem;
-		font-size: 0.875rem;
+		gap: var(--gap-xs);
+		font-size: var(--font-size-s);
 		color: var(--color-grey-500);
 	}
 	.switch-tabs {

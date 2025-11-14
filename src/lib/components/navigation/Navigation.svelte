@@ -25,17 +25,17 @@
 
 <style lang="scss">
 	.sidebar__navigation {
-		z-index: 1000;
+		z-index: var(--sidebar-z-index);
 		display: flex;
 		flex-direction: var(--sidebar-flex-direction);
-		gap: 1rem;
+		gap: var(--gap-l);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			height: 100%;
-			width: 100%;
+			width: var(--full-container-width);
 			justify-content: space-between;
 		}
 	}
 	.sidebar__navigation_minimized {
-		width: 100%;
+		width: var(--full-container-width);
 	}
 </style>

@@ -42,14 +42,14 @@
 	}
 	.page-header__title {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
-		font-weight: 550;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
+		font-weight: var(--font-weight-550);
 		font-weight: bolder;
 	}
 	.page-header__buttons {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		align-items: center;
 		justify-content: flex-end;
 	}
@@ -58,7 +58,7 @@
 		overflow-y: auto;
 		display: grid;
 		align-items: start;
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'overview' 'budgets';
 		}
@@ -69,11 +69,11 @@
 	}
 	.budgets-grid__segment {
 		display: flex;
-		gap: 1rem;
+		gap: var(--gap-l);
 		flex-direction: column;
 		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius-m);
+		padding: var(--padding-xxl);
 		z-index: 5;
 	}
 	.budgets-grid__segment_overview {
@@ -84,7 +84,7 @@
 	.budgets-grid__segment_budgets {
 		grid-area: budgets;
 		background: transparent;
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 		padding: 0;
 	}
 </style>

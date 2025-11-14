@@ -9,5 +9,3 @@
 
 <TransactionsList {transactions} overview />
 
-<style lang="scss">
-</style>

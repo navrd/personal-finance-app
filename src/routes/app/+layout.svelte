@@ -17,8 +17,8 @@
 <style lang="scss">
 	.content {
 		background: var(--color-beige-100);
-		min-width: 100%;
-		max-width: 100%;
+		min-width: var(--full-container-width);
+		max-width: var(--full-container-width);
 		transition: padding 0.3s ease;
 		@media (min-width: 0px) and (max-width: 1023px) {
 			padding-bottom: var(--sidebar-height);
@@ -33,9 +33,9 @@
 		}
 	}
 	.content-wrapper {
-		padding: 1rem;
+		padding: var(--padding-l);
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 	}
 </style>

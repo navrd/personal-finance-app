@@ -44,19 +44,87 @@
 	--sidebar-width: 12.5rem;
 	--sidebar-height: 100dvh;
 	--sidebar-flex-direction: column;
-	--sidebar-padding: 1rem;
+	--sidebar-padding: var(--padding-l);
+	--sidebar-z-index: 1000;
+
+	--thin-border-beige-100: 1px solid var(--color-beige-100);
+	--thin-border-beige-500: 1px solid var(--color-beige-500);
+	--thin-border-transparent: 1px solid transparent;
+
+	--regular-border-green: 0.25rem solid var(--color-green);
+	--regular-border-yellow: 0.25rem solid var(--color-yellow);
+	--regular-border-cyan: 0.25rem solid var(--color-cyan);
+	--regular-border-chocolate: 0.25rem solid chocoloate;
+
+	--font-weight-100: 100;
+	--font-weight-150: 150;
+	--font-weight-200: 200;
+	--font-weight-250: 250;
+	--font-weight-300: 300;
+	--font-weight-350: 350;
+	--font-weight-400: 400;
+	--font-weight-450: 450;
+	--font-weight-500: 500;
+	--font-weight-550: 550;
+	--font-weight-600: 600;
+	--font-weight-650: 650;
+	--font-weight-700: 700;
+	--font-weight-750: 750;
+	--font-weight-800: 800;
+	--font-weight-850: 850;
+	--font-weight-900: 900;
+
+	--line-height-s: 1.2;
+	--line-height-m: 1.5;
+	--line-height-l: 1.6;
+
+	--font-size-xs: 0.75rem;
+	--font-size-s: 0.875rem;
+	--font-size-m: 1rem;
+	--font-size-l: 1.125rem;
+	--font-size-xl: 1.25rem;
+	--font-size-xxl: 1.5rem;
+	--font-size-xxxl: 2rem;
+
+	--radius-xs: 0.25rem;
+	--radius-s: 0.5rem;
+	--radius-m: 0.75rem;
+	--radius-l: 1rem;
+	--radius-xl: 1.25rem;
+	--radius-xxl: 1.5rem;
+	--radius-round: 50%;
+
+	--full-container-width: 100%;
+	--full-screen-width: 100dvw;
+	--full-screen-height: 100dvh;
+
+	--gap-xs: 0.25rem;
+	--gap-s: 0.5rem;
+	--gap-m: 0.75rem;
+	--gap-l: 1rem;
+	--gap-xl: 1.25rem;
+	--gap-xxl: 1.5rem;
+
+	--padding-xs: 0.25rem;
+	--padding-s: 0.5rem;
+	--padding-m: 0.75rem;
+	--padding-l: 1rem;
+	--padding-xl: 1.25rem;
+	--padding-xxl: 1.5rem;
+	--padding-xxxl: 2rem;
+
+	--no-border: 0;
+	--no-outline: var(--no-outline);
 }
 
 @media (min-width: 0px) and (max-width: 1023px) {
 	:root {
-		--sidebar-width: 100%;
+		--sidebar-width: var(--full-container-width);
 		--sidebar-height: 5rem;
 		--sidebar-flex-direction: row;
 	}
 }
 @media (min-width: 1024px) and (max-width: 1199px) {
-
 }
 @media screen and (min-width: 1200px) {
-
 }

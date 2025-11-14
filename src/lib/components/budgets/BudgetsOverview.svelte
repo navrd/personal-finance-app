@@ -56,7 +56,7 @@
 	.segment__legend {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		max-width: inherit;
 		max-height: 240px;
 		overflow: auto;
@@ -65,8 +65,8 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
-		padding: 0 1.5rem;
+		gap: var(--gap-xs);
+		padding: 0 var(--padding-xxl);
 		&:before {
 			position: absolute;
 			left: 0;
@@ -79,13 +79,13 @@
 		}
 	}
 	.budget__label {
-		font-size: 0.75rem;
-		line-height: 1.5;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 	.budget__sum {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		font-weight: bolder;
 	}
 </style>

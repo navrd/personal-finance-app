@@ -160,9 +160,9 @@
 	}
 
 	.budgets {
-		width: 100%;
+		width: var(--full-container-width);
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: var(--gap-l);
 	}
 </style>

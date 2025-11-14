@@ -21,19 +21,19 @@
 		position: relative;
 		display: inline-block;
 		color: var(--color-grey-500);
-		border: 1px solid var(--color-beige-500);
-		border-radius: 0.75rem;
+		border: var(--thin-border-beige-500);
+		border-radius: var(--radius-m);
 	}
 
 	.search-input {
 		border-radius: inherit;
-		width: 100%;
-		padding: 1.25rem 0.75rem;
+		width: var(--full-container-width);
+		padding: var(--padding-xl) var(--padding-m);
 		border: 1px solid #ccc;
-		border: 0;
+		border: var(--no-border);
 		outline: none;
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 	}
 
 	.search-icon {

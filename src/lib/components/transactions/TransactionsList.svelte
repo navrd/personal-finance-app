@@ -87,7 +87,7 @@
 
 <style lang="scss">
 	.transactions-list__items {
-		width: 100%;
+		width: var(--full-container-width);
 		display: flex;
 		flex-direction: column;
 	}
@@ -100,8 +100,8 @@
 		padding-block: 0.75rem;
 		border-bottom: 1px solid var(--color-grey-100);
 		color: var(--color-grey-500);
-		font-size: 0.75rem;
-		line-height: 1.5;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
 		flex: 1;
 		&:first-child {
 			flex: 4;

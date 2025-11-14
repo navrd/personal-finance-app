@@ -85,13 +85,13 @@
 	}
 	.page-header__title {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: bolder;
 	}
 	.overview-grid {
 		display: grid;
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'balance' 'pots' 'transactions' 'budgets' 'reccuring';
 		}
@@ -108,11 +108,11 @@
 	}
 	.overview-grid__segment {
 		display: flex;
-		gap: 1rem;
+		gap: var(--gap-l);
 		flex-direction: column;
 		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius-m);
+		padding: var(--padding-xxl);
 		@media screen and (min-width: 1024px) {
 			height: 100%;
 		}

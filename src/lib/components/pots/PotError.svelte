@@ -24,30 +24,30 @@
 		display: flex;
 		flex-direction: row;
 		align-items: flex-start;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 		padding: $containerPadding;
 		color: var(--color-grey-900);
 		background: white;
 		/* border-radius: calc(($containerBorderRadius + $containerPadding)); */
 		border-radius: $containerBorderRadius;
 		@media screen and (max-width: 1023px) {
-			width: 100%;
+			width: var(--full-container-width);
 		}
 		@media screen and (min-width: 1024px) {
 			width: calc(50% - 0.75rem);
 		}
 	}
 	.form-error__message {
-		padding: 0.75rem;
+		padding: var(--padding-m);
 		background: var(--color-beige-100);
 		border-radius: $containerBorderRadius;
 	}
 	.close {
 		width: 1.5rem;
 		height: 1.5rem;
-		border-radius: 50%;
-		border: 0;
-		outline: 0;
+		border-radius: var(--radius-round);
+		border: var(--no-border);
+		outline: var(--no-outline);
 		display: flex;
 		align-items: center;
 		justify-content: center;

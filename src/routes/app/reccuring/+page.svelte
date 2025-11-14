@@ -139,14 +139,14 @@
 	}
 	.page-header__title {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
-		font-weight: 550;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
+		font-weight: var(--font-weight-550);
 		font-weight: bolder;
 	}
 	.reccuring-grid {
 		display: grid;
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'bills bills' 'transactions transactions';
 		}
@@ -159,12 +159,12 @@
 	}
 	.section {
 		background: white;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-m);
 	}
 	.bills {
 		grid-area: bills;
 		display: flex;
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			flex-direction: row;
 		}
@@ -176,19 +176,19 @@
 	.transactions-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
-		padding: 1.5rem 1.25rem;
+		gap: var(--gap-m);
+		padding: var(--padding-xxl) 1.25rem;
 		grid-area: transactions;
 	}
 	.transactions-list__filters {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--gap-m);
 	}
 	.transactions-list__filter {
 		display: flex;
 		align-items: center;
-		font-size: 0.875rem;
-		line-height: 1.5;
-		gap: 0.75rem;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		gap: var(--gap-m);
 	}
 </style>

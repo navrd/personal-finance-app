@@ -81,7 +81,7 @@
 	.error-message {
 		background-color: #fee;
 		color: #c53030;
-		padding: 1rem;
+		padding: var(--padding-l);
 		border-radius: 8px;
 		margin-bottom: 1rem;
 		border-left: 4px solid #c53030;
@@ -93,14 +93,14 @@
 		color: #666;
 
 		p {
-			font-size: 1.1rem;
+			font-size: var(--font-size-l);
 		}
 	}
 
 	.pots-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: 1.5rem;
+		gap: var(--gap-xxl);
 	}
 	.empty-state {
 		text-align: center;
