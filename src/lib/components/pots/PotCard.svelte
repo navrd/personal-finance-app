@@ -186,7 +186,7 @@
 		min-width: 130px;
 		z-index: 3;
 		border-radius: var(--radius-m);
-		box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
+		box-shadow: var(--box-shadow);
 	}
 
 	.header-title {
@@ -234,7 +234,7 @@
 		margin-bottom: 0.5rem;
 	}
 	.progress-fill {
-		height: 100%;
+		height: var(--full-container-height);
 		border-radius: 4px;
 		transition: width 0.3s ease;
 	}

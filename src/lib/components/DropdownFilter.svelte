@@ -299,8 +299,8 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 2;
-		width: 100dvw;
-		height: 100dvh;
+		width: var(--full-screen-width);
+		height: var(--full-screen-height);
 		background: rgba(0, 0, 0, 0.25);
 	}
 	.mobile-options {

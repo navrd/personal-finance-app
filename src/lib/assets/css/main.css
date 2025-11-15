@@ -66,7 +66,7 @@ li {
 		color: white;
 	}
 	@media (min-width: 0px) and (max-width: 1023px) {
-		height: 100%;
+		height: var(--full-container-height);
 	}
 	@media screen and (min-width: 1024px) {
 		width: 10rem;
@@ -129,7 +129,7 @@ li {
 	top: 0;
 	left: 0;
 	width: var(--full-container-width);
-	height: 100%;
+	height: var(--full-container-height);
 	background: linear-gradient(90deg, transparent 0%, var(--color-grey-100) 50%, transparent 100%);
 	transform: translateX(-100%);
 	animation: shimmer-transform 2s ease-in-out infinite;

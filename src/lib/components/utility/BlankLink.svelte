@@ -52,7 +52,7 @@
 		top: 0;
 		left: 0;
 		width: var(--full-container-width);
-		height: 100%;
+		height: var(--full-container-height);
 		border: none;
 		background: transparent;
 		cursor: pointer;
@@ -62,7 +62,7 @@
 		/* top: 0;
 		left: 0; */
 		width: var(--full-container-width);
-		height: 100%;
+		height: var(--full-container-height);
 		border: none;
 		background: transparent;
 		cursor: pointer;

@@ -177,7 +177,7 @@
 		z-index: 5;
 		overflow: auto;
 		border-radius: var(--radius-s);
-		box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
+		box-shadow: var(--box-shadow);
 	}
 	.error {
 		font-size: var(--font-size-s);

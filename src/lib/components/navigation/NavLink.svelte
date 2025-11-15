@@ -34,7 +34,7 @@
 		justify-content: flex-start;
 		gap: var(--gap-s);
 		@media (min-width: 0px) and (max-width: 1023px) {
-			height: 100%;
+			height: var(--full-container-height);
 		}
 		@media screen and (min-width: 1024px) {
 			width: 10rem;
@@ -61,7 +61,7 @@
 			top: 0;
 			border-top-right-radius: 0.5rem;
 			border-bottom-right-radius: 0.5rem;
-			height: 100%;
+			height: var(--full-container-height);
 			width: calc(100% - 1rem);
 		}
 	}
@@ -80,7 +80,7 @@
 			position: absolute;
 			left: 0;
 			width: 0.25rem;
-			height: 100%;
+			height: var(--full-container-height);
 			content: '';
 		}
 		@media (min-width: 0px) and (max-width: 1023px) {

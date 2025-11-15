@@ -95,6 +95,7 @@
 	--radius-round: 50%;
 
 	--full-container-width: 100%;
+	--full-container-height: 100%;
 	--full-screen-width: 100dvw;
 	--full-screen-height: 100dvh;
 
@@ -115,6 +116,8 @@
 
 	--no-border: 0;
 	--no-outline: var(--no-outline);
+	--box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
+
 }
 
 @media (min-width: 0px) and (max-width: 1023px) {

@@ -71,7 +71,7 @@
 			position: absolute;
 			left: 0;
 			top: 0;
-			height: 100%;
+			height: var(--full-container-height);
 			width: 4px;
 			z-index: 1;
 			content: '';

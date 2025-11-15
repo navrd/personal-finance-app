@@ -43,13 +43,13 @@
 		@media (min-width: 0px) and (max-width: 1023px) {
 			padding: 0 var(--padding-l);
 			bottom: 0;
-			border-top-right-radius: 1rem;
-			border-top-left-radius: 1rem;
+			border-top-right-radius: var(--radius-l);
+			border-top-left-radius: var(--radius-l);
 		}
 		@media (min-width: 1024px) {
 			left: 0;
-			border-top-right-radius: 1rem;
-			border-bottom-right-radius: 1rem;
+			border-top-right-radius: var(--radius-l);
+			border-bottom-right-radius: var(--radius-l);
 		}
 	}
 	.sidebar__minimized {

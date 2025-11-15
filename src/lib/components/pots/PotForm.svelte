@@ -186,7 +186,7 @@
 		justify-content: center;
 		z-index: 2;
 		width: var(--full-container-width);
-		height: 100dvh;
+		height: var(--full-screen-height);
 		background: rgba(0, 0, 0, 0.25);
 	}
 	.form-container {

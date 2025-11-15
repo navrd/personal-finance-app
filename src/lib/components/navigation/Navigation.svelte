@@ -30,7 +30,7 @@
 		flex-direction: var(--sidebar-flex-direction);
 		gap: var(--gap-l);
 		@media (min-width: 0px) and (max-width: 1023px) {
-			height: 100%;
+			height: var(--full-container-height);
 			width: var(--full-container-width);
 			justify-content: space-between;
 		}

@@ -108,9 +108,9 @@
 
 <style lang="scss">
 	.auth-wrapper {
-		min-width: 100dvw;
-		max-width: 100dvw;
-		min-height: 100dvh;
+		min-width: var(--full-screen-width);
+		max-width: var(--full-screen-width);
+		min-height: var(--full-screen-height);
 		display: flex;
 		flex-direction: column;
 		align-items: center;

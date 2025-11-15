@@ -18,11 +18,11 @@
 
 <style lang="scss">
 	.error-page {
-		width: 100dvw;
-		height: 100dvh;
-		min-height: 100dvh;
-		max-width: 100dvw;
-		max-height: 100dvh;
+		width: var(--full-screen-width);
+		height: var(--full-screen-height);
+		min-height: var(--full-screen-height);
+		max-width: var(--full-screen-width);
+		max-height: var(--full-screen-height);
 		display: flex;
 		justify-content: center;
 		align-items: center;

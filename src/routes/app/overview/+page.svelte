@@ -96,7 +96,7 @@
 			grid-template-areas: 'balance' 'pots' 'transactions' 'budgets' 'reccuring';
 		}
 		@media (min-width: 1024px) {
-			height: 100%;
+			height: var(--full-container-height);
 			grid-template-areas:
 				'balance balance balance balance balance'
 				'pots pots pots budgets budgets'
@@ -114,7 +114,7 @@
 		border-radius: var(--radius-m);
 		padding: var(--padding-xxl);
 		@media screen and (min-width: 1024px) {
-			height: 100%;
+			height: var(--full-container-height);
 		}
 	}
 	.overview-grid__segment_balance {

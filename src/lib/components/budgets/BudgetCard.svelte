@@ -287,7 +287,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		min-width: 130px;
 		z-index: 3;
 		border-radius: var(--radius-m);
-		box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
+		box-shadow: var(--box-shadow);
 	}
 
 	.header-title {

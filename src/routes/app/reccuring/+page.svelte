@@ -151,7 +151,7 @@
 			grid-template-areas: 'bills bills' 'transactions transactions';
 		}
 		@media (min-width: 1024px) {
-			height: 100%;
+			height: var(--full-container-height);
 			grid-template-areas:
 				'bills transactions transactions'
 				'bills transactions transactions';

@@ -180,7 +180,7 @@
 		overflow: hidden;
 	}
 	.progress-fill {
-		height: 100%;
+		height: var(--full-container-height);
 		border-radius: 4px;
 		transition: width 0.3s ease;
 	}
@@ -189,7 +189,7 @@
 	}
 
 	.progress-new-amount {
-		height: 100%;
+		height: var(--full-container-height);
 		border-radius: 4px;
 		transition: width 0.3s ease;
 	}
@@ -253,7 +253,7 @@
 		justify-content: center;
 		z-index: 2;
 		width: var(--full-container-width);
-		height: 100dvh;
+		height: var(--full-screen-height);
 		background: rgba(0, 0, 0, 0.25);
 	}
 	.form-container {
