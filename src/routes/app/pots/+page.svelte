@@ -43,7 +43,7 @@
 	}
 	.page-header__buttons {
 		display: flex;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		align-items: center;
 		justify-content: flex-end;
 	}

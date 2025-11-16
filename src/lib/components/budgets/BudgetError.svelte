@@ -22,21 +22,21 @@
 		display: flex;
 		flex-direction: row;
 		align-items: flex-start;
-		gap: var(--gap-m);
-		padding:var(--padding-m);
+		gap: var(--space-m);
+		padding:var(--space-m);
 		color: var(--color-grey-900);
 		background: white;
 		border-radius: var(--radius-s);
 		@media screen and (max-width: 1023px) {
-			width: var(--full-container-width);
+			width: 100%;
 		}
 		@media screen and (min-width: 1024px) {
 			width: calc(50% - 0.75rem);
 		}
 	}
 	.form-error__message {
-		width: var(--full-container-width);
-		padding: var(--padding-m);
+		width: 100%;
+		padding: var(--space-m);
 		background: var(--color-beige-100);
 		border-radius: var(--radius-s);
 	}
@@ -44,8 +44,8 @@
 		width: 1.5rem;
 		height: 1.5rem;
 		border-radius: var(--radius-round);
-		border: var(--no-border);
-		outline: var(--no-outline);
+		border: 0;
+		outline: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;

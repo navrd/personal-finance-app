@@ -28,14 +28,14 @@
 		z-index: var(--sidebar-z-index);
 		display: flex;
 		flex-direction: var(--sidebar-flex-direction);
-		gap: var(--gap-l);
+		gap: var(--space-l);
 		@media (min-width: 0px) and (max-width: 1023px) {
-			height: var(--full-container-height);
-			width: var(--full-container-width);
+			height: 100%;
+			width: 100%;
 			justify-content: space-between;
 		}
 	}
 	.sidebar__navigation_minimized {
-		width: var(--full-container-width);
+		width: 100%;
 	}
 </style>

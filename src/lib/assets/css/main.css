@@ -26,11 +26,12 @@
 	font-synthesis: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	font-size: var(--font-size-base);
 }
 
 html,
 body {
-	max-width: 100vw;
+	max-width: var(--viewport-width);
 	overflow-x: hidden;
 }
 a,
@@ -54,19 +55,19 @@ li {
 }
 
 .sidebar-action {
-	padding: var(--padding-l);
+	padding: var(--space-l);
 	display: flex;
 	justify-content: flex-start;
 	color: var(--color-grey-300);
 	align-items: center;
-	gap: var(--gap-s);
+	gap: var(--space-s);
 	&:hover,
 	&:focus,
 	&:active {
 		color: white;
 	}
 	@media (min-width: 0px) and (max-width: 1023px) {
-		height: var(--full-container-height);
+		height: 100%;
 	}
 	@media screen and (min-width: 1024px) {
 		width: 10rem;
@@ -94,7 +95,7 @@ li {
 .details {
 	text-decoration: none;
 	display: flex;
-	gap: var(--gap-m);
+	gap: var(--space-m);
 	font-size: var(--font-size-s);
 	line-height: var(--line-height);
 	color: var(--color-grey-500);
@@ -128,8 +129,8 @@ li {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: var(--full-container-width);
-	height: var(--full-container-height);
+	width: 100%;
+	height: 100%;
 	background: linear-gradient(90deg, transparent 0%, var(--color-grey-100) 50%, transparent 100%);
 	transform: translateX(-100%);
 	animation: shimmer-transform 2s ease-in-out infinite;

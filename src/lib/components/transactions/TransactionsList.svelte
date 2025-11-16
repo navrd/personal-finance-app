@@ -87,7 +87,7 @@
 
 <style lang="scss">
 	.transactions-list__items {
-		width: var(--full-container-width);
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 	}
@@ -98,11 +98,11 @@
 	.transactions-list__category {
 		display: flex;
 		padding-block: 0.75rem;
-		border-bottom: 1px solid var(--color-grey-100);
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		color: var(--color-grey-500);
 		font-size: var(--font-size-xs);
 		line-height: var(--line-height);
-		flex: 1;
+		flex: var(--fill-evenly);
 		&:first-child {
 			flex: 4;
 		}

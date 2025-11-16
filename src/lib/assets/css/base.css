@@ -22,39 +22,16 @@
 	--color-turquoise: hsl(180, 16%, 42%);
 	--color-white: hsl(0, 0%, 100%);
 	--color-yellow: hsl(28, 73%, 81%);
-	--font-size-preset-1: 2rem;
-	--font-size-preset-2: 1.5rem;
-	--font-size-preset-3: 1.25rem;
-	--font-size-preset-4: 1.125rem;
-	--font-size-preset-5: 1rem;
-	--line-height-preset-1: 120%;
-	--line-height-preset-2: 120%;
-	--line-height-preset-3: 150%;
-	--line-height-preset-4: 150%;
-	--line-height-preset-5: 150%;
-	--spacing-50: 1rem;
-	--spacing-100: 2rem;
-	--spacing-150: 3rem;
-	--spacing-200: 4rem;
-	--spacing-250: 5rem;
-	--spacing-300: 6rem;
-	--spacing-400: 7rem;
-	--spacing-500: 8rem;
 	--letter-spacing: -0.05em;
 	--sidebar-width: 12.5rem;
 	--sidebar-height: 100dvh;
 	--sidebar-flex-direction: column;
-	--sidebar-padding: var(--padding-l);
+	--sidebar-padding: var(--space-l);
 	--sidebar-z-index: 1000;
 
-	--thin-border-beige-100: 1px solid var(--color-beige-100);
-	--thin-border-beige-500: 1px solid var(--color-beige-500);
-	--thin-border-transparent: 1px solid transparent;
-
-	--regular-border-green: 0.25rem solid var(--color-green);
-	--regular-border-yellow: 0.25rem solid var(--color-yellow);
-	--regular-border-cyan: 0.25rem solid var(--color-cyan);
-	--regular-border-chocolate: 0.25rem solid chocoloate;
+	--border-thin: 1px;
+	--border-regular: 0.25rem;
+	--border-thick: 0.5rem;
 
 	--font-weight-100: 100;
 	--font-weight-150: 150;
@@ -78,6 +55,12 @@
 	--line-height-m: 1.5;
 	--line-height-l: 1.6;
 
+	--full-container-width: 100%;
+	--full-container-height: 100%;
+	--viewport-width: 100dvw;
+	--viewport-height: 100dvh;
+
+	--font-size-base: 16px;
 	--font-size-xs: 0.75rem;
 	--font-size-s: 0.875rem;
 	--font-size-m: 1rem;
@@ -93,36 +76,25 @@
 	--radius-xl: 1.25rem;
 	--radius-xxl: 1.5rem;
 	--radius-round: 50%;
+	--radius-none: 0;
 
-	--full-container-width: 100%;
-	--full-container-height: 100%;
-	--full-screen-width: 100dvw;
-	--full-screen-height: 100dvh;
+	--space-xs: 0.25rem;
+	--space-s: 0.5rem;
+	--space-m: 0.75rem;
+	--space-l: 1rem;
+	--space-xl: 1.25rem;
+	--space-xxl: 1.5rem;
+	--space-xxxl: 2rem;
 
-	--gap-xs: 0.25rem;
-	--gap-s: 0.5rem;
-	--gap-m: 0.75rem;
-	--gap-l: 1rem;
-	--gap-xl: 1.25rem;
-	--gap-xxl: 1.5rem;
-
-	--padding-xs: 0.25rem;
-	--padding-s: 0.5rem;
-	--padding-m: 0.75rem;
-	--padding-l: 1rem;
-	--padding-xl: 1.25rem;
-	--padding-xxl: 1.5rem;
-	--padding-xxxl: 2rem;
-
-	--no-border: 0;
-	--no-outline: var(--no-outline);
 	--box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
 
+	--fill-evenly: 1;
+	--fill-propotionally: 1 1 auto;
 }
 
 @media (min-width: 0px) and (max-width: 1023px) {
 	:root {
-		--sidebar-width: var(--full-container-width);
+		--sidebar-width: 100%;
 		--sidebar-height: 5rem;
 		--sidebar-flex-direction: row;
 	}

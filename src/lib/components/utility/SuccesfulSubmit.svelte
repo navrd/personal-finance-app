@@ -33,7 +33,7 @@
 
 		--mark-check-width: calc(var(--mark-size) / 4);
 		--mark-check-height: calc(var(--mark-size) / 2);
-		--mark-check-border: var(--no-border).5rem solid white;
+		--mark-check-border: 0.5rem solid white;
 		--mark-check-transform: scale(0) rotate(45deg);
 		--mark-check-transform-active: scale(1) rotate(45deg);
 		--mark-border-radius: var(--radius-round);
@@ -44,7 +44,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: var(--gap-l);
+		gap: var(--space-l);
 		background: inherit; 
 		color: inherit;
         @media screen and (max-width: 899px) {

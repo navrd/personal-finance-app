@@ -21,16 +21,16 @@
 		position: relative;
 		display: inline-block;
 		color: var(--color-grey-500);
-		border: var(--thin-border-beige-500);
+		border: var(--border-thin) solid var(--color-grey-500);
 		border-radius: var(--radius-m);
 	}
 
 	.search-input {
 		border-radius: inherit;
-		width: var(--full-container-width);
-		padding: var(--padding-xl) var(--padding-m);
+		width: 100%;
+		padding: var(--space-xl) var(--space-m);
 		border: 1px solid #ccc;
-		border: var(--no-border);
+		border: 0;
 		outline: none;
 		font-size: var(--font-size-s);
 		line-height: var(--line-height);

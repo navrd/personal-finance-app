@@ -296,9 +296,9 @@
 
 <style lang="scss">
 	.auth-wrapper {
-		min-width: var(--full-screen-width);
-		max-width: var(--full-screen-width);
-		min-height: var(--full-screen-height);
+		min-width: var(--viewport-width);
+		max-width: var(--viewport-width);
+		min-height: var(--viewport-height);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -316,8 +316,8 @@
 		justify-content: center;
 		background: white;
 		border-radius: var(--radius-m);
-		padding: var(--padding-xxl);
-		gap: var(--gap-m);
+		padding: var(--space-xxl);
+		gap: var(--space-m);
 	}
 	.form-title {
 		font-size: var(--font-size-xxxl);
@@ -326,12 +326,12 @@
 	.form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		justify-content: center;
 	}
 	.auth-switch {
 		display: flex;
-		gap: var(--gap-xs);
+		gap: var(--space-xs);
 		font-size: var(--font-size-s);
 		color: var(--color-grey-500);
 	}

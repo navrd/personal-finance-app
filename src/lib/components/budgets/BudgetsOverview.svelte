@@ -56,7 +56,7 @@
 	.segment__legend {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		max-width: inherit;
 		max-height: 240px;
 		overflow: auto;
@@ -65,13 +65,13 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-xs);
-		padding: 0 var(--padding-xxl);
+		gap: var(--space-xs);
+		padding: 0 var(--space-xxl);
 		&:before {
 			position: absolute;
 			left: 0;
 			top: 0;
-			height: var(--full-container-height);
+			height: 100%;
 			width: 4px;
 			z-index: 1;
 			content: '';

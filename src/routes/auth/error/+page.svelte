@@ -25,14 +25,14 @@
 		justify-content: center;
 		align-items: center;
 		min-height: 100vh;
-		padding: var(--padding-l);
+		padding: var(--space-l);
 	}
 
 	.error-card {
 		background: white;
-		border-radius: 8px;
+		border-radius: var(--radius-s);
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		padding: var(--padding-xxxl);
+		padding: var(--space-xxxl);
 		text-align: center;
 		max-width: 400px;
 		border-left: 4px solid #dc2626;
@@ -40,27 +40,27 @@
 
 	h1 {
 		color: #dc2626;
-		margin-bottom: 1rem;
+		margin-bottom: var(--space-l);
 		font-size: var(--font-size-xxl)
 	}
 
 	p {
-		margin-bottom: 2rem;
+		margin-bottom: var(--space-xxxl);
 		color: #6b7280;
 		line-height: var(--line-height-l);
 	}
 
 	.actions {
 		display: flex;
-		gap: var(--gap-l);
+		gap: var(--space-l);
 		justify-content: center;
 		flex-wrap: wrap;
 	}
 
 	button {
-		padding: var(--padding-m) var(--padding-xxl);
+		padding: var(--space-m) var(--space-xxl);
 		border: 1px solid #d1d5db;
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		background: white;
 		cursor: pointer;
 		transition: all 0.2s;

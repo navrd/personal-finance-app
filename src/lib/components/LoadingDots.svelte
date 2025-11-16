@@ -15,7 +15,7 @@
 
 <style lang="scss">
 	.loading-dots {
-		width: var(--full-container-width);
+		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;

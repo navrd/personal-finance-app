@@ -18,11 +18,11 @@
 
 <style lang="scss">
 	.error-page {
-		width: var(--full-screen-width);
-		height: var(--full-screen-height);
-		min-height: var(--full-screen-height);
-		max-width: var(--full-screen-width);
-		max-height: var(--full-screen-height);
+		width: var(--viewport-width);
+		height: var(--viewport-height);
+		min-height: var(--viewport-height);
+		max-width: var(--viewport-width);
+		max-height: var(--viewport-height);
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -31,18 +31,18 @@
 		overflow: hidden;
 	}
 	.error-content {
-		padding: var(--padding-xxxl);
+		padding: var(--space-xxxl);
 		min-width: fit-content;
 		max-width: fit-content;
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: var(--gap-l);
+		gap: var(--space-l);
 		background: var(--color-yellow);
 		color: var(--color-grey-900);
 		overflow: hidden;
 		border-radius: var(--radius-s);
-		border: var(--thin-border-beige-500);
+		border: var(--border-thin) solid var(--color-grey-500);
 		h1 {
 			font-size: var(--font-size-xxxl);
 			font-weight: bolder;

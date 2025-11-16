@@ -177,8 +177,8 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 
 <style lang="scss">
 	.action {
-		padding:  var(--padding-m) var(--padding-s);
-		border-bottom: 1px solid var(--color-grey-100);
+		padding:  var(--space-m) var(--space-s);
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		color: var(--color-grey-900);
 		font-size: var(--font-size-s);
 		&:last-child {
@@ -206,27 +206,27 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	.latest-transactions {
 		display: flex;
 		flex-direction: column;
-		padding: var(--padding-m);
+		padding: var(--space-m);
 		border-radius: var(--radius-m);
 		background: var(--color-beige-100);
 	}
 	.data {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-xs);
+		gap: var(--space-xs);
 	}
 	.budget-data {
 		display: flex;
-		width: var(--full-container-width);
+		width: 100%;
 	}
 	.spent,
 	.remaining {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 
-		flex: 1 1 auto;
+		flex: var(--fill-propotionally);
 		&:before {
 			content: ' ';
 			width: 0.25rem;
@@ -253,7 +253,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		font-weight: var(--font-weight-600);
 	}
 	.amount-progress {
-		padding: var(--padding-xs);
+		padding: var(--space-xs);
 		display: flex;
 		height: 2rem;
 		background: var(--color-beige-100);
@@ -280,7 +280,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		background: white;
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		position: absolute;
 		top: calc(100% + 0.5rem);
 		right: 0;
@@ -294,7 +294,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		font-weight: bolder;
 		color: var(--color-grey-900);
 		&:before {
@@ -308,11 +308,11 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	.budget-card {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
-		width: var(--full-container-width);
+		gap: var(--space-m);
+		width: 100%;
 		background: white;
 		border-radius: var(--radius-m);
-		padding: var(--padding-xxl);
+		padding: var(--space-xxl);
 	}
 
 	.budget-card__header {

@@ -62,7 +62,7 @@
 	.wrapper {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-xs);
+		gap: var(--space-xs);
 	}
 	.label {
 		text-transform: capitalize;
@@ -73,17 +73,17 @@
 	}
 	.container {
 		position: relative;
-		width: var(--full-container-width);
+		width: 100%;
 		color: var(--color-grey-900);
-		border: var(--thin-border-beige-500);
+		border: var(--border-thin) solid var(--color-grey-500);
 		border-radius: var(--radius-s);
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		font-size: var(--font-size-s);
 		line-height: var(--line-height);
-		padding: var(--padding-xl) var(--padding-m);
+		padding: var(--space-xl) var(--space-m);
 	}
 	.container_error {
 		border-color: var(--color-red);
@@ -91,8 +91,8 @@
 
 	.input {
 		border-radius: inherit;
-		width: var(--full-container-width);
-		border: var(--no-border);
+		width: 100%;
+		border: 0;
 		outline: none;
 		font-size: var(--font-size-s);
 	}

@@ -41,7 +41,7 @@
 		transition: width 0.3s ease;
 		z-index: var(--sidebar-z-index);
 		@media (min-width: 0px) and (max-width: 1023px) {
-			padding: 0 var(--padding-l);
+			padding: 0 var(--space-l);
 			bottom: 0;
 			border-top-right-radius: var(--radius-l);
 			border-top-left-radius: var(--radius-l);
@@ -69,7 +69,7 @@
 	.sidebar__buttons {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-l);
+		gap: var(--space-l);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			display: none;
 		}

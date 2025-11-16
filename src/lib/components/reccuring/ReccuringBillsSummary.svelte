@@ -90,9 +90,9 @@
 	}
 	.bills-totals {
 		text-transform: capitalize;
-		padding: var(--padding-xl);
+		padding: var(--space-xl);
 		@media screen and (max-width: 1023px) {
-			flex: 1;
+			flex: var(--fill-evenly);
 		}
 	}
 	.label {
@@ -107,10 +107,10 @@
 	.bills-totals__segment {
 		display: flex;
 		justify-content: space-between;
-		border-bottom: 1px solid var(--color-grey-100);
-		padding: var(--padding-l) 0;
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
+		padding: var(--space-l) 0;
 		&:last-child {
-			border-bottom: none;
+			border-bottom: 0;
 		}
 	}
 	.segment__title {

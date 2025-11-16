@@ -148,22 +148,22 @@
 		font-weight: bolder;
 	}
 	.section {
-		padding: var(--padding-xl);
+		padding: var(--space-xl);
 	}
 	.transactions-list {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-xxl);
+		gap: var(--space-xxl);
 	}
 	.transactions-list__filters {
 		display: flex;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.transactions-list__filter {
 		display: flex;
 		align-items: center;
 		font-size: var(--font-size-s);
 		line-height: var(--line-height);
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 </style>

@@ -91,12 +91,12 @@
 	}
 	.overview-grid {
 		display: grid;
-		gap: var(--gap-xxl);
+		gap: var(--space-xxl);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'balance' 'pots' 'transactions' 'budgets' 'reccuring';
 		}
 		@media (min-width: 1024px) {
-			height: var(--full-container-height);
+			height: 100%;
 			grid-template-areas:
 				'balance balance balance balance balance'
 				'pots pots pots budgets budgets'
@@ -108,13 +108,13 @@
 	}
 	.overview-grid__segment {
 		display: flex;
-		gap: var(--gap-l);
+		gap: var(--space-l);
 		flex-direction: column;
 		background: white;
 		border-radius: var(--radius-m);
-		padding: var(--padding-xxl);
+		padding: var(--space-xxl);
 		@media screen and (min-width: 1024px) {
-			height: var(--full-container-height);
+			height: 100%;
 		}
 	}
 	.overview-grid__segment_balance {

@@ -33,12 +33,12 @@
 	.pagination-controls {
 		display: flex;
 		justify-content: space-between;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		align-items: center;
 	}
 	.pagination-controls__pages {
 		display: flex;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		align-items: center;
 	}
 	.pagination-controls__button {
@@ -49,7 +49,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border: var(--thin-border-beige-500);
+		border: var(--border-thin) solid var(--color-grey-500);
 		border-radius: var(--radius-s);
 		font-size: var(--font-size-s);
 		line-height: var(--line-height);

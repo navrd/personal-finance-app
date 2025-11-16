@@ -20,12 +20,12 @@
 	.bills-totals {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-xxl);
-		padding: var(--padding-xl);
+		gap: var(--space-xxl);
+		padding: var(--space-xl);
 		background: var(--color-grey-900);
 		color: white;
 		@media screen and (max-width: 1023px) {
-			flex: 1;
+			flex: var(--fill-evenly);
 		}
 	}
 	.label {

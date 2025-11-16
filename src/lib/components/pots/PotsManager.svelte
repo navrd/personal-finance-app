@@ -81,9 +81,9 @@
 	.error-message {
 		background-color: #fee;
 		color: #c53030;
-		padding: var(--padding-l);
-		border-radius: 8px;
-		margin-bottom: 1rem;
+		padding: var(--space-l);
+		border-radius: var(--radius-s);
+		margin-bottom: var(--space-l);
 		border-left: 4px solid #c53030;
 	}
 
@@ -100,13 +100,13 @@
 	.pots-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: var(--gap-xxl);
+		gap: var(--space-xxl);
 	}
 	.empty-state {
 		text-align: center;
 		padding: 40px;
 		background: #f9fafb;
-		border-radius: 12px;
+		border-radius: var(--radius-m);
 		color: #6b7280;
 	}
 

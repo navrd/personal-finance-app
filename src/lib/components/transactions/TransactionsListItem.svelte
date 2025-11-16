@@ -106,20 +106,20 @@
 	.transactions-list__item {
 		display: flex;
 		align-items: center;
-		border-bottom: 1px solid var(--color-grey-100);
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		&:last-child {
-			border-bottom: none;
+			border-bottom: 0;
 		}
 	}
 	.transactions-list__category {
 		display: flex;
 		align-items: center;
-		gap: var(--gap-xs);
+		gap: var(--space-xs);
 		padding-block: 0.75rem;
 		color: var(--color-grey-500);
 		font-size: var(--font-size-xs);
 		line-height: var(--line-height);
-		flex: 1;
+		flex: var(--fill-evenly);
 		&:first-child {
 			flex: 4;
 		}
@@ -148,7 +148,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.transaction-creds__text {
 		color: var(--color-grey-900);

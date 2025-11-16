@@ -65,7 +65,7 @@
 		display: flex;
 		min-height: 100vh;
 		overflow-y: auto;
-		min-width: var(--full-container-width);
-		max-width: var(--full-container-width);
+		min-width: 100%;
+		max-width: 100%;
 	}
 </style>

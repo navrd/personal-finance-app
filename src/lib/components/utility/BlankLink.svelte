@@ -51,8 +51,8 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: var(--full-container-width);
-		height: var(--full-container-height);
+		width: 100%;
+		height: 100%;
 		border: none;
 		background: transparent;
 		cursor: pointer;
@@ -61,8 +61,8 @@
 		position: relative;
 		/* top: 0;
 		left: 0; */
-		width: var(--full-container-width);
-		height: var(--full-container-height);
+		width: 100%;
+		height: 100%;
 		border: none;
 		background: transparent;
 		cursor: pointer;

@@ -39,15 +39,15 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: var(--full-container-width);
-		height: var(--full-container-height);
+		width: 100%;
+		height: 100%;
 		border: none;
 		background: transparent;
 		cursor: pointer;
 	}
 	.blank-button_full-width {
-		width: var(--full-container-width);
-		flex: 1;
+		width: 100%;
+		flex: var(--fill-evenly);
 		justify-content: space-between;
 	}
 </style>

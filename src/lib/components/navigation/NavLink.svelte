@@ -32,9 +32,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: var(--gap-s);
+		gap: var(--space-s);
 		@media (min-width: 0px) and (max-width: 1023px) {
-			height: var(--full-container-height);
+			height: 100%;
 		}
 		@media screen and (min-width: 1024px) {
 			width: 10rem;
@@ -52,16 +52,16 @@
 		z-index: 1;
 		@media (min-width: 0px) and (max-width: 1023px) {
 			bottom: 0;
-			width: var(--full-container-width);
+			width: 100%;
 			height: 90%;
-			border-top-left-radius: 0.5rem;
-			border-top-right-radius: 0.5rem;
+			border-top-left-radius: var(--radius-s);
+			border-top-right-radius: var(--radius-s);
 		}
 		@media (min-width: 1024px) {
 			top: 0;
-			border-top-right-radius: 0.5rem;
-			border-bottom-right-radius: 0.5rem;
-			height: var(--full-container-height);
+			border-top-right-radius: var(--radius-s);
+			border-bottom-right-radius: var(--radius-s);
+			height: 100%;
 			width: calc(100% - 1rem);
 		}
 	}
@@ -69,24 +69,24 @@
 		background: var(--color-beige-100);
 	}
 	.navlink__content {
-		width: var(--full-container-width);
+		width: 100%;
 		height: inherit;
 		position: relative;
 		display: flex;
-		gap: var(--gap-s);
+		gap: var(--space-s);
 
 		&:before {
 			z-index: 2;
 			position: absolute;
 			left: 0;
 			width: 0.25rem;
-			height: var(--full-container-height);
+			height: 100%;
 			content: '';
 		}
 		@media (min-width: 0px) and (max-width: 1023px) {
 			&:before {
 				bottom: 0;
-				width: var(--full-container-width);
+				width: 100%;
 				height: 0.25rem;
 			}
 		}
@@ -100,15 +100,15 @@
 		}
 	}
 	.navlink__overlay {
-		padding: var(--padding-l);
+		padding: var(--space-l);
 		color: var(--color-grey-300);
 		top: 0;
 		left: 0;
-		width: var(--full-container-width);
+		width: 100%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		gap: var(--gap-s);
+		gap: var(--space-s);
 		z-index: 2;
 		&:hover,
 		&:focus,

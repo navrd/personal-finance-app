@@ -35,7 +35,7 @@
 
 <style lang="scss">
 	.segment__data {
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		display: flex;
 		@media screen and (min-width: 0px) and (max-width: 670px) {
 			flex-direction: column;
@@ -48,8 +48,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		padding: var(--padding-m);
-		gap: var(--gap-m);
+		padding: var(--space-m);
+		gap: var(--space-m);
 		background: var(--color-beige-100);
 		min-width: 20rem;
 		border-radius: var(--radius-m);
@@ -70,11 +70,11 @@
 	}
 	.segment__summary {
 		display: flex;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		flex-wrap: wrap;
 	}
 	.pot {
-		padding: 0 var(--padding-xxl);
+		padding: 0 var(--space-xxl);
 		position: relative;
 		flex-basis: calc(50% - 0.75rem);
 
@@ -82,7 +82,7 @@
 			position: absolute;
 			left: 0;
 			top: 0;
-			height: var(--full-container-height);
+			height: 100%;
 			width: 4px;
 			content: '';
 			background: var(--data-color);

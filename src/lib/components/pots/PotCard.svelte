@@ -179,7 +179,7 @@
 		background: white;
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		position: absolute;
 		top: calc(100% + 0.5rem);
 		right: 0;
@@ -193,7 +193,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		font-weight: bolder;
 		color: var(--color-grey-900);
 		&:before {
@@ -207,10 +207,10 @@
 	.pot-card {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		background: white;
 		border-radius: var(--radius-m);
-		padding: var(--padding-xxl);
+		padding: var(--space-xxl);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		transition:
 			transform 0.2s ease,
@@ -223,19 +223,19 @@
 	.progress-container {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.progress-bar {
-		width: var(--full-container-width);
+		width: 100%;
 		height: 8px;
 		background-color: var(--color-beige-100);
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		overflow: hidden;
-		margin-bottom: 0.5rem;
+		margin-bottom: var(--space-s);
 	}
 	.progress-fill {
-		height: var(--full-container-height);
-		border-radius: 4px;
+		height: 100%;
+		border-radius: var(--radius-xs);
 		transition: width 0.3s ease;
 	}
 	.progress-data {
@@ -257,7 +257,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		width: var(--full-container-width);
+		width: 100%;
 	}
 	.label {
 		font-size: var(--font-size-s);
@@ -272,12 +272,12 @@
 		font-weight: bolder;
 	}
 	.action {
-		padding:  var(--padding-m)  var(--padding-s);
-		border-bottom: 1px solid var(--color-grey-100);
+		padding:  var(--space-m)  var(--space-s);
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		color: var(--color-grey-900);
 		font-size: var(--font-size-s);
 		&:last-child {
-			border-bottom: none;
+			border-bottom: 0;
 		}
 		&:hover {
 			background: var(--color-grey-300);
@@ -291,13 +291,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.action-button {
-		flex: 1;
+		flex: var(--fill-evenly);
 		border-radius: var(--radius-m);
-		padding: var(--padding-l);
-		border: var(--thin-border-beige-100);
+		padding: var(--space-l);
+		border: var(--border-thin) solid var(--color-beige-100);
 		background: var(--color-beige-100);
 		color: var(--color-grey-900);
 		font-weight: bolder;

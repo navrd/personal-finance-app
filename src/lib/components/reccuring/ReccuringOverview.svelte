@@ -87,25 +87,25 @@
 	.segment__data {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.segment__particle {
 		background: var(--color-beige-100);
-		padding: var(--padding-l) var(--padding-m);
+		padding: var(--space-l) var(--space-m);
 		display: flex;
-		flex: 1;
+		flex: var(--fill-evenly);
 		justify-content: space-between;
-		border-left: var(--regular-border-chocolate);
-		border-radius: 8px;
+		border-left: var(--border-regular) solid chocolate;
+		border-radius: var(--radius-s);
 	}
 	.segment__particle_paid {
-		border-left: var(--regular-border-green);
+		border-left: var(--border-regular) solid var(--color-green);
 	}
 	.segment__particle_due-soon {
-		border-left: var(--regular-border-yellow);
+		border-left: var(--border-regular) solid var(--color-yellow);
 	}
 	.segment__particle_upcoming {
-		border-left: var(--regular-border-cyan);
+		border-left: var(--border-regular) solid var(--color-cyan);
 	}
 	.segment__title {
 		color: var(--color-grey-500);

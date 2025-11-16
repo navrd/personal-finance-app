@@ -146,12 +146,12 @@
 	}
 	.reccuring-grid {
 		display: grid;
-		gap: var(--gap-xxl);
+		gap: var(--space-xxl);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'bills bills' 'transactions transactions';
 		}
 		@media (min-width: 1024px) {
-			height: var(--full-container-height);
+			height: 100%;
 			grid-template-areas:
 				'bills transactions transactions'
 				'bills transactions transactions';
@@ -164,7 +164,7 @@
 	.bills {
 		grid-area: bills;
 		display: flex;
-		gap: var(--gap-xxl);
+		gap: var(--space-xxl);
 		@media (min-width: 0px) and (max-width: 1023px) {
 			flex-direction: row;
 		}
@@ -176,19 +176,19 @@
 	.transactions-list {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
-		padding: var(--padding-xxl) 1.25rem;
+		gap: var(--space-m);
+		padding: var(--space-xxl) var(--space-xl);
 		grid-area: transactions;
 	}
 	.transactions-list__filters {
 		display: flex;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.transactions-list__filter {
 		display: flex;
 		align-items: center;
 		font-size: var(--font-size-s);
 		line-height: var(--line-height);
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 </style>

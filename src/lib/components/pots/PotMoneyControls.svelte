@@ -173,15 +173,15 @@
 <style lang="scss">
 	.progress-bar {
 		display: flex;
-		width: var(--full-container-width);
+		width: 100%;
 		height: 8px;
 		background-color: var(--color-beige-100);
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		overflow: hidden;
 	}
 	.progress-fill {
-		height: var(--full-container-height);
-		border-radius: 4px;
+		height: 100%;
+		border-radius: var(--radius-xs);
 		transition: width 0.3s ease;
 	}
 	.progress-fill_withdraw {
@@ -189,16 +189,16 @@
 	}
 
 	.progress-new-amount {
-		height: var(--full-container-height);
-		border-radius: 4px;
+		height: 100%;
+		border-radius: var(--radius-xs);
 		transition: width 0.3s ease;
 	}
 	.progress-new-amount_withdraw {
 		position: absolute;
 		right: 0;
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-		border-left: 1px solid white;
+		border-top-left-radius: var(--radius-none);
+		border-bottom-left-radius: var(--radius-none);
+		border-left: var(--border-thin) solid white;
 	}
 	.progress-data {
 		display: flex;
@@ -219,7 +219,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		width: var(--full-container-width);
+		width: 100%;
 	}
 	.label {
 		font-size: var(--font-size-s);
@@ -252,16 +252,16 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 2;
-		width: var(--full-container-width);
-		height: var(--full-screen-height);
+		width: 100%;
+		height: var(--viewport-height);
 		background: rgba(0, 0, 0, 0.25);
 	}
 	.form-container {
 		background: white;
 		border: 1px solid #e5e7eb;
-		border-radius: 12px;
-		padding: 30px;
-		margin-bottom: 30px;
+		border-radius: var(--radius-m);
+		padding: 32px;
+		margin-bottom: var(--space-xxxl);
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
 		@media screen and (max-width: 1023px) {
@@ -275,15 +275,15 @@
 	.pot-form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.pot-form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.form-header {
-		width: var(--full-container-width);
+		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -292,8 +292,8 @@
 		width: 1.5rem;
 		height: 1.5rem;
 		border-radius: var(--radius-round);
-		border: var(--no-border);
-		outline: var(--no-outline);
+		border: 0;
+		outline: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;

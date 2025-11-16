@@ -49,7 +49,7 @@
 	}
 	.page-header__buttons {
 		display: flex;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		align-items: center;
 		justify-content: flex-end;
 	}
@@ -58,7 +58,7 @@
 		overflow-y: auto;
 		display: grid;
 		align-items: start;
-		gap: var(--gap-xxl);
+		gap: var(--space-xxl);
 		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'overview' 'budgets';
 		}
@@ -69,11 +69,11 @@
 	}
 	.budgets-grid__segment {
 		display: flex;
-		gap: var(--gap-l);
+		gap: var(--space-l);
 		flex-direction: column;
 		background: white;
 		border-radius: var(--radius-m);
-		padding: var(--padding-xxl);
+		padding: var(--space-xxl);
 		z-index: 5;
 	}
 	.budgets-grid__segment_overview {
@@ -84,7 +84,7 @@
 	.budgets-grid__segment_budgets {
 		grid-area: budgets;
 		background: transparent;
-		gap: var(--gap-xxl);
+		gap: var(--space-xxl);
 		padding: 0;
 	}
 </style>

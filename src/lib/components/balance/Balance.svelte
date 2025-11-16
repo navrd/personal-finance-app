@@ -21,15 +21,15 @@
         @media screen and (max-width: 670px){
             flex-direction: column;
         }
-		gap: var(--gap-xxl);
+		gap: var(--space-xxl);
 	}
 	.balance-entry {
-		flex: 1 1 auto;
+		flex: var(--fill-propotionally);
 		border-radius: var(--radius-m);
-		padding: var(--padding-xxl);
+		padding: var(--space-xxl);
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-s);
+		gap: var(--space-s);
 		background: white;
 		color: var(--color-grey-900);
 	}

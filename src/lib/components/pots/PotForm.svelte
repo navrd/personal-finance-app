@@ -185,15 +185,15 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 2;
-		width: var(--full-container-width);
-		height: var(--full-screen-height);
+		width: 100%;
+		height: var(--viewport-height);
 		background: rgba(0, 0, 0, 0.25);
 	}
 	.form-container {
 		background: white;
 		border: 1px solid #e5e7eb;
-		border-radius: 12px;
-		padding: var(--padding-l);
+		border-radius: var(--radius-m);
+		padding: var(--space-l);
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 		@media screen and (max-width: 1023px) {
 			max-width: calc(100% - 2rem);
@@ -202,7 +202,7 @@
 	.pot-form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 	}
 	.description {
 		font-size: var(--font-size-s);
@@ -210,18 +210,18 @@
 		color: var(--color-grey-500);
 	}
 	.color-option {
-		width: var(--full-container-width);
+		width: 100%;
 		display: flex;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		align-items: center;
 		text-transform: capitalize;
-		border: var(--thin-border-transparent);
+		border: var(--border-thin) solid transparent;
 		color: var(--color-grey-900);
 		justify-content: space-between;
 	}
 	.color-option__name {
 		display: flex;
-		gap: var(--gap-m);
+		gap: var(--space-m);
 		&:before {
 			content: ' ';
 			height: 1rem;
@@ -240,7 +240,7 @@
 		}
 	}
 	.form-header {
-		width: var(--full-container-width);
+		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -249,8 +249,8 @@
 		width: 1.5rem;
 		height: 1.5rem;
 		border-radius: var(--radius-round);
-		border: var(--no-border);
-		outline: var(--no-outline);
+		border: 0;
+		outline: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
