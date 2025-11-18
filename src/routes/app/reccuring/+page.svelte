@@ -147,10 +147,10 @@
 	.reccuring-grid {
 		display: grid;
 		gap: var(--space-xxl);
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'bills bills' 'transactions transactions';
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			height: 100%;
 			grid-template-areas:
 				'bills transactions transactions'
@@ -165,10 +165,10 @@
 		grid-area: bills;
 		display: flex;
 		gap: var(--space-xxl);
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			flex-direction: row;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			flex-direction: column;
 		}
 	}

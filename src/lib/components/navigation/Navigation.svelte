@@ -29,7 +29,7 @@
 		display: flex;
 		flex-direction: var(--sidebar-flex-direction);
 		gap: var(--space-l);
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			height: 100%;
 			width: 100%;
 			justify-content: space-between;

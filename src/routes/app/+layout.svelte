@@ -20,15 +20,15 @@
 		min-width: 100%;
 		max-width: 100%;
 		transition: padding 0.3s ease;
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			padding-bottom: var(--sidebar-height);
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			padding-left: var(--sidebar-width);
 		}
 	}
 	.content_expanded {
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			padding-left: 5rem;
 		}
 	}

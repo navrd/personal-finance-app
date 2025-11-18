@@ -55,12 +55,10 @@
 	--line-height-m: 1.5;
 	--line-height-l: 1.6;
 
-	--full-container-width: 100%;
-	--full-container-height: 100%;
 	--viewport-width: 100dvw;
 	--viewport-height: 100dvh;
 
-	--font-size-base: 16px;
+	font-size: 16px;
 	--font-size-xs: 0.75rem;
 	--font-size-s: 0.875rem;
 	--font-size-m: 1rem;
@@ -92,14 +90,10 @@
 	--fill-propotionally: 1 1 auto;
 }
 
-@media (min-width: 0px) and (max-width: 1023px) {
+@media screen and (min-width: 0px) and (max-width: 1023px) {
 	:root {
 		--sidebar-width: 100%;
 		--sidebar-height: 5rem;
 		--sidebar-flex-direction: row;
 	}
-}
-@media (min-width: 1024px) and (max-width: 1199px) {
-}
-@media screen and (min-width: 1200px) {
 }

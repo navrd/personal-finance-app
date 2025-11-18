@@ -33,7 +33,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		gap: var(--space-s);
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			height: 100%;
 		}
 		@media screen and (min-width: 1024px) {
@@ -50,14 +50,14 @@
 		position: absolute;
 		left: 0;
 		z-index: 1;
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			bottom: 0;
 			width: 100%;
 			height: 90%;
 			border-top-left-radius: var(--radius-s);
 			border-top-right-radius: var(--radius-s);
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			top: 0;
 			border-top-right-radius: var(--radius-s);
 			border-bottom-right-radius: var(--radius-s);
@@ -83,14 +83,14 @@
 			height: 100%;
 			content: '';
 		}
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			&:before {
 				bottom: 0;
 				width: 100%;
 				height: 0.25rem;
 			}
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			top: 0;
 		}
 	}
@@ -115,11 +115,11 @@
 		&:active {
 			color: white;
 		}
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			flex-direction: column;
 			justify-content: center;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			justify-content: flex-start;
 		}
 		* {
@@ -146,24 +146,24 @@
 		text-transform: capitalize;
 		display: flex;
 		
-		@media (min-width: 0px) and (max-width: 599px) {
+		@media screen and (min-width: 0px) and (max-width: 599px) {
 			display: none;
 		}
 		@media screen and (min-width: 600px) and (max-width: 1023px) {
 			display: block;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			display: block;
 		}
 	}
 	.navlink__title_hidden {
-		@media (min-width: 0px) and (max-width: 599px) {
+		@media screen and (min-width: 0px) and (max-width: 599px) {
 			display: none;
 		}
 		@media screen and (min-width: 600px) and (max-width: 1023px) {
 			display: block;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			display: none;
 		}
 	}

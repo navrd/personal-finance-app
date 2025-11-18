@@ -110,7 +110,7 @@
 		color: #6b7280;
 	}
 
-	@media (max-width: 1024px) {
+	@media screen and (max-width: 1024px) {
 		.pots-grid {
 			grid-template-columns: 1fr;
 		}

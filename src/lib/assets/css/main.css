@@ -26,7 +26,6 @@
 	font-synthesis: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	font-size: var(--font-size-base);
 }
 
 html,
@@ -66,7 +65,7 @@ li {
 	&:active {
 		color: white;
 	}
-	@media (min-width: 0px) and (max-width: 1023px) {
+	@media screen and (min-width: 0px) and (max-width: 1023px) {
 		height: 100%;
 	}
 	@media screen and (min-width: 1024px) {

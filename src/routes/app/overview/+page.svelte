@@ -92,10 +92,10 @@
 	.overview-grid {
 		display: grid;
 		gap: var(--space-xxl);
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'balance' 'pots' 'transactions' 'budgets' 'reccuring';
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			height: 100%;
 			grid-template-areas:
 				'balance balance balance balance balance'
