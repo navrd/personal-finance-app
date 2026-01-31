@@ -4,7 +4,7 @@
 	import ReccuringBillsSummary from '$lib/components/reccuring/ReccuringBillsSummary.svelte';
 	import ReccuringBillsTotals from '$lib/components/reccuring/ReccuringBillsTotals.svelte';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import { TransactionsList, TransactionsPagination}  from '$lib/components';
+	import { TransactionsList, TransactionsPagination } from '$lib/components';
 	import Spacer from '$lib/components/utility/Spacer.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
@@ -16,7 +16,7 @@
 	import { getContext } from 'svelte';
 
 	let transactions: () => Transaction[] = getContext('transactions');
-	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions: () => TransactionSortOption[] = getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
 
@@ -149,6 +149,7 @@
 		gap: var(--space-xxl);
 		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'bills bills' 'transactions transactions';
+			grid-template-columns: 1fr 1fr;
 		}
 		@media screen and (min-width: 1024px) {
 			height: 100%;
@@ -160,12 +161,16 @@
 	.section {
 		background: white;
 		border-radius: var(--radius-m);
+		max-width: 100%;
 	}
 	.bills {
 		grid-area: bills;
 		display: flex;
 		gap: var(--space-xxl);
-		@media screen and (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (max-width: 399px) {
+			flex-direction: column;
+		}
+		@media screen and (min-width: 400px) and (max-width: 1023px) {
 			flex-direction: row;
 		}
 		@media screen and (min-width: 1024px) {

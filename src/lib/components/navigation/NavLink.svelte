@@ -118,6 +118,7 @@
 		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			flex-direction: column;
 			justify-content: center;
+			padding: var(--space-s);
 		}
 		@media screen and (min-width: 1024px) {
 			justify-content: flex-start;
@@ -145,7 +146,7 @@
 	.navlink__title {
 		text-transform: capitalize;
 		display: flex;
-		
+
 		@media screen and (min-width: 0px) and (max-width: 599px) {
 			display: none;
 		}

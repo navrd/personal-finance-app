@@ -32,7 +32,7 @@
 				class="legend-item"
 				style:--data-color={loading && editingBudget?.id === budget.id
 					? 'var(--color-grey-300)'
-					: (getById(themes(), budget.theme_id)?.theme)}
+					: getById(themes(), budget.theme_id)?.theme}
 			>
 				<h3 class="budget__label" class:loading={loading && editingBudget?.id === budget.id}>
 					{getById(categories(), budget.category_id)?.category}
@@ -52,6 +52,9 @@
 	.segment__data {
 		display: flex;
 		justify-content: space-between;
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
+			flex-direction: column;
+		}
 	}
 	.segment__legend {
 		display: flex;

@@ -37,9 +37,13 @@
 		align-items: center;
 	}
 	.pagination-controls__pages {
+
 		display: flex;
 		gap: var(--space-m);
 		align-items: center;
+		@media screen and (max-width: 399px) {
+			display: none
+		}
 	}
 	.pagination-controls__button {
 		min-width: 2.5rem;

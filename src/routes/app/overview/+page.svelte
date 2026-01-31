@@ -12,7 +12,7 @@
 		component: Component<any>;
 	}
 
-	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions: () => TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let balance: () => BalanceType = getContext('balance');
 	let balanceData = $derived.by<Pick<BalanceType, 'current' | 'expenses' | 'income'>>(() => {
@@ -27,7 +27,11 @@
 
 	let transactions: () => Transaction[] = getContext('transactions');
 	let transactionsSortedByDate = $derived.by(() => {
-		return sortTransactions(transactions(), transactionSortOptions()[2].id, transactionSortOptions());
+		return sortTransactions(
+			transactions(),
+			transactionSortOptions()[2].id,
+			transactionSortOptions()
+		);
 	});
 
 	let overviews: Overview[] = [{ title: 'balance', component: Balance }];
@@ -94,6 +98,7 @@
 		gap: var(--space-xxl);
 		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'balance' 'pots' 'transactions' 'budgets' 'reccuring';
+			grid-template-columns: 100%;
 		}
 		@media screen and (min-width: 1024px) {
 			height: 100%;
@@ -113,6 +118,11 @@
 		background: white;
 		border-radius: var(--radius-m);
 		padding: var(--space-xxl);
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
+			max-width: 100%;
+			padding: var(--space-m);
+			gap: var(--space-m); /* or whatever spacing you want */
+		}
 		@media screen and (min-width: 1024px) {
 			height: 100%;
 		}
