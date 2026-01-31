@@ -176,12 +176,12 @@
 		width: 100%;
 		height: 8px;
 		background-color: var(--color-beige-100);
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		overflow: hidden;
 	}
 	.progress-fill {
 		height: 100%;
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		transition: width 0.3s ease;
 	}
 	.progress-fill_withdraw {
@@ -190,15 +190,15 @@
 
 	.progress-new-amount {
 		height: 100%;
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		transition: width 0.3s ease;
 	}
 	.progress-new-amount_withdraw {
 		position: absolute;
 		right: 0;
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-		border-left: 1px solid white;
+		border-top-left-radius: var(--radius-none);
+		border-bottom-left-radius: var(--radius-none);
+		border-left: var(--border-thin) solid white;
 	}
 	.progress-data {
 		display: flex;
@@ -206,12 +206,12 @@
 		justify-content: space-between;
 	}
 	.progress-amount {
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 		color: var(--color-grey-500);
 		font-weight: bolder;
 	}
 	.progress-target {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		color: var(--color-grey-500);
 	}
 
@@ -222,26 +222,26 @@
 		width: 100%;
 	}
 	.label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 
 	.value {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: bolder;
 	}
 	.title {
-		font-size: 1.25rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xl);
+		line-height: var(--line-height-s);
 		color: var(--color-grey-900);
 		font-weight: bolder;
 	}
 	.description {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 	.pot-controls-wrapper {
@@ -253,15 +253,15 @@
 		justify-content: center;
 		z-index: 2;
 		width: 100%;
-		height: 100dvh;
+		height: var(--viewport-height);
 		background: rgba(0, 0, 0, 0.25);
 	}
 	.form-container {
 		background: white;
 		border: 1px solid #e5e7eb;
-		border-radius: 12px;
-		padding: 30px;
-		margin-bottom: 30px;
+		border-radius: var(--radius-m);
+		padding: 32px;
+		margin-bottom: var(--space-xxxl);
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
 		@media screen and (max-width: 1023px) {
@@ -275,12 +275,12 @@
 	.pot-form {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 	}
 	.pot-form {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 	}
 	.form-header {
 		width: 100%;
@@ -291,7 +291,7 @@
 	.close {
 		width: 1.5rem;
 		height: 1.5rem;
-		border-radius: 50%;
+		border-radius: var(--radius-round);
 		border: 0;
 		outline: 0;
 		display: flex;

@@ -32,7 +32,7 @@
 				class="legend-item"
 				style:--data-color={loading && editingBudget?.id === budget.id
 					? 'var(--color-grey-300)'
-					: (getById(themes(), budget.theme_id)?.theme)}
+					: getById(themes(), budget.theme_id)?.theme}
 			>
 				<h3 class="budget__label" class:loading={loading && editingBudget?.id === budget.id}>
 					{getById(categories(), budget.category_id)?.category}
@@ -52,11 +52,14 @@
 	.segment__data {
 		display: flex;
 		justify-content: space-between;
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
+			flex-direction: column;
+		}
 	}
 	.segment__legend {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		max-width: inherit;
 		max-height: 240px;
 		overflow: auto;
@@ -65,8 +68,8 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
-		padding: 0 1.5rem;
+		gap: var(--space-xs);
+		padding: 0 var(--space-xxl);
 		&:before {
 			position: absolute;
 			left: 0;
@@ -79,13 +82,13 @@
 		}
 	}
 	.budget__label {
-		font-size: 0.75rem;
-		line-height: 1.5;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 	.budget__sum {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		font-weight: bolder;
 	}
 </style>

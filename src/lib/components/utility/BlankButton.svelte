@@ -47,7 +47,7 @@
 	}
 	.blank-button_full-width {
 		width: 100%;
-		flex: 1;
+		flex: var(--fill-evenly);
 		justify-content: space-between;
 	}
 </style>

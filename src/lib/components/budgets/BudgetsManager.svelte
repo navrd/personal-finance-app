@@ -116,8 +116,8 @@
 
 	.alert {
 		padding: 15px;
-		border-radius: 8px;
-		margin-bottom: 20px;
+		border-radius: var(--radius-s);
+		margin-bottom: var(--space-xl);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -141,7 +141,7 @@
 		text-align: center;
 		padding: 40px;
 		background: #f9fafb;
-		border-radius: 12px;
+		border-radius: var(--radius-m);
 		color: #6b7280;
 	}
 
@@ -155,7 +155,7 @@
 		text-align: center;
 		padding: 40px;
 		background: #f9fafb;
-		border-radius: 12px;
+		border-radius: var(--radius-m);
 		color: #6b7280;
 	}
 
@@ -163,6 +163,6 @@
 		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: var(--space-l);
 	}
 </style>

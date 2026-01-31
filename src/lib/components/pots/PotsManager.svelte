@@ -81,9 +81,9 @@
 	.error-message {
 		background-color: #fee;
 		color: #c53030;
-		padding: 1rem;
-		border-radius: 8px;
-		margin-bottom: 1rem;
+		padding: var(--space-l);
+		border-radius: var(--radius-s);
+		margin-bottom: var(--space-l);
 		border-left: 4px solid #c53030;
 	}
 
@@ -93,24 +93,24 @@
 		color: #666;
 
 		p {
-			font-size: 1.1rem;
+			font-size: var(--font-size-l);
 		}
 	}
 
 	.pots-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: 1.5rem;
+		gap: var(--space-xxl);
 	}
 	.empty-state {
 		text-align: center;
 		padding: 40px;
 		background: #f9fafb;
-		border-radius: 12px;
+		border-radius: var(--radius-m);
 		color: #6b7280;
 	}
 
-	@media (max-width: 1024px) {
+	@media screen and (max-width: 1024px) {
 		.pots-grid {
 			grid-template-columns: 1fr;
 		}

@@ -175,16 +175,16 @@
 		display: flex;
 		flex-direction: column;
 		margin: 0;
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		background: white;
 		z-index: 1;
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 	.filter-wrapper {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		align-items: center;
 		min-width: inherit;
 		max-width: inherit;
@@ -194,8 +194,8 @@
 		}
 	}
 	.filter-label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 
@@ -219,21 +219,21 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 1.25rem 0.75rem;
+		padding: var(--space-xl) var(--space-m);
 		height: max-content;
-		border: 1px solid var(--color-beige-500);
-		border-radius: 0.5rem;
+		border: var(--border-thin) solid var(--color-grey-500);
+		border-radius: var(--radius-s);
 		outline: none;
 		background: transparent;
 		span {
-			font-size: 0.875rem;
-			line-height: 1.5;
+			font-size: var(--font-size-s);
+			line-height: var(--line-height);
 		}
 	}
 	.filter__options {
 		width: 100%;
-		padding-top: 10px;
-		padding-bottom: 10px;
+		padding-top: var(--space-m);
+		padding-bottom: var(--space-m);
 		display: flex;
 		flex-direction: column;
 		min-width: inherit;
@@ -245,9 +245,9 @@
 	.filter__option {
 		width: 100%;
 		cursor: pointer;
-		padding: 1.25rem 0.75rem;
+		padding: var(--space-xl) var(--space-m);
 		display: flex;
-		border-bottom: 1px solid var(--color-grey-100);
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		&:hover {
 			background: var(--color-grey-300);
 		}
@@ -266,8 +266,8 @@
 		justify-content: flex-start;
 		padding: 0;
 		margin: 0;
-		border: none;
-		outline: none;
+		border: 0;
+		outline: 0;
 		background: transparent;
 		@media screen and (max-width: 632px) {
 			max-width: 100%;
@@ -275,12 +275,12 @@
 	}
 	.filter-options-wrapper {
 		width: 100%;
-		padding-top: 10px;
+		padding-top: var(--space-m);
 		position: absolute;
 		width: 100%;
 		z-index: 2;
 		top: calc(100% + 4px);
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 	}
 	.dropdown-icon {
 		max-width: 0.875rem;
@@ -299,15 +299,15 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 2;
-		width: 100dvw;
-		height: 100dvh;
+		width: var(--viewport-width);
+		height: var(--viewport-height);
 		background: rgba(0, 0, 0, 0.25);
 	}
 	.mobile-options {
 		width: 80dvw;
 		max-height: 40dvh;
 		overflow: auto;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-m);
 		background: white;
 	}
 </style>

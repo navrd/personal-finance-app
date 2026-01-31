@@ -33,13 +33,17 @@
 	.pagination-controls {
 		display: flex;
 		justify-content: space-between;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		align-items: center;
 	}
 	.pagination-controls__pages {
+
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		align-items: center;
+		@media screen and (max-width: 399px) {
+			display: none
+		}
 	}
 	.pagination-controls__button {
 		min-width: 2.5rem;
@@ -49,10 +53,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid var(--color-beige-500);
-		border-radius: 0.5rem;
-		font-size: 0.875rem;
-		line-height: 1.5;
+		border: var(--border-thin) solid var(--color-grey-500);
+		border-radius: var(--radius-s);
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		background: transparent;
 		&:hover {
 			cursor: pointer;

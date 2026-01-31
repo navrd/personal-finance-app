@@ -2,6 +2,6 @@
 
 <style lang="scss">
 	.spacer {
-		flex: 1 1 auto;
+		flex: var(--fill-propotionally);
 	}
 </style>

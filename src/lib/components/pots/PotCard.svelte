@@ -179,38 +179,38 @@
 		background: white;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		position: absolute;
 		top: calc(100% + 0.5rem);
 		right: 0;
 		min-width: 130px;
 		z-index: 3;
-		border-radius: 0.75rem;
-		box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
+		border-radius: var(--radius-m);
+		box-shadow: var(--box-shadow);
 	}
 
 	.header-title {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		font-weight: bolder;
 		color: var(--color-grey-900);
 		&:before {
 			content: ' ';
 			width: 0.75rem;
 			height: 0.75rem;
-			border-radius: 50%;
+			border-radius: var(--radius-round);
 			background: var(--data-color);
 		}
 	}
 	.pot-card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius-m);
+		padding: var(--space-xxl);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		transition:
 			transform 0.2s ease,
@@ -223,19 +223,19 @@
 	.progress-container {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 	}
 	.progress-bar {
 		width: 100%;
 		height: 8px;
 		background-color: var(--color-beige-100);
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		overflow: hidden;
-		margin-bottom: 0.5rem;
+		margin-bottom: var(--space-s);
 	}
 	.progress-fill {
 		height: 100%;
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		transition: width 0.3s ease;
 	}
 	.progress-data {
@@ -244,12 +244,12 @@
 		justify-content: space-between;
 	}
 	.progress-amount {
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 		color: var(--color-grey-500);
 		font-weight: bolder;
 	}
 	.progress-target {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		color: var(--color-grey-500);
 	}
 
@@ -260,24 +260,24 @@
 		width: 100%;
 	}
 	.label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 
 	.value {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: bolder;
 	}
 	.action {
-		padding: 0.75rem 0.5rem;
-		border-bottom: 1px solid var(--color-grey-100);
+		padding:  var(--space-m)  var(--space-s);
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		color: var(--color-grey-900);
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 		&:last-child {
-			border-bottom: none;
+			border-bottom: 0;
 		}
 		&:hover {
 			background: var(--color-grey-300);
@@ -291,13 +291,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 0.75rem;
+		gap: var(--space-m);
 	}
 	.action-button {
-		flex: 1;
-		border-radius: 0.75rem;
-		padding: 1rem;
-		border: 1px solid var(--color-beige-100);
+		flex: var(--fill-evenly);
+		border-radius: var(--radius-m);
+		padding: var(--space-l);
+		border: var(--border-thin) solid var(--color-beige-100);
 		background: var(--color-beige-100);
 		color: var(--color-grey-900);
 		font-weight: bolder;

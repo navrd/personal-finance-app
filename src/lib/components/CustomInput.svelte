@@ -62,12 +62,12 @@
 	.wrapper {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--space-xs);
 	}
 	.label {
 		text-transform: capitalize;
-		font-size: 0.75rem;
-		line-height: 1.5;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 		font-weight: bolder;
 	}
@@ -75,15 +75,15 @@
 		position: relative;
 		width: 100%;
 		color: var(--color-grey-900);
-		border: 1px solid var(--color-beige-500);
-		border-radius: 0.5rem;
+		border: var(--border-thin) solid var(--color-grey-500);
+		border-radius: var(--radius-s);
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
-		gap: 0.75rem;
-		font-size: 0.875rem;
-		line-height: 1.5;
-		padding: 1.25rem 0.75rem;
+		gap: var(--space-m);
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		padding: var(--space-xl) var(--space-m);
 	}
 	.container_error {
 		border-color: var(--color-red);
@@ -94,7 +94,7 @@
 		width: 100%;
 		border: 0;
 		outline: none;
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 	}
 
 	.icon,
@@ -107,7 +107,7 @@
 		pointer-events: none;
 	}
 	.error {
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 		color: var(--color-red);
 		text-wrap: wrap;
 	}

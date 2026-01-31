@@ -48,7 +48,7 @@
 		width: 1rem;
 		height: 1rem;
 		background: white;
-		border-radius: 50%;
+		border-radius: var(--radius-round);
 		animation: flickerAnimation 1s ease infinite;
 	}
 </style>

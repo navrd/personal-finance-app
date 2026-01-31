@@ -4,7 +4,7 @@
 	import ReccuringBillsSummary from '$lib/components/reccuring/ReccuringBillsSummary.svelte';
 	import ReccuringBillsTotals from '$lib/components/reccuring/ReccuringBillsTotals.svelte';
 	import SearchInput from '$lib/components/SearchInput.svelte';
-	import { TransactionsList, TransactionsPagination}  from '$lib/components';
+	import { TransactionsList, TransactionsPagination } from '$lib/components';
 	import Spacer from '$lib/components/utility/Spacer.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
@@ -16,7 +16,7 @@
 	import { getContext } from 'svelte';
 
 	let transactions: () => Transaction[] = getContext('transactions');
-	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions: () => TransactionSortOption[] = getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
 
@@ -139,18 +139,19 @@
 	}
 	.page-header__title {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
-		font-weight: 550;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
+		font-weight: var(--font-weight-550);
 		font-weight: bolder;
 	}
 	.reccuring-grid {
 		display: grid;
-		gap: 1.5rem;
-		@media (min-width: 0px) and (max-width: 1023px) {
+		gap: var(--space-xxl);
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'bills bills' 'transactions transactions';
+			grid-template-columns: 1fr 1fr;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			height: 100%;
 			grid-template-areas:
 				'bills transactions transactions'
@@ -159,16 +160,20 @@
 	}
 	.section {
 		background: white;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-m);
+		max-width: 100%;
 	}
 	.bills {
 		grid-area: bills;
 		display: flex;
-		gap: 1.5rem;
-		@media (min-width: 0px) and (max-width: 1023px) {
+		gap: var(--space-xxl);
+		@media screen and (max-width: 399px) {
+			flex-direction: column;
+		}
+		@media screen and (min-width: 400px) and (max-width: 1023px) {
 			flex-direction: row;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			flex-direction: column;
 		}
 	}
@@ -176,19 +181,19 @@
 	.transactions-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
-		padding: 1.5rem 1.25rem;
+		gap: var(--space-m);
+		padding: var(--space-xxl) var(--space-xl);
 		grid-area: transactions;
 	}
 	.transactions-list__filters {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--space-m);
 	}
 	.transactions-list__filter {
 		display: flex;
 		align-items: center;
-		font-size: 0.875rem;
-		line-height: 1.5;
-		gap: 0.75rem;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		gap: var(--space-m);
 	}
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { CustomInput, CustomButton, LoadingDots, BlankButton } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -160,13 +161,13 @@
 	);
 </script>
 
-<div class="login-wrapper">
+<div class="auth-wrapper">
 	<!-- Success Message -->
 	{#if displaySuccess}
 		<div class="message message_success">
 			<strong>Success:</strong>
 			{displaySuccess}
-			<button class="button" onclick={clearMessages}>×</button>
+			<CustomButton onclick={clearMessages}>×</CustomButton>
 		</div>
 	{/if}
 
@@ -175,13 +176,13 @@
 		<div class="message message_error">
 			<strong>Error:</strong>
 			{displayError}
-			<button class="button" onclick={clearMessages}>×</button>
+			<CustomButton onclick={clearMessages}>×</CustomButton>
 		</div>
 	{/if}
 	<!-- Signup Form -->
 	{#if !displayError && !displaySuccess}
 		{#if currentTab === 'signup'}
-			<div class="login-wrapper__form">
+			<div class="auth-wrapper__form">
 				<h2 class="form-title">Sign Up</h2>
 				<form
 					method="POST"
@@ -213,7 +214,7 @@
 						type="password"
 						name="password"
 						disabled={isLoading}
-						id="signup-password"
+						id="signup-password-one"
 						label="Password"
 						bind:value={signupPasswordOne}
 						validator={validateSignupPassword}
@@ -222,7 +223,7 @@
 						type="password"
 						name="password"
 						disabled={isLoading}
-						id="signup-password"
+						id="signup-password-two"
 						label="Password"
 						bind:value={signupPasswordTwo}
 						validator={validateConfirmPassword}
@@ -244,7 +245,7 @@
 
 		<!-- Login Form -->
 		{#if currentTab === 'login'}
-			<div class="login-wrapper__form">
+			<div class="auth-wrapper__form">
 				<h2 class="form-title">Login</h2>
 				<form
 					method="POST"
@@ -283,49 +284,55 @@
 						><span class="switch-tabs">Sign Up</span></BlankButton
 					>
 				</h2>
+				<h2 class="auth-switch">
+					Forgot password? <BlankButton onclick={() => goto('auth/reset-password')}
+						><span class="switch-tabs">Reset it</span></BlankButton
+					>
+				</h2>
 			</div>
 		{/if}
 	{/if}
 </div>
 
 <style lang="scss">
-	.login-wrapper {
-		min-width: 100dvw;
-		max-width: 100dvw;
+	.auth-wrapper {
+		min-width: var(--viewport-width);
+		max-width: var(--viewport-width);
+		min-height: var(--viewport-height);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		background: var(--color-beige-100);
 		color: var(--color-grey-900);
-		font-size: 1.125rem;
+		font-size: var(--font-size-l);
 		overflow: hidden;
 	}
-	.login-wrapper__form,
+	.auth-wrapper__form,
 	.message {
 		min-width: 30dvw;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
-		gap: 0.75rem;
+		border-radius: var(--radius-m);
+		padding: var(--space-xxl);
+		gap: var(--space-m);
 	}
 	.form-title {
-		font-size: 2rem;
+		font-size: var(--font-size-xxxl);
 		font-weight: bolder;
 	}
 	.form {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		justify-content: center;
 	}
 	.auth-switch {
 		display: flex;
-		gap: 0.25rem;
-		font-size: 0.875rem;
+		gap: var(--space-xs);
+		font-size: var(--font-size-s);
 		color: var(--color-grey-500);
 	}
 	.switch-tabs {

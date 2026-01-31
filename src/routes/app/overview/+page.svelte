@@ -12,7 +12,7 @@
 		component: Component<any>;
 	}
 
-	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions: () => TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let balance: () => BalanceType = getContext('balance');
 	let balanceData = $derived.by<Pick<BalanceType, 'current' | 'expenses' | 'income'>>(() => {
@@ -27,7 +27,11 @@
 
 	let transactions: () => Transaction[] = getContext('transactions');
 	let transactionsSortedByDate = $derived.by(() => {
-		return sortTransactions(transactions(), transactionSortOptions()[2].id, transactionSortOptions());
+		return sortTransactions(
+			transactions(),
+			transactionSortOptions()[2].id,
+			transactionSortOptions()
+		);
 	});
 
 	let overviews: Overview[] = [{ title: 'balance', component: Balance }];
@@ -85,17 +89,18 @@
 	}
 	.page-header__title {
 		color: var(--color-grey-900);
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: bolder;
 	}
 	.overview-grid {
 		display: grid;
-		gap: 1.5rem;
-		@media (min-width: 0px) and (max-width: 1023px) {
+		gap: var(--space-xxl);
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			grid-template-areas: 'balance' 'pots' 'transactions' 'budgets' 'reccuring';
+			grid-template-columns: 100%;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			height: 100%;
 			grid-template-areas:
 				'balance balance balance balance balance'
@@ -108,11 +113,16 @@
 	}
 	.overview-grid__segment {
 		display: flex;
-		gap: 1rem;
+		gap: var(--space-l);
 		flex-direction: column;
 		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius-m);
+		padding: var(--space-xxl);
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
+			max-width: 100%;
+			padding: var(--space-m);
+			gap: var(--space-m); /* or whatever spacing you want */
+		}
 		@media screen and (min-width: 1024px) {
 			height: 100%;
 		}

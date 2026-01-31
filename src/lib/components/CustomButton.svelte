@@ -21,11 +21,11 @@
 		border: 0;
 		color: var(--color-white);
 		background-color: var(--color-grey-900);
-		line-height: 1.5;
+		line-height: var(--line-height);
 		padding-inline: 1rem;
 		padding-block: 1rem;
-		border-radius: 0.5rem;
-		font-size: 0.875rem;
+		border-radius: var(--radius-s);
+		font-size: var(--font-size-s);
 		height: 3.5rem;
 		&:hover,
 		&:active,

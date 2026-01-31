@@ -32,8 +32,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 0.5rem;
-		@media (min-width: 0px) and (max-width: 1023px) {
+		gap: var(--space-s);
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			height: 100%;
 		}
 		@media screen and (min-width: 1024px) {
@@ -50,17 +50,17 @@
 		position: absolute;
 		left: 0;
 		z-index: 1;
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			bottom: 0;
 			width: 100%;
 			height: 90%;
-			border-top-left-radius: 0.5rem;
-			border-top-right-radius: 0.5rem;
+			border-top-left-radius: var(--radius-s);
+			border-top-right-radius: var(--radius-s);
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			top: 0;
-			border-top-right-radius: 0.5rem;
-			border-bottom-right-radius: 0.5rem;
+			border-top-right-radius: var(--radius-s);
+			border-bottom-right-radius: var(--radius-s);
 			height: 100%;
 			width: calc(100% - 1rem);
 		}
@@ -73,7 +73,7 @@
 		height: inherit;
 		position: relative;
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--space-s);
 
 		&:before {
 			z-index: 2;
@@ -83,14 +83,14 @@
 			height: 100%;
 			content: '';
 		}
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			&:before {
 				bottom: 0;
 				width: 100%;
 				height: 0.25rem;
 			}
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			top: 0;
 		}
 	}
@@ -100,7 +100,7 @@
 		}
 	}
 	.navlink__overlay {
-		padding: 1rem;
+		padding: var(--space-l);
 		color: var(--color-grey-300);
 		top: 0;
 		left: 0;
@@ -108,18 +108,19 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		gap: 0.5rem;
+		gap: var(--space-s);
 		z-index: 2;
 		&:hover,
 		&:focus,
 		&:active {
 			color: white;
 		}
-		@media (min-width: 0px) and (max-width: 1023px) {
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			flex-direction: column;
 			justify-content: center;
+			padding: var(--space-s);
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			justify-content: flex-start;
 		}
 		* {
@@ -145,25 +146,25 @@
 	.navlink__title {
 		text-transform: capitalize;
 		display: flex;
-		
-		@media (min-width: 0px) and (max-width: 599px) {
+
+		@media screen and (min-width: 0px) and (max-width: 599px) {
 			display: none;
 		}
 		@media screen and (min-width: 600px) and (max-width: 1023px) {
 			display: block;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			display: block;
 		}
 	}
 	.navlink__title_hidden {
-		@media (min-width: 0px) and (max-width: 599px) {
+		@media screen and (min-width: 0px) and (max-width: 599px) {
 			display: none;
 		}
 		@media screen and (min-width: 600px) and (max-width: 1023px) {
 			display: block;
 		}
-		@media (min-width: 1024px) {
+		@media screen and (min-width: 1024px) {
 			display: none;
 		}
 	}

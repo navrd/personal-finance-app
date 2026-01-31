@@ -86,18 +86,18 @@
 <style lang="scss">
 	.section {
 		background: white;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-m);
 	}
 	.bills-totals {
 		text-transform: capitalize;
-		padding: 1.25rem;
+		padding: var(--space-xl);
 		@media screen and (max-width: 1023px) {
-			flex: 1;
+			flex: var(--fill-evenly);
 		}
 	}
 	.label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		font-weight: bolder;
 	}
 	.bills-totals__segments {
@@ -107,19 +107,19 @@
 	.bills-totals__segment {
 		display: flex;
 		justify-content: space-between;
-		border-bottom: 1px solid var(--color-grey-100);
-		padding: 1rem 0;
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
+		padding: var(--space-l) 0;
 		&:last-child {
-			border-bottom: none;
+			border-bottom: 0;
 		}
 	}
 	.segment__title {
-		font-size: 0.75rem;
-		line-height: 1.5;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 	.segment__value {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 		color: var(--color-grey-900);
 		font-weight: bolder;
 	}

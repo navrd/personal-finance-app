@@ -15,27 +15,27 @@
 <style lang="scss">
 	.section {
 		background: white;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-m);
 	}
 	.bills-totals {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-		padding: 1.25rem;
+		gap: var(--space-xxl);
+		padding: var(--space-xl);
 		background: var(--color-grey-900);
 		color: white;
 		@media screen and (max-width: 1023px) {
-			flex: 1;
+			flex: var(--fill-evenly);
 		}
 	}
 	.label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		font-weight: bolder;
 	}
 	.sum {
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: bolder;
 	}
 </style>

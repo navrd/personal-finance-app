@@ -53,18 +53,19 @@
 
 		return `${day} ${month} ${year}`;
 	};
+	function getImageUrl(url: string): string {
+		return url.replace('/assets', '');
+	}
 </script>
 
 <li class="transactions-list__item">
 	<div class="transactions-list__category">
 		<p class="transaction-creds">
-			{#await import(`../../${transaction.avatar}`) then { default: src }}
-				{#if isLoading}<span class="avatar-loading"></span>{:else}<img
-						class="avatar"
-						{src}
-						alt={transaction.name}
-					/>{/if}
-			{/await}
+			{#if isLoading}<span class="avatar-loading"></span>{:else}<img
+					class="avatar"
+					src={getImageUrl(transaction.avatar)}
+					alt={transaction.name}
+				/>{/if}
 			<span class="transaction-creds__text" class:loading={isLoading}>{transaction.name}</span>
 		</p>
 	</div>
@@ -105,20 +106,20 @@
 	.transactions-list__item {
 		display: flex;
 		align-items: center;
-		border-bottom: 1px solid var(--color-grey-100);
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		&:last-child {
-			border-bottom: none;
+			border-bottom: 0;
 		}
 	}
 	.transactions-list__category {
 		display: flex;
 		align-items: center;
-		gap: 0.25rem;
+		gap: var(--space-xs);
 		padding-block: 0.75rem;
 		color: var(--color-grey-500);
-		font-size: 0.75rem;
-		line-height: 1.5;
-		flex: 1;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
+		flex: var(--fill-evenly);
 		&:first-child {
 			flex: 4;
 		}
@@ -133,33 +134,33 @@
 		max-width: 2rem;
 		min-height: 2rem;
 		max-height: 2rem;
-		border-radius: 50%;
+		border-radius: var(--radius-round);
 	}
 	.avatar-loading {
 		min-width: 2rem;
 		max-width: 2rem;
 		min-height: 2rem;
 		max-height: 2rem;
-		border-radius: 50%;
+		border-radius: var(--radius-round);
 		background: var(--color-grey-300);
 	}
 	.transaction-creds {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 0.75rem;
+		gap: var(--space-m);
 	}
 	.transaction-creds__text {
 		color: var(--color-grey-900);
-		font-size: 0.875rem;
-		line-height: 1.5;
-		font-weight: 600;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		font-weight: var(--font-weight-600);
 	}
 	.amount {
 		color: var(--color-grey-900);
-		font-size: 0.875rem;
-		line-height: 1.5;
-		font-weight: 700;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		font-weight: var(--font-weight-700);
 	}
 	.amount_plus {
 		color: var(--color-green);

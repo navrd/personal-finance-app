@@ -35,7 +35,7 @@
 
 <style lang="scss">
 	.segment__data {
-		gap: 0.75rem;
+		gap: var(--space-m);
 		display: flex;
 		@media screen and (min-width: 0px) and (max-width: 670px) {
 			flex-direction: column;
@@ -48,33 +48,33 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		padding: 0.75rem;
-		gap: 0.75rem;
+		padding: var(--space-m);
+		gap: var(--space-m);
 		background: var(--color-beige-100);
 		min-width: 20rem;
-		border-radius: 0.75rem;
+		border-radius: var(--radius-m);
 	}
 	.total-savings__icon {
 		min-width: 3rem;
 	}
 	.total-savings__label {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 		text-transform: capitalize;
 	}
 	.total-savings__sum {
-		font-size: 2rem;
-		line-height: 1.2;
+		font-size: var(--font-size-xxxl);
+		line-height: var(--line-height-s);
 		font-weight: bolder;
 	}
 	.segment__summary {
 		display: flex;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		flex-wrap: wrap;
 	}
 	.pot {
-		padding: 0 1.5rem;
+		padding: 0 var(--space-xxl);
 		position: relative;
 		flex-basis: calc(50% - 0.75rem);
 
@@ -89,13 +89,13 @@
 		}
 	}
 	.pot__label {
-		font-size: 0.75rem;
-		line-height: 1.5;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 	.pot__sum {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		font-weight: bolder;
 	}
 </style>

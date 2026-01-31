@@ -177,10 +177,10 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 
 <style lang="scss">
 	.action {
-		padding: 0.75rem 0.5rem;
-		border-bottom: 1px solid var(--color-grey-100);
+		padding:  var(--space-m) var(--space-s);
+		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		color: var(--color-grey-900);
-		font-size: 0.875rem;
+		font-size: var(--font-size-s);
 		&:last-child {
 			border-bottom: none;
 		}
@@ -192,28 +192,28 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		color: var(--color-red);
 	}
 	.segment__header {
-		font-size: 1rem;
-		line-height: 1.5;
+		font-size: var(--font-size-m);
+		line-height: var(--line-height);
 		color: var(--color-grey-900);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
 	.segment_title {
-		font-size: 1rem;
-		font-weight: 600;
+		font-size: var(--font-size-m);
+		font-weight: var(--font-weight-600);
 	}
 	.latest-transactions {
 		display: flex;
 		flex-direction: column;
-		padding: 0.75rem;
-		border-radius: 0.75rem;
+		padding: var(--space-m);
+		border-radius: var(--radius-m);
 		background: var(--color-beige-100);
 	}
 	.data {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--space-xs);
 	}
 	.budget-data {
 		display: flex;
@@ -224,15 +224,15 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 0.75rem;
+		gap: var(--space-m);
 
-		flex: 1 1 auto;
+		flex: var(--fill-propotionally);
 		&:before {
 			content: ' ';
 			width: 0.25rem;
 			height: 2rem;
 			background: var(--color-beige-100);
-			border-radius: 0.25rem;
+			border-radius: var(--radius-xs);
 		}
 	}
 
@@ -243,27 +243,27 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	}
 	.label {
 		color: var(--color-grey-500);
-		font-size: 0.75rem;
-		line-height: 1.5;
+		font-size: var(--font-size-xs);
+		line-height: var(--line-height);
 	}
 	.sum {
 		color: var(--color-grey-900);
-		font-size: 0.875rem;
-		line-height: 1.5;
-		font-weight: 600;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
+		font-weight: var(--font-weight-600);
 	}
 	.amount-progress {
-		padding: 0.25rem;
+		padding: var(--space-xs);
 		display: flex;
 		height: 2rem;
 		background: var(--color-beige-100);
-		border-radius: 0.25rem;
+		border-radius: var(--radius-xs);
 	}
 	.amount-progress__value {
 		height: calc(2rem - 2 * 0.25rem);
 		background: var(--data-color);
 		width: var(--data-width);
-		border-radius: 0.25rem;
+		border-radius: var(--radius-xs);
 		transition: width 0.25s ease;
 	}
 	.context-menu {
@@ -280,39 +280,39 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		background: white;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		position: absolute;
 		top: calc(100% + 0.5rem);
 		right: 0;
 		min-width: 130px;
 		z-index: 3;
-		border-radius: 0.75rem;
-		box-shadow: 0rem 0.75rem 1.5rem 0rem hsl(from black h s l / 0.25);
+		border-radius: var(--radius-m);
+		box-shadow: var(--box-shadow);
 	}
 
 	.header-title {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		font-weight: bolder;
 		color: var(--color-grey-900);
 		&:before {
 			content: ' ';
 			width: 0.75rem;
 			height: 0.75rem;
-			border-radius: 50%;
+			border-radius: var(--radius-round);
 			background: var(--data-color);
 		}
 	}
 	.budget-card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: var(--space-m);
 		width: 100%;
 		background: white;
-		border-radius: 0.75rem;
-		padding: 1.5rem;
+		border-radius: var(--radius-m);
+		padding: var(--space-xxl);
 	}
 
 	.budget-card__header {
@@ -321,8 +321,8 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		align-items: center;
 	}
 	.budget-amount {
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 		color: var(--color-grey-500);
 	}
 </style>

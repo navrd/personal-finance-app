@@ -21,19 +21,19 @@
 		position: relative;
 		display: inline-block;
 		color: var(--color-grey-500);
-		border: 1px solid var(--color-beige-500);
-		border-radius: 0.75rem;
+		border: var(--border-thin) solid var(--color-grey-500);
+		border-radius: var(--radius-m);
 	}
 
 	.search-input {
 		border-radius: inherit;
 		width: 100%;
-		padding: 1.25rem 0.75rem;
+		padding: var(--space-xl) var(--space-m);
 		border: 1px solid #ccc;
 		border: 0;
 		outline: none;
-		font-size: 0.875rem;
-		line-height: 1.5;
+		font-size: var(--font-size-s);
+		line-height: var(--line-height);
 	}
 
 	.search-icon {

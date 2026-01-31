@@ -25,11 +25,11 @@
 
 <style lang="scss">
 	.sidebar__navigation {
-		z-index: 1000;
+		z-index: var(--sidebar-z-index);
 		display: flex;
 		flex-direction: var(--sidebar-flex-direction);
-		gap: 1rem;
-		@media (min-width: 0px) and (max-width: 1023px) {
+		gap: var(--space-l);
+		@media screen and (min-width: 0px) and (max-width: 1023px) {
 			height: 100%;
 			width: 100%;
 			justify-content: space-between;
