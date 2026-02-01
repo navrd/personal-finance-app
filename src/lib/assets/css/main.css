@@ -35,6 +35,7 @@ body {
 a,
 button,
 input {
+	color: inherit;
 	font-family: inherit;
 	cursor: pointer;
 }
