@@ -201,7 +201,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	}
 	.segment_title {
 		font-size: var(--font-size-m);
-		font-weight: var(--font-weight-600);
+		font-weight: 600;
 	}
 	.latest-transactions {
 		display: flex;
@@ -250,7 +250,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		color: var(--color-grey-900);
 		font-size: var(--font-size-s);
 		line-height: var(--line-height);
-		font-weight: var(--font-weight-600);
+		font-weight: 600;
 	}
 	.amount-progress {
 		padding: var(--space-xs);

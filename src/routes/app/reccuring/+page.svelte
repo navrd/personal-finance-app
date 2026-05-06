@@ -141,7 +141,7 @@
 		color: var(--color-grey-900);
 		font-size: var(--font-size-xxxl);
 		line-height: var(--line-height-s);
-		font-weight: var(--font-weight-550);
+		font-weight: 550;
 		font-weight: bolder;
 	}
 	.reccuring-grid {

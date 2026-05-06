@@ -100,7 +100,7 @@ li {
 	color: var(--color-grey-500);
 	align-items: center;
 	justify-content: center;
-	font-weight: var(--font-weight-350);
+	font-weight: 350;
 	font-style: normal;
 	* {
 		color: currentColor;
