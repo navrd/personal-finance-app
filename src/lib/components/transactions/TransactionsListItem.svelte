@@ -154,13 +154,13 @@
 		color: var(--color-grey-900);
 		font-size: var(--font-size-s);
 		line-height: var(--line-height);
-		font-weight: var(--font-weight-600);
+		font-weight: 600;
 	}
 	.amount {
 		color: var(--color-grey-900);
 		font-size: var(--font-size-s);
 		line-height: var(--line-height);
-		font-weight: var(--font-weight-700);
+		font-weight: 700;
 	}
 	.amount_plus {
 		color: var(--color-green);

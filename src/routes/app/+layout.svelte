@@ -1,10 +1,36 @@
 <script lang="ts">
+	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import { Sidebar } from '$lib/components';
+	import { Overlay, LoadingRing } from '$lib/components/utility/';
 	import type { StateWrapper } from '$lib/types/index.js';
 	import { getContext } from 'svelte';
 	let minimize: StateWrapper<boolean> = getContext('minimize');
 
 	let { children } = $props();
+
+	let isNavigating = $state(false);
+	let timeoutId: ReturnType<typeof setTimeout> | null = $state(null);
+
+	const SHOW_DELAY = 220;
+
+	beforeNavigate(({ from, to, type }) => {
+		if (type === 'leave') return;
+		if (from?.url?.pathname === to?.url?.pathname) return;
+
+		if (timeoutId) clearTimeout(timeoutId);
+
+		timeoutId = setTimeout(() => {
+			isNavigating = true;
+		}, SHOW_DELAY);
+	});
+
+	afterNavigate(({ to }) => {
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+			timeoutId = null;
+		}
+		isNavigating = false;
+	});
 </script>
 
 <Sidebar />
@@ -13,6 +39,10 @@
 		{@render children?.()}
 	</div>
 </main>
+
+<Overlay slideInFrom="none" show={isNavigating} onclose={() => {}}
+	><LoadingRing loadingRingSize="5rem" /></Overlay
+>
 
 <style lang="scss">
 	.content {

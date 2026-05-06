@@ -1,6 +1,12 @@
+import { dev } from '$app/environment'
 import { createServerClient } from '@supabase/ssr'
 import { type Handle, redirect } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
+
+if (dev) {
+    const { ProxyAgent, setGlobalDispatcher } = await import('undici')
+    setGlobalDispatcher(new ProxyAgent('socks5://127.0.0.1:1080'))
+}
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
 

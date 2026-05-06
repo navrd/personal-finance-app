@@ -37,6 +37,7 @@
 		"@supabase/supabase-js": "^2.50.5",
 		"@svelte-put/clickoutside": "^4.0.0",
 		"sass": "^1.89.2",
-		"svelte-outside": "^0.0.3"
+		"svelte-outside": "^0.0.3",
+		"undici": "^7.25.0"
 	}
 }
