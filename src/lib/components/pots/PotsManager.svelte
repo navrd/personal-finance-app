@@ -37,6 +37,8 @@
 			total: 0,
 			theme_id: ''
 		};
+		editingPot = null;
+		showForm = false;
 	}
 
 	async function clearForm() {
@@ -57,7 +59,7 @@
 	{/if}
 
 	{#if showForm}
-		<PotForm bind:editingPot bind:loading bind:formData bind:showForm />
+		<PotForm bind:editingPot bind:loading bind:formData bind:showForm {resetFormData}/>
 	{/if}
 	{#if pots().length === 0}
 		<div class="empty-state">
@@ -71,6 +73,7 @@
 		</div>
 	{/if}
 </div>
+
 
 <style lang="scss">
 	.pots-container {

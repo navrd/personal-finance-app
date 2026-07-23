@@ -14,28 +14,21 @@
 		formData: CreatePotData & { id?: string };
 		loading: boolean;
 		showForm: boolean;
+		resetFormData: () => void;
 	}
 
 	let {
 		editingPot = $bindable(),
 		formData = $bindable(),
 		loading = $bindable(),
-		showForm = $bindable()
+		showForm = $bindable(),
+		resetFormData
 	}: PotFormProps = $props();
 
 	let themes: () => ColorTheme[] = getContext('themes');
 	let pots: () => Pot[] = getContext('pots');
 
 	let formRef = $state<Overlay | null>(null);
-
-	function resetFormData() {
-		formData = {
-			name: '',
-			target: 0,
-			total: 0,
-			theme_id: ''
-		};
-	}
 
 	function cancelEdit() {
 		editingPot = null;
@@ -118,7 +111,7 @@
 		<header class="form-header">
 			<h2 class="title">{editingPot ? 'Edit Pot' : 'Create New Pot'}</h2>
 
-			<button class="close" type="button" onclick={cancelEdit}>{@html Close}</button>
+			<button class="close" type="button" onclick={formRef.close}>{@html Close}</button>
 		</header>
 		<p class="description">
 			{editingPot
