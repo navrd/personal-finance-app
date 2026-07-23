@@ -6,18 +6,33 @@
 		children?: Snippet;
 		ariaLabel?: string;
 		absolute?: boolean;
-		type?: "button" | "submit" | "reset" | null | undefined;
-		fullWidth?: boolean
+		type?: 'button' | 'submit' | 'reset' | null | undefined;
+		fullWidth?: boolean;
+		flexStart?: boolean;
 	}
 
-	let { onclick, children, ariaLabel, absolute, type = "button", fullWidth = false }: BlankButtonProps = $props();
+	let {
+		onclick,
+		children,
+		ariaLabel,
+		absolute,
+		type = 'button',
+		fullWidth = false,
+		flexStart = false
+	}: BlankButtonProps = $props();
 </script>
 
-<button class="blank-button" {onclick} aria-label={ariaLabel} {type} class:blank-button_absolute={absolute} class:blank-button_full-width={fullWidth}
-	>{@render children?.()}</button
+<button
+	class="blank-button"
+	{onclick}
+	aria-label={ariaLabel}
+	{type}
+	class:blank-button_absolute={absolute}
+	class:blank-button_full-width={fullWidth}
+	class:blank-button_flex-start={flexStart}>{@render children?.()}</button
 >
 
-<style lang="scss">
+<style lang="css">
 	.blank-button {
 		display: flex;
 		flex-direction: inherit;
@@ -41,6 +56,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
+		z-index: 9998;
 		border: none;
 		background: transparent;
 		cursor: pointer;
@@ -49,5 +65,8 @@
 		width: 100%;
 		flex: var(--fill-evenly);
 		justify-content: space-between;
+	}
+	.blank-button_flex-start {
+		justify-content: flex-start;
 	}
 </style>
