@@ -1,4 +1,5 @@
 import { Home, Pots, Reccuring, Transactions, Budgets } from '$lib/assets/images';
+import type { ComponentType } from 'svelte';
 export interface NavLinkProps {
     href: string;
     minimize: boolean;
@@ -176,4 +177,14 @@ export interface PreparedTheme extends ColorTheme {
 }
 export interface PreparedCategory extends Category {
     isUsed: boolean
+}
+
+export interface ContextOption {
+    id?: string;
+    title: string;
+    icon?: string;
+    onclick: (e: MouseEvent) => void;
+    variant?: 'default' | 'destructive';
+    disabled?: boolean;
+    hidden?: boolean;
 }

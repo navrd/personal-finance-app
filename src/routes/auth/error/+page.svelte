@@ -7,7 +7,7 @@
 	);
 </script>
 
-// /auth/error/+page.svelte (Svelte 5 with TypeScript)
+
 <div class="error-container">
 	<div class="error-card">
 		<h1>Authentication Error</h1>

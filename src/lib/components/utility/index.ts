@@ -4,3 +4,5 @@ export { default as Spacer } from './Spacer.svelte';
 export { default as SuccesfulSubmit } from './SuccesfulSubmit.svelte';
 export { default as Overlay } from './Overlay.svelte';
 export { default as LoadingRing } from './LoadingRing.svelte';
+export { default as ContextMenu } from './ContextMenu.svelte';
+export { default as PortalDropdown } from './PortalDropdown.svelte';

@@ -76,7 +76,7 @@
 		width: var(--viewport-width);
 		height: var(--viewport-height);
 		background: rgba(0, 0, 0, 0.25);
-		z-index: 9;
+		z-index: 9998;
 	}
 
 	.wrapper {
@@ -88,12 +88,14 @@
 		}
 		display: flex;
 		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 		gap: var(--space-xxl);
-		border: 1px solid var(--color-grey-900);
+		/* border: 1px solid var(--color-grey-900); */
 		transition: transform var(--animation-duration) ease-in-out;
 		border-radius: var(--radius-l);
 		max-height: 75dvh;
-		z-index: 10;
+		z-index: 9999;
 
 		@media screen and (max-width: 899px) {
 			width: 90dvw;

@@ -6,7 +6,7 @@
 	import { clickoutside } from '@svelte-put/clickoutside';
 	import { Dots } from '$lib/assets/images';
 	import type { ColorTheme, CreatePotData, Pot } from '$lib/types';
-	import { PotMoneyControls, LoadingDots, BlankButton } from '$lib/components';
+	import { PotMoneyControls, LoadingDots, BlankButton, PortalDropdown } from '$lib/components';
 	import { getById } from '$lib/helpers';
 
 	interface PotCardProps {
@@ -97,31 +97,31 @@
 		>
 			{pot.name}
 		</h3>
-		<div class="context-menu">
-			<BlankButton
-				onclick={(e: MouseEvent) => {
-					e.stopPropagation();
-					showContextMenu = !showContextMenu;
-				}}>{@html Dots}</BlankButton
-			>
-			{#if showContextMenu}
-				<ul class="context-menu__actions" use:clickoutside onclickoutside={clickOutside}>
-					<li class="action">
-						<BlankButton onclick={() => editPot(pot)}>Edit pot</BlankButton>
-					</li>
-					<li class="action action_delete">
-						<form method="POST" action="?/deletePot" use:enhance={enhanceDeleteForm}>
-							<input type="hidden" name="id" value={pot.id} />
-							<BlankButton type="submit" fullWidth
-								>{#if loading}
-									<LoadingDots dotColor="var(--color-red)" />
-								{:else}Delete pot{/if}</BlankButton
-							>
-						</form>
-					</li>
-				</ul>
-			{/if}
-		</div>
+		<PortalDropdown bind:opened={showContextMenu}>
+			{#snippet trigger()}
+				<div>
+					{@html Dots}
+				</div>
+			{/snippet}
+
+			<ul class="context-menu__actions" use:clickoutside onclickoutside={clickOutside}>
+				<li class="action">
+					<BlankButton onclick={() => editPot(pot)} fullWidth={true} flexStart
+						>Edit pot</BlankButton
+					>
+				</li>
+				<li class="action action_delete">
+					<form method="POST" action="?/deletePot" use:enhance={enhanceDeleteForm}>
+						<input type="hidden" name="id" value={pot.id} />
+						<BlankButton type="submit" fullWidth flexStart
+							>{#if loading}
+								<LoadingDots dotColor="var(--color-red)" />
+							{:else}Delete pot{/if}</BlankButton
+						>
+					</form>
+				</li>
+			</ul>
+		</PortalDropdown>
 	</div>
 
 	<div class="pot-amount">
@@ -159,20 +159,11 @@
 	<PotMoneyControls {pot} bind:editingPot bind:loading bind:showPotControls bind:addMoney />
 {/if}
 
-<style lang="scss">
+<style lang="css">
 	.pot-card__header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-	}
-	.context-menu {
-		position: relative;
-		display: flex;
-
-		align-items: center;
-		justify-content: center;
-		color: var(--color-grey-300);
-		fill: currentColor;
 	}
 
 	.context-menu__actions {
@@ -180,9 +171,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-m);
-		position: absolute;
-		top: calc(100% + 0.5rem);
-		right: 0;
 		min-width: 130px;
 		z-index: 3;
 		border-radius: var(--radius-m);
@@ -195,7 +183,7 @@
 		justify-content: flex-start;
 		gap: var(--space-m);
 		font-weight: bolder;
-		color: var(--color-grey-900);
+		/* color: var(--color-grey-900); */
 		&:before {
 			content: ' ';
 			width: 0.75rem;

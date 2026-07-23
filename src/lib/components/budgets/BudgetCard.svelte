@@ -12,7 +12,7 @@
 	import { getContext } from 'svelte';
 	import { ArrowRight, Dots } from '$lib/assets/images';
 	import { clickoutside } from '@svelte-put/clickoutside';
-	import { TransactionsList, LoadingDots, BlankButton } from '$lib/components';
+	import { TransactionsList, LoadingDots, BlankButton, PortalDropdown } from '$lib/components';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import { getById } from '$lib/helpers';
 
@@ -40,13 +40,13 @@
 		resetFormData
 	}: BudgetCardProps = $props();
 
-	let themes:() => ColorTheme[] = getContext('themes');
+	let themes: () => ColorTheme[] = getContext('themes');
 	let categories: () => Pick<Category, 'id' | 'category'>[] = getContext('categories');
 	let transactions: () => Transaction[] = getContext('transactions');
 	let transactionSortOptions: () => TransactionSortOption[] = getContext('transactionSortOptions');
 
 	let showContextMenu = $state(false);
-let isLoading = $derived(loading && editingBudget?.id === budget.id);
+	let isLoading = $derived(loading && editingBudget?.id === budget.id);
 
 	function editBudget(budget: Budget) {
 		editingBudget = budget;
@@ -60,7 +60,7 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		showContextMenu = false;
 	}
 
-	const enhanceForm: SubmitFunction = async ({ action, formData, cancel }) => {
+	const enhanceDeleteForm: SubmitFunction = async ({ action, formData, cancel }) => {
 		if (action.search.includes('deleteBudget') || action.pathname.includes('deleteBudget')) {
 			const confirmed = confirm('Are you sure you want to delete this budget?');
 			if (!confirmed) {
@@ -109,31 +109,31 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		>
 			{getById(categories(), budget.category_id)?.category}
 		</h3>
-		<div class="context-menu">
-			<BlankButton
-				onclick={(e: MouseEvent) => {
-					e.stopPropagation();
-					showContextMenu = !showContextMenu;
-				}}>{@html Dots}</BlankButton
-			>
-			{#if showContextMenu}
-				<ul class="context-menu__actions" use:clickoutside onclickoutside={clickOutside}>
-					<li class="action">
-						<BlankButton onclick={() => editBudget(budget)}>Edit budget</BlankButton>
-					</li>
-					<li class="action action_delete">
-						<form method="POST" action="?/deleteBudget" use:enhance={enhanceForm}>
-							<input type="hidden" name="id" value={budget.id} />
-							<BlankButton type="submit" fullWidth
-								>{#if loading}
-									<LoadingDots dotColor="var(--color-red)" />
-								{:else}Delete budget{/if}</BlankButton
-							>
-						</form>
-					</li>
-				</ul>
-			{/if}
-		</div>
+		<PortalDropdown bind:opened={showContextMenu}>
+			{#snippet trigger()}
+				<div>
+					{@html Dots}
+				</div>
+			{/snippet}
+
+			<ul class="context-menu__actions" use:clickoutside onclickoutside={clickOutside}>
+				<li class="action">
+					<BlankButton onclick={() => editBudget(budget)} fullWidth={true} flexStart
+						>Edit budget</BlankButton
+					>
+				</li>
+				<li class="action action_delete">
+					<form method="POST" action="?/deleteBudget" use:enhance={enhanceDeleteForm}>
+						<input type="hidden" name="id" value={budget.id} />
+						<BlankButton type="submit" fullWidth flexStart
+							>{#if loading}
+								<LoadingDots dotColor="var(--color-red)" />
+							{:else}Delete budget{/if}</BlankButton
+						>
+					</form>
+				</li>
+			</ul>
+		</PortalDropdown>
 	</div>
 
 	<p class="budget-amount" class:loading={isLoading}>Maximum of ${budget.maximum}</p>
@@ -141,7 +141,9 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	<div class="amount-progress">
 		<div
 			class="amount-progress__value"
-			style:--data-color={isLoading ? 'var(--color-grey-300)' :getById(themes(), budget.theme_id)?.theme}
+			style:--data-color={isLoading
+				? 'var(--color-grey-300)'
+				: getById(themes(), budget.theme_id)?.theme}
 			style:--data-width={`${(spent * -100) / budget.maximum}%`}
 			class:loading={isLoading}
 		></div>
@@ -175,9 +177,9 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 	</div>
 </div>
 
-<style lang="scss">
+<style lang="css">
 	.action {
-		padding:  var(--space-m) var(--space-s);
+		padding: var(--space-m) var(--space-s);
 		border-bottom: var(--border-thin) solid var(--color-grey-100);
 		color: var(--color-grey-900);
 		font-size: var(--font-size-s);
@@ -266,24 +268,13 @@ let isLoading = $derived(loading && editingBudget?.id === budget.id);
 		border-radius: var(--radius-xs);
 		transition: width 0.25s ease;
 	}
-	.context-menu {
-		position: relative;
-		display: flex;
-
-		align-items: center;
-		justify-content: center;
-		color: var(--color-grey-300);
-		fill: currentColor;
-	}
 
 	.context-menu__actions {
 		background: white;
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-m);
-		position: absolute;
 		top: calc(100% + 0.5rem);
-		right: 0;
 		min-width: 130px;
 		z-index: 3;
 		border-radius: var(--radius-m);

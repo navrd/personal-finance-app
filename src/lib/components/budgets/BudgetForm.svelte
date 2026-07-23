@@ -8,6 +8,7 @@
 	import { CustomSelect, CustomInput, CustomButton, LoadingDots } from '$lib/components';
 	import { getById } from '$lib/helpers/';
 	import { Close } from '$lib/assets/images';
+	import { Overlay } from '$lib/components/utility/';
 
 	interface BudgetFormData {
 		category_id: string;
@@ -34,7 +35,8 @@
 	let categories: () => Pick<Category, 'id' | 'category'>[] = getContext('categories');
 	let user: () => User = getContext('user');
 	let budgets: () => Budget[] = getContext('budgets');
-	let themes:() => ColorTheme[] = getContext('themes');
+	let themes: () => ColorTheme[] = getContext('themes');
+	let formRef = $state<Overlay | null>(null);
 
 	let usedCategoriesIds = $derived.by(() => {
 		let usedCategories = budgets().map((budget) => budget.category_id);
@@ -121,113 +123,89 @@
 	});
 </script>
 
-<div class="budget-form-wrapper">
-	<div class="form-container">
-		<form
-			method="POST"
-			class="budget-form"
-			action={editingBudget ? '?/updateBudget' : '?/createBudget'}
-			use:enhance={enhanceForm}
+<Overlay show={showForm} slideInFrom="top" onclose={resetFormData} bind:this={formRef}>
+	<form
+		method="POST"
+		class="budget-form"
+		action={editingBudget ? '?/updateBudget' : '?/createBudget'}
+		use:enhance={enhanceForm}
+	>
+		<header class="form-header">
+			<h2 class="title">{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
+			<button class="close" type="button" onclick={formRef.close}>{@html Close}</button>
+		</header>
+		<p class="description">
+			{editingBudget
+				? 'As your budgets change, feel free to update your spending limits.'
+				: 'Choose a category to set a spending budget. These categories can help you monitor spending.'}
+		</p>
+		<input type="hidden" name="user_id" value={user().id} />
+
+		{#if editingBudget}
+			<input type="hidden" name="id" value={editingBudget.id} />
+		{/if}
+		<CustomSelect
+			options={preparedCategories}
+			label="category"
+			onOptionClick={onCategorySelect}
+			selectedOption={getById(preparedCategories, formData?.category_id)!}
+			hiddenInput
+			inputName="category_id"
+			bind:inputValue={formData.category_id}
+			validator={validateBudgetCategory}
 		>
-			<header class="form-header">
-				<h2 class="title">{editingBudget ? 'Edit Budget' : 'Add New Budget'}</h2>
-				<button class="close" type="button" onclick={resetFormData}>{@html Close}</button>
-			</header>
-			<p class="description">
-				{editingBudget
-					? 'As your budgets change, feel free to update your spending limits.'
-					: 'Choose a category to set a spending budget. These categories can help you monitor spending.'}
-			</p>
-			<input type="hidden" name="user_id" value={user().id} />
+			{#snippet children(category)}
+				<p class="category-option" class:category-option_used={category.isUsed}>
+					{category.category}{#if category.isUsed}<span>Already used</span>{/if}
+				</p>
+			{/snippet}
+		</CustomSelect>
 
-			{#if editingBudget}
-				<input type="hidden" name="id" value={editingBudget.id} />
-			{/if}
-			<CustomSelect
-				options={preparedCategories}
-				label="category"
-				onOptionClick={onCategorySelect}
-				selectedOption={getById(preparedCategories, formData?.category_id)!}
-				hiddenInput
-				inputName="category_id"
-				bind:inputValue={formData.category_id}
-				validator={validateBudgetCategory}
-			>
-				{#snippet children(category)}
-					<p class="category-option" class:category-option_used={category.isUsed}>
-						{category.category}{#if category.isUsed}<span>Already used</span>{/if}
-					</p>
-				{/snippet}
-			</CustomSelect>
+		<CustomInput
+			bind:value={formData.maximum}
+			type="number"
+			placeholder="e.g. 200"
+			symbol="$"
+			name="maximum"
+			id="maximum"
+			label="Maximum Spending"
+			validator={validateBudgetMaximum}
+		/>
 
-			<CustomInput
-				bind:value={formData.maximum}
-				type="number"
-				placeholder="e.g. 200"
-				symbol="$"
-				name="maximum"
-				id="maximum"
-				label="Maximum Spending"
-				validator={validateBudgetMaximum}
-			/>
+		<CustomSelect
+			options={preparedThemes}
+			label="theme"
+			onOptionClick={onThemeSelect}
+			selectedOption={getById(preparedThemes, formData.theme_id)}
+			hiddenInput
+			inputName="theme_id"
+			bind:inputValue={formData.theme_id}
+			validator={validateBudgetTheme}
+		>
+			{#snippet children(theme)}
+				<p
+					class="color-option"
+					class:color-option_used={theme.isUsed}
+					style:--data-color={theme.theme}
+				>
+					<span class="color-option__name">{theme.name}</span>
+					{#if theme.isUsed}<span>Already used</span>{/if}
+				</p>
+			{/snippet}</CustomSelect
+		>
+		<CustomButton type="submit" disabled={!isFormValid}>
+			{#if loading}
+				<LoadingDots />
+			{:else}{editingBudget ? 'Update Budget' : 'Create Budget'}{/if}
+		</CustomButton>
+	</form>
+</Overlay>
 
-			<CustomSelect
-				options={preparedThemes}
-				label="theme"
-				onOptionClick={onThemeSelect}
-				selectedOption={getById(preparedThemes, formData.theme_id)}
-				hiddenInput
-				inputName="theme_id"
-				bind:inputValue={formData.theme_id}
-				validator={validateBudgetTheme}
-			>
-				{#snippet children(theme)}
-					<p
-						class="color-option"
-						class:color-option_used={theme.isUsed}
-						style:--data-color={theme.theme}
-					>
-						<span class="color-option__name">{theme.name}</span>
-						{#if theme.isUsed}<span>Already used</span>{/if}
-					</p>
-				{/snippet}</CustomSelect
-			>
-			<CustomButton type="submit" disabled={!isFormValid}>
-				{#if loading}
-					<LoadingDots />
-				{:else}{editingBudget ? 'Update Budget' : 'Create Budget'}{/if}
-			</CustomButton>
-		</form>
-	</div>
-</div>
-
-<style lang="scss">
-	.budget-form-wrapper {
-		position: fixed;
-		top: 0;
-		left: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 2;
-		width: 100%;
-		height: var(--viewport-height);
-		background: rgba(0, 0, 0, 0.25);
-	}
+<style lang="css">
 	.budget-form {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-m);
-	}
-	.form-container {
-		background: white;
-		border: 1px solid #e5e7eb;
-		border-radius: var(--radius-m);
-		padding: var(--space-l);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		@media screen and (max-width: 1023px) {
-			max-width: calc(100% - 2rem);
-		}
 	}
 	.description {
 		font-size: var(--font-size-s);

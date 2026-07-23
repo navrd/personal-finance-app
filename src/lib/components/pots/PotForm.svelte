@@ -7,6 +7,7 @@
 	import { CustomInput, CustomSelect, CustomButton, LoadingDots } from '$lib/components';
 	import { getContext } from 'svelte';
 	import { getById } from '$lib/helpers';
+	import { Overlay } from '$lib/components/utility';
 
 	interface PotFormProps {
 		editingPot: Pot | null;
@@ -22,8 +23,10 @@
 		showForm = $bindable()
 	}: PotFormProps = $props();
 
-	let themes:() => ColorTheme[] = getContext('themes');
+	let themes: () => ColorTheme[] = getContext('themes');
 	let pots: () => Pot[] = getContext('pots');
+
+	let formRef = $state<Overlay | null>(null);
 
 	function resetFormData() {
 		formData = {
@@ -37,7 +40,7 @@
 	function cancelEdit() {
 		editingPot = null;
 		resetFormData();
-		showForm = false;
+		if (formRef) formRef.close();
 	}
 
 	const enhanceForm: SubmitFunction = async ({ formData, cancel }) => {
@@ -100,105 +103,81 @@
 			validatePotName(formData.name) === null &&
 			validatePotTarget(formData.target) === null &&
 			validatePotTheme(formData.theme_id) === null &&
-			!loading	
+			!loading
 		);
 	});
 </script>
 
-<div class="pot-form-wrapper">
-	<div class="form-container">
-		<form
-			class="pot-form"
-			method="POST"
-			action={editingPot ? '?/updatePot' : '?/createPot'}
-			use:enhance={enhanceForm}
+<Overlay show={showForm} slideInFrom="top" onclose={cancelEdit} bind:this={formRef}>
+	<form
+		class="pot-form"
+		method="POST"
+		action={editingPot ? '?/updatePot' : '?/createPot'}
+		use:enhance={enhanceForm}
+	>
+		<header class="form-header">
+			<h2 class="title">{editingPot ? 'Edit Pot' : 'Create New Pot'}</h2>
+
+			<button class="close" type="button" onclick={cancelEdit}>{@html Close}</button>
+		</header>
+		<p class="description">
+			{editingPot
+				? 'If your saving targets change, feel free to update your pots.'
+				: 'Create a pot to set savings targets. These can help keep you on track as you save for special purchases.'}
+		</p>
+		{#if editingPot}
+			<input type="hidden" name="id" value={formData.id} />
+		{/if}
+		<CustomInput
+			id="name"
+			name="name"
+			label="Pot Name"
+			placeholder="e.g., Vacation Fund"
+			type="text"
+			bind:value={formData.name}
+			validator={validatePotName}
+		/>
+		<CustomInput
+			bind:value={formData.target}
+			type="number"
+			placeholder="e.g. 200"
+			symbol="$"
+			name="target"
+			id="target"
+			label="Target"
+			validator={validatePotTarget}
+		/>
+		<CustomSelect
+			options={preparedThemes}
+			label="theme"
+			onOptionClick={onThemeSelect}
+			selectedOption={getById(preparedThemes, formData.theme_id)}
+			hiddenInput
+			inputName="theme_id"
+			bind:inputValue={formData.theme_id}
+			validator={validatePotTheme}
 		>
-			<header class="form-header">
-				<h2 class="title">{editingPot ? 'Edit Pot' : 'Create New Pot'}</h2>
+			{#snippet children(theme)}
+				<p
+					class="color-option"
+					class:color-option_used={theme.isUsed}
+					style:--data-color={theme.theme}
+				>
+					<span class="color-option__name">{theme.name}</span>
+					{#if theme.isUsed}<span>Already used</span>{/if}
+				</p>
+			{/snippet}</CustomSelect
+		>
 
-				<button class="close" type="button" onclick={cancelEdit}>{@html Close}</button>
-			</header>
-			<p class="description">
-				{editingPot
-					? 'If your saving targets change, feel free to update your pots.'
-					: 'Create a pot to set savings targets. These can help keep you on track as you save for special purchases.'}
-			</p>
-			{#if editingPot}
-				<input type="hidden" name="id" value={formData.id} />
-			{/if}
-			<CustomInput
-				id="name"
-				name="name"
-				label="Pot Name"
-				placeholder="e.g., Vacation Fund"
-				type="text"
-				bind:value={formData.name}
-				validator={validatePotName}
-			/>
-			<CustomInput
-				bind:value={formData.target}
-				type="number"
-				placeholder="e.g. 200"
-				symbol="$"
-				name="target"
-				id="target"
-				label="Target"
-				validator={validatePotTarget}
-			/>
-			<CustomSelect
-				options={preparedThemes}
-				label="theme"
-				onOptionClick={onThemeSelect}
-				selectedOption={getById(preparedThemes, formData.theme_id)}
-				hiddenInput
-				inputName="theme_id"
-				bind:inputValue={formData.theme_id}
-				validator={validatePotTheme}
-			>
-				{#snippet children(theme)}
-					<p
-						class="color-option"
-						class:color-option_used={theme.isUsed}
-						style:--data-color={theme.theme}
-					>
-						<span class="color-option__name">{theme.name}</span>
-						{#if theme.isUsed}<span>Already used</span>{/if}
-					</p>
-				{/snippet}</CustomSelect
-			>
-
-			<CustomButton type="submit" disabled={!isFormValid}>
-				{#if loading}
-					<LoadingDots />
-				{:else}{editingPot ? 'Update Pot' : 'Create Pot'}{/if}
-			</CustomButton>
-		</form>
-	</div>
-</div>
+		<CustomButton type="submit" disabled={!isFormValid}>
+			{#if loading}
+				<LoadingDots />
+			{:else}{editingPot ? 'Update Pot' : 'Create Pot'}{/if}
+		</CustomButton>
+	</form>
+</Overlay>
 
 <style lang="scss">
-	.pot-form-wrapper {
-		position: fixed;
-		top: 0;
-		left: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 2;
-		width: 100%;
-		height: var(--viewport-height);
-		background: rgba(0, 0, 0, 0.25);
-	}
-	.form-container {
-		background: white;
-		border: 1px solid #e5e7eb;
-		border-radius: var(--radius-m);
-		padding: var(--space-l);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		@media screen and (max-width: 1023px) {
-			max-width: calc(100% - 2rem);
-		}
-	}
 	.pot-form {
 		display: flex;
 		flex-direction: column;
