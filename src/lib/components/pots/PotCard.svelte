@@ -3,7 +3,6 @@
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { invalidate } from '$app/navigation';
-	import { clickoutside } from '@svelte-put/clickoutside';
 	import { Dots } from '$lib/assets/images';
 	import type { ColorTheme, CreatePotData, Pot } from '$lib/types';
 	import { PotMoneyControls, LoadingDots, BlankButton, PortalDropdown } from '$lib/components';
@@ -49,10 +48,7 @@
 		showForm = true;
 		showContextMenu = false;
 	}
-	function clickOutside(e: CustomEvent<MouseEvent>) {
-		e.stopPropagation();
-		showContextMenu = false;
-	}
+
 	const enhanceDeleteForm: SubmitFunction = async ({ action, formData, cancel }) => {
 		if (action.search.includes('deletePot') || action.pathname.includes('deletePot')) {
 			const confirmed = confirm('Are you sure you want to delete this budget?');
@@ -104,7 +100,7 @@
 				</div>
 			{/snippet}
 
-			<ul class="context-menu__actions" use:clickoutside onclickoutside={clickOutside}>
+			<ul class="context-menu__actions">
 				<li class="action">
 					<BlankButton onclick={() => editPot(pot)} fullWidth={true} flexStart
 						>Edit pot</BlankButton

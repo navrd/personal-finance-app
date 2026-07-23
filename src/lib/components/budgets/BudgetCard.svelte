@@ -11,7 +11,6 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
 	import { ArrowRight, Dots } from '$lib/assets/images';
-	import { clickoutside } from '@svelte-put/clickoutside';
 	import { TransactionsList, LoadingDots, BlankButton, PortalDropdown } from '$lib/components';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import { getById } from '$lib/helpers';
@@ -81,10 +80,6 @@
 		};
 	};
 
-	function clickOutside(e: CustomEvent<MouseEvent>) {
-		e.stopPropagation();
-		showContextMenu = false;
-	}
 	let spent = $derived(
 		transactions()
 			.filter((transaction) => transaction.category_id === budget.category_id)
@@ -116,7 +111,7 @@
 				</div>
 			{/snippet}
 
-			<ul class="context-menu__actions" use:clickoutside onclickoutside={clickOutside}>
+			<ul class="context-menu__actions">
 				<li class="action">
 					<BlankButton onclick={() => editBudget(budget)} fullWidth={true} flexStart
 						>Edit budget</BlankButton
