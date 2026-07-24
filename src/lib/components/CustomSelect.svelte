@@ -1,25 +1,28 @@
 <script lang="ts" generics="T">
-	import type { Snippet } from 'svelte';
+	import { tick, type Snippet } from 'svelte';
 	import { BlankButton } from './utility';
 	import { ArrowRight } from '$lib/assets/images';
 	import { clickoutside } from '@svelte-put/clickoutside';
+	import { TOOLTIP_FALLBACKS } from '$lib/constants';
+	import { clamp, computeAlignedPosition, fitsInViewport } from '$lib/helpers';
+	import { scale } from 'svelte/transition';
 
 	interface CustomSelectProps<T> {
-		// Snippet for rendering individual options in the dropdown
 		children: Snippet<[T]>;
-		// Snippet for rendering the selected option display
 		selectedDisplay?: Snippet<[T | null]>;
 		label: string;
 		options: T[];
 		selectedOption: T | null;
 		onOptionClick: (option: T) => void;
-		// Optional: custom placeholder when nothing is selected
 		placeholder?: string;
 		hiddenInput?: boolean;
 		inputName?: string;
 		inputValue?: string | number;
 		disabled?: boolean;
-		validator?: (value: string) => string | null; // New prop for validation function
+		validator?: (value: string) => string | null;
+		placement?: 'top' | 'bottom' | 'left' | 'right';
+		align?: 'start' | 'end';
+		offset?: number;
 	}
 
 	let {
@@ -34,11 +37,19 @@
 		inputName,
 		inputValue = $bindable(),
 		validator,
-		disabled
+		disabled,
+		placement = 'bottom',
+		align = 'end',
+		offset = 8
 	}: CustomSelectProps<T> = $props();
 
-	// Internal touched state
 	let touched = $state(false);
+	let triggerEl = $state<HTMLElement | null>(null);
+	let triggerElWidth: number = $derived(triggerEl ? triggerEl.getBoundingClientRect().width : 0);
+	let containerEl = $state<HTMLElement | null>(null);
+	let coords = $state({ x: 0, y: 0 });
+	let resolvedPlacement = $state(placement);
+	let ready = $state(false);
 
 	let showOptions = $state(false);
 
@@ -50,32 +61,111 @@
 		e.stopPropagation();
 	}
 
-	function onSelectedOptionClick() {
-		showOptions = !showOptions;
-	}
-	// Computed error message - only show if touched and validator exists
 	const errorMessage = $derived.by(() => {
 		if (!touched || !validator) return null;
 		return validator(String(inputValue) || '');
 	});
+
+	function close() {
+		showOptions = false;
+	}
+
+	const ORIGIN_VERTICAL: Record<'top' | 'bottom', 'top' | 'bottom'> = {
+		top: 'bottom',
+		bottom: 'top'
+	};
+	let transformOrigin = $derived.by(() => {
+		if (resolvedPlacement === 'top' || resolvedPlacement === 'bottom') {
+			const vertical = ORIGIN_VERTICAL[resolvedPlacement];
+			const horizontal = align === 'end' ? 'right' : 'left';
+			return `${vertical} ${horizontal}`;
+		}
+		const horizontal = resolvedPlacement === 'left' ? 'right' : 'left';
+		const vertical = align === 'end' ? 'bottom' : 'top';
+		return `${vertical} ${horizontal}`;
+	});
+
+	async function position(triggerEl: HTMLElement, containerEl: HTMLElement) {
+		if (!triggerEl || !containerEl) return;
+
+		const triggerRect = triggerEl.getBoundingClientRect();
+		const menuRect = containerEl.getBoundingClientRect();
+
+		for (const p of TOOLTIP_FALLBACKS[placement]) {
+			const pos = computeAlignedPosition(triggerRect, menuRect, p, align, offset);
+			if (fitsInViewport(pos, menuRect)) {
+				coords = pos;
+				resolvedPlacement = p;
+				return;
+			}
+		}
+		resolvedPlacement = placement;
+
+		coords = clamp(
+			computeAlignedPosition(triggerRect, menuRect, placement, align, offset),
+			menuRect
+		);
+	}
+
+	async function open() {
+		ready = false;
+		showOptions = true;
+		await tick();
+		await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+		await position(triggerEl!, containerEl!);
+		ready = true;
+	}
+
+	function onclick(e: MouseEvent) {
+		e.stopPropagation();
+		if (showOptions) {
+			close();
+		} else {
+			open();
+		}
+	}
+
+	function onclickoutside(e: CustomEvent<MouseEvent>) {
+		close();
+		e.stopPropagation();
+	}
+
+	function onScroll() {
+		if (showOptions) positionMenu();
+	}
+
+	function portal(node: HTMLElement) {
+		document.body.appendChild(node);
+		return { destroy: () => node.remove() };
+	}
+	export async function positionMenu() {
+		if (!triggerEl || !containerEl) return;
+		await tick();
+		await tick();
+		await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+		await position(triggerEl!, containerEl!);
+	}
 </script>
+
+<svelte:window
+	onscroll={onScroll}
+	onresize={onScroll}
+/>
 
 <div class="custom-select" use:clickoutside onclickoutside={clickOutside}>
 	<p class="custom-select__label">{label}</p>
 	<div
 		class="custom-select__selected-option"
 		class:custom-select__selected-option_error={errorMessage}
+		bind:this={triggerEl}
 	>
-		<BlankButton onclick={onSelectedOptionClick} fullWidth>
+		<BlankButton {onclick} fullWidth>
 			<div class="selected-option__content">
 				{#if selectedDisplay}
-					<!-- Use custom selected display snippet -->
 					{@render selectedDisplay(selectedOption)}
 				{:else if selectedOption}
-					<!-- Fallback: render selected option using the same children snippet -->
 					{@render children(selectedOption)}
 				{:else}
-					<!-- Placeholder when nothing is selected -->
 					<span class="placeholder">{placeholder}</span>
 				{/if}
 			</div>
@@ -93,7 +183,20 @@
 	{#if errorMessage}<p class="error">{errorMessage}</p>{/if}
 
 	{#if showOptions}
-		<ul class="custom-select__options">
+		<ul
+			class="custom-select__options"
+			bind:this={containerEl}
+			use:portal
+			use:clickoutside
+			{onclickoutside}
+			class:custom-select__options--enter={ready}
+			style:left="{coords.x}px"
+			style:top="{coords.y}px"
+			style:visibility={ready ? 'visible' : 'hidden'}
+			style:transform-origin={transformOrigin}
+			style:width="{triggerEl.getBoundingClientRect().width}px"
+			out:scale={{ duration: 300, start: 0 }}
+		>
 			{#each options as option}
 				<li class="option">
 					<BlankButton
@@ -112,9 +215,8 @@
 	{/if}
 </div>
 
-<style lang="scss">
+<style lang="css">
 	.custom-select {
-		position: relative;
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xs);
@@ -167,17 +269,19 @@
 		transform: rotate(270deg);
 	}
 	.custom-select__options {
-		width: 100%;
-		position: absolute;
-		top: calc(100% + 0.25rem);
+		/* width: 100%; */
+		position: fixed;
+		z-index: 9999;
 		display: flex;
 		flex-direction: column;
 		max-height: 15rem;
 		background: white;
-		z-index: 5;
 		overflow: auto;
 		border-radius: var(--radius-s);
 		box-shadow: var(--box-shadow);
+	}
+	.custom-select__options--enter {
+		animation: context-in 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 	.error {
 		font-size: var(--font-size-s);
