@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { FilterIcon, SortIcon } from '$lib/assets/images';
 	import { TransactionsList, TransactionsPagination } from '$lib/components';
-	import DropdownFilter from '$lib/components/DropdownFilter.svelte';
-	import SearchInput from '$lib/components/SearchInput.svelte';
-	import Spacer from '$lib/components/utility/Spacer.svelte';
+	import { DropdownFilter } from '$lib/components/dropdownFilter/';
+	import { SearchInput } from '$lib/components/';
+	import { Spacer } from '$lib/components/utility';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
 		Category,
@@ -16,7 +16,7 @@
 
 	let transactions: () => Transaction[] = getContext('transactions');
 	let categories: () => Pick<Category, 'id' | 'category'>[] = getContext('categories');
-	let transactionSortOptions:() => TransactionSortOption[] = getContext('transactionSortOptions');
+	let transactionSortOptions: () => TransactionSortOption[] = getContext('transactionSortOptions');
 	let currentPage = $state(1);
 	let pageSize = $state(10);
 	let innerWidth = $state(0);

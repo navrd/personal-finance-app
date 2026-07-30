@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { SortIcon } from '$lib/assets/images';
-	import DropdownFilter from '$lib/components/DropdownFilter.svelte';
-	import ReccuringBillsSummary from '$lib/components/reccuring/ReccuringBillsSummary.svelte';
-	import ReccuringBillsTotals from '$lib/components/reccuring/ReccuringBillsTotals.svelte';
-	import SearchInput from '$lib/components/SearchInput.svelte';
-	import { TransactionsList, TransactionsPagination } from '$lib/components';
+	import { DropdownFilter } from '$lib/components/dropdownFilter';
+	import { ReccuringBillsSummary, ReccuringBillsTotals } from '$lib/components/reccuring';
+	import { TransactionsList, TransactionsPagination, SearchInput } from '$lib/components';
 	import Spacer from '$lib/components/utility/Spacer.svelte';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import type {
