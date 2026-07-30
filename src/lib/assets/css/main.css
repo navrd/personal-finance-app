@@ -219,3 +219,44 @@ li {
 	color: var(--color-grey-900);
 	transform: scale(0.95);
 }
+
+.filter__option {
+	width: 100%;
+	cursor: pointer;
+	padding: var(--space-xl) var(--space-m);
+	display: flex;
+	border-bottom: var(--border-thin) solid var(--color-grey-100);
+	&:hover {
+		background: var(--color-grey-300);
+	}
+}
+.filter__option_active {
+	background: var(--color-grey-300);
+}
+.filter__option-wrapper {
+	max-width: 150px;
+	width: 100%;
+	cursor: pointer;
+	min-width: inherit;
+	min-height: inherit;
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	@media screen and (max-width: 632px) {
+		max-width: 100%;
+	}
+}
+.filter-options-wrapper {
+	width: 100%;
+	padding-top: var(--space-m);
+	position: absolute;
+	width: 100%;
+	z-index: 2;
+	top: calc(100% + 4px);
+	border-radius: var(--radius-xs);
+}

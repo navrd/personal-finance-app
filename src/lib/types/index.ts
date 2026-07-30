@@ -188,3 +188,13 @@ export interface ContextOption {
     disabled?: boolean;
     hidden?: boolean;
 }
+
+export interface DropdownFilterProps<T> {
+    labelKey: keyof T;
+    valueKey: keyof T;
+    options: T[];
+    selected: string;
+    defaultValue?: boolean;
+    label: string;
+    icon: string;
+}
