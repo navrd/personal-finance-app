@@ -7,6 +7,7 @@
 	import type { ColorTheme, CreatePotData, Pot } from '$lib/types';
 	import { PotMoneyControls, LoadingDots, BlankButton, PortalDropdown } from '$lib/components';
 	import { getById } from '$lib/helpers';
+	import PotCardContextMenu from './PotCardContextMenu.svelte';
 
 	interface PotCardProps {
 		pot: Pot;
@@ -26,7 +27,7 @@
 		resetFormData
 	}: PotCardProps = $props();
 
-	let themes:() => ColorTheme[] = getContext('themes');
+	let themes: () => ColorTheme[] = getContext('themes');
 	let showContextMenu = $state(false);
 	let showPotControls = $state(false);
 	let addMoney = $state(false);
@@ -36,40 +37,6 @@
 	function getProgressPercentage(pot: Pot): number {
 		return pot.target > 0 ? Math.min((pot.total / pot.target) * 100, 100) : 0;
 	}
-	function editPot(pot: Pot) {
-		editingPot = pot;
-		formData = {
-			id: pot.id,
-			name: pot.name,
-			target: pot.target,
-			total: pot.total,
-			theme_id: pot.theme_id
-		};
-		showForm = true;
-		showContextMenu = false;
-	}
-
-	const enhanceDeleteForm: SubmitFunction = async ({ action, formData, cancel }) => {
-		if (action.search.includes('deletePot') || action.pathname.includes('deletePot')) {
-			const confirmed = confirm('Are you sure you want to delete this budget?');
-			if (!confirmed) {
-				cancel();
-				return;
-			}
-		}
-		loading = true;
-		return async ({ result, update }) => {
-			if (result.type === 'success') {
-				await invalidate('app:budgets');
-				loading = false;
-				resetFormData();
-			} else {
-				await update();
-				loading = false;
-				showContextMenu = false;
-			}
-		};
-	};
 	function add() {
 		editingPot = pot;
 		showPotControls = true;
@@ -93,31 +60,15 @@
 		>
 			{pot.name}
 		</h3>
-		<PortalDropdown bind:opened={showContextMenu}>
-			{#snippet trigger()}
-				<div>
-					{@html Dots}
-				</div>
-			{/snippet}
-
-			<ul class="context-menu__actions">
-				<li class="action">
-					<BlankButton onclick={() => editPot(pot)} fullWidth={true} flexStart
-						>Edit pot</BlankButton
-					>
-				</li>
-				<li class="action action_delete">
-					<form method="POST" action="?/deletePot" use:enhance={enhanceDeleteForm}>
-						<input type="hidden" name="id" value={pot.id} />
-						<BlankButton type="submit" fullWidth flexStart
-							>{#if loading}
-								<LoadingDots dotColor="var(--color-red)" />
-							{:else}Delete pot{/if}</BlankButton
-						>
-					</form>
-				</li>
-			</ul>
-		</PortalDropdown>
+		<PotCardContextMenu
+			bind:showContextMenu
+			bind:showForm
+			bind:pot
+			bind:editingPot
+			bind:formData
+			bind:loading
+			{resetFormData}
+		/>
 	</div>
 
 	<div class="pot-amount">
@@ -161,25 +112,12 @@
 		justify-content: space-between;
 		align-items: center;
 	}
-
-	.context-menu__actions {
-		background: white;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-m);
-		min-width: 130px;
-		z-index: 3;
-		border-radius: var(--radius-m);
-		box-shadow: var(--box-shadow);
-	}
-
 	.header-title {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
 		gap: var(--space-m);
 		font-weight: bolder;
-		/* color: var(--color-grey-900); */
 		&:before {
 			content: ' ';
 			width: 0.75rem;
@@ -254,21 +192,6 @@
 		font-size: var(--font-size-xxxl);
 		line-height: var(--line-height-s);
 		font-weight: bolder;
-	}
-	.action {
-		padding:  var(--space-m)  var(--space-s);
-		border-bottom: var(--border-thin) solid var(--color-grey-100);
-		color: var(--color-grey-900);
-		font-size: var(--font-size-s);
-		&:last-child {
-			border-bottom: 0;
-		}
-		&:hover {
-			background: var(--color-grey-300);
-		}
-	}
-	.action_delete {
-		color: var(--color-red);
 	}
 
 	.actions {

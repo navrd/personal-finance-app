@@ -1,25 +1,17 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { invalidate } from '$app/navigation';
 	import type {
 		Budget,
+		BudgetFormData,
 		Category,
 		ColorTheme,
 		Transaction,
 		TransactionSortOption
 	} from '$lib/types';
-	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getContext } from 'svelte';
-	import { ArrowRight, Dots } from '$lib/assets/images';
-	import { TransactionsList, LoadingDots, BlankButton, PortalDropdown } from '$lib/components';
+	import { ArrowRight } from '$lib/assets/images';
+	import { TransactionsList, BudgetCardContextMenu } from '$lib/components';
 	import { sortTransactions } from '$lib/helpers/transactions';
 	import { getById } from '$lib/helpers';
-
-	interface BudgetFormData {
-		category_id: string;
-		maximum: string;
-		theme_id: string;
-	}
 
 	interface BudgetCardProps {
 		budget: Budget;
@@ -47,39 +39,6 @@
 	let showContextMenu = $state(false);
 	let isLoading = $derived(loading && editingBudget?.id === budget.id);
 
-	function editBudget(budget: Budget) {
-		editingBudget = budget;
-		formData = {
-			category_id: budget.category_id,
-			maximum: budget.maximum.toString(),
-			theme_id: budget.theme_id,
-			id: budget.id
-		};
-		showForm = true;
-		showContextMenu = false;
-	}
-
-	const enhanceDeleteForm: SubmitFunction = async ({ action, formData, cancel }) => {
-		if (action.search.includes('deleteBudget') || action.pathname.includes('deleteBudget')) {
-			const confirmed = confirm('Are you sure you want to delete this budget?');
-			if (!confirmed) {
-				cancel();
-				return;
-			}
-		}
-		loading = true;
-		return async ({ result, update }) => {
-			if (result.type === 'success') {
-				await invalidate('app:budgets');
-				loading = false;
-				resetFormData();
-			} else {
-				await update();
-				loading = false;
-			}
-		};
-	};
-
 	let spent = $derived(
 		transactions()
 			.filter((transaction) => transaction.category_id === budget.category_id)
@@ -104,31 +63,15 @@
 		>
 			{getById(categories(), budget.category_id)?.category}
 		</h3>
-		<PortalDropdown bind:opened={showContextMenu}>
-			{#snippet trigger()}
-				<div>
-					{@html Dots}
-				</div>
-			{/snippet}
-
-			<ul class="context-menu__actions">
-				<li class="action">
-					<BlankButton onclick={() => editBudget(budget)} fullWidth={true} flexStart
-						>Edit budget</BlankButton
-					>
-				</li>
-				<li class="action action_delete">
-					<form method="POST" action="?/deleteBudget" use:enhance={enhanceDeleteForm}>
-						<input type="hidden" name="id" value={budget.id} />
-						<BlankButton type="submit" fullWidth flexStart
-							>{#if loading}
-								<LoadingDots dotColor="var(--color-red)" />
-							{:else}Delete budget{/if}</BlankButton
-						>
-					</form>
-				</li>
-			</ul>
-		</PortalDropdown>
+		<BudgetCardContextMenu
+			bind:showContextMenu
+			bind:showForm
+			bind:budget
+			bind:editingBudget
+			bind:formData
+			bind:loading
+			{resetFormData}
+		/>
 	</div>
 
 	<p class="budget-amount" class:loading={isLoading}>Maximum of ${budget.maximum}</p>
@@ -173,21 +116,6 @@
 </div>
 
 <style lang="css">
-	.action {
-		padding: var(--space-m) var(--space-s);
-		border-bottom: var(--border-thin) solid var(--color-grey-100);
-		color: var(--color-grey-900);
-		font-size: var(--font-size-s);
-		&:last-child {
-			border-bottom: none;
-		}
-		&:hover {
-			background: var(--color-grey-300);
-		}
-	}
-	.action_delete {
-		color: var(--color-red);
-	}
 	.segment__header {
 		font-size: var(--font-size-m);
 		line-height: var(--line-height);
@@ -264,18 +192,6 @@
 		transition: width 0.25s ease;
 	}
 
-	.context-menu__actions {
-		background: white;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-m);
-		top: calc(100% + 0.5rem);
-		min-width: 130px;
-		z-index: 3;
-		border-radius: var(--radius-m);
-		box-shadow: var(--box-shadow);
-	}
-
 	.header-title {
 		display: flex;
 		align-items: center;
@@ -299,6 +215,14 @@
 		background: white;
 		border-radius: var(--radius-m);
 		padding: var(--space-xxl);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+
+		&:hover {
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+		}
 	}
 
 	.budget-card__header {
