@@ -198,3 +198,9 @@ export interface DropdownFilterProps<T> {
     label: string;
     icon: string;
 }
+
+export interface BudgetFormData {
+    category_id: string;
+    maximum: string;
+    theme_id: string;
+}
